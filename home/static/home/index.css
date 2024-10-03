@@ -1,0 +1,68 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin:0;
+    padding: 0;
+}
+
+.container{
+    max-width: 1140px;  
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+
+.header{
+    width:100%;
+    color: white;
+    padding: 20px;
+    background: #151c39e8;
+	box-sizing: border-box;
+}
+
+.menu-item{
+    list-style: none;
+}
+
+.menu-link{
+    color: white;
+    text-decoration: none;
+}
+
+/* Дополнительно */
+
+.menu-link{
+    text-transform: uppercase;
+    font-weight: bold;
+}
+/* HEADER */
+.menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.header-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-logo{
+    display: flex;
+    flex-direction: row;   
+    align-items: center;
+    flex-grow: 1;
+}
+
+.logo-img{
+    margin-right: 10%;
+    width: 20%;
+    height: 20%;
+}
+
+.header-menu{
+    flex-grow: 1;
+}
+
+
