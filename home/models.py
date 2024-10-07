@@ -29,7 +29,7 @@ class Person(TimeStamp):
     last_name = models.CharField("Отчество", max_length=100)
 
     def __str__(self):
-        return self.title
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
     
     class Meta:
         verbose_name = 'Физическое лицо'
@@ -39,7 +39,7 @@ class Category(TimeStamp):
     category = models.CharField("Категория участника", max_length=100)
 
     def __str__(self):
-        return self.title
+        return self.category
     
     class Meta:
         verbose_name = 'Категория участника'
@@ -47,3 +47,10 @@ class Category(TimeStamp):
 
 class Participant(TimeStamp):
     name = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="pname" )        
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'Участник'
+        verbose_name_plural = 'Участники'
