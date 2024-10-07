@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+    <head class = "header">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width={device-width}, initial-scale=1.0">
+        <title>{% block title %} {% endblock %}</title>
+        <link href="{% static 'home/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'home/index.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <!--START HEADER-->
+    <header class = 'header'>
+
+        <div class = 'container'>
+            <div class = 'header-row'>
+                <!--START BLOCK LOGO-->
+                <div class = 'header-logo'>
+                    <img class = 'logo-img' src='img/logo.png'></img>
+                </div>
+                <!--END BLOCK LOGO-->
+
+                <!--START BLOCK MENU-->
+                <div class = 'header-menu'>
+                    <ul class = 'menu'>
+                        <li class = 'menu-item'>
+                            <a class = 'menu-link' href ='#'>Категории</a>
+                        </li>
+                        <li class = 'menu-item'>
+                            <a class = 'menu-link' href ='#'>Компетенции</a>
+                        </li>
+                        <li class = 'menu-item'>
+                            <a class = 'menu-link' href ='#metka'>Награды</a>
+                        </li>
+                        <li class = 'menu-item'>
+                            <a class = 'menu-link' href ='#metka'>Участники</a>
+                        </li>
+                        <li class = 'menu-item'>
+                            <a class = 'menu-link' href ='#metka'>Файлы</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--END BLOCK MENU-->
+            </div>
+        </div>
+
+
+
+    </header>
+    <!--END HEADER-->
+
+        {% block body %}
+        {% endblock %}
+        
+    </body>
+</html>
