@@ -23,34 +23,37 @@ class Event(TimeStamp):
         verbose_name = 'Мероприятие'
         verbose_name_plural = 'Мероприятия'
 
-class Person(TimeStamp):
+class Participant(TimeStamp):
     first_name = models.CharField("Имя", max_length=100)
     middle_name = models.CharField("Фамилия", max_length=100)
     last_name = models.CharField("Отчество", max_length=100)
+    organization = models.CharField("Организация", max_length=100)
 
     def __str__(self):
         return f"{self.first_name} {self.middle_name} {self.last_name}"
     
     class Meta:
-        verbose_name = 'Физическое лицо'
-        verbose_name_plural = 'Физические лица'
+        verbose_name = 'Участник'
+        verbose_name_plural = 'Участники'
 
 class Category(TimeStamp):
-    category = models.CharField("Категория участника", max_length=100)
+    title = models.CharField("Категория участника", max_length=100)
+    print_title = models.TextField('Название для печати')
 
     def __str__(self):
-        return self.category
+        return self.title
     
     class Meta:
         verbose_name = 'Категория участника'
         verbose_name_plural = 'Категории участников'
 
-class Participant(TimeStamp):
-    name = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="pname" )        
+class Competency(TimeStamp):
+    title = models.CharField("Компетенция (номинация)", max_length=100)
+    print_title = models.TextField('Название для печати')
 
     def __str__(self):
-        return self.name
+        return self.title
     
     class Meta:
-        verbose_name = 'Участник'
-        verbose_name_plural = 'Участники'
+        verbose_name = 'Компетенция (номинация)'
+        verbose_name_plural = 'Компетенции (номинации)'

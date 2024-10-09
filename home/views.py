@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Event
+from .models import Event, Category
 
 # Create your views here.
 def index(request):
@@ -8,4 +8,9 @@ def index(request):
 def  events(request):
     return render(request, "home/events.html", {
         "events": Event.objects.all()
+    })
+
+def  categories(request):
+    return render(request, "home/categories.html", {
+        "categories": Category.objects.all()
     })
