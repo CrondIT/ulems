@@ -1,0 +1,10 @@
+{% extends "home/layout.html" %}
+
+{% block body %}
+    <h1>Категории участников</h1>
+    <ul>
+        {% for category in categories %}
+            <li>Наименование: {{category.title}} Для печати: {{category.print_title}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
