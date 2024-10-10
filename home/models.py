@@ -28,6 +28,7 @@ class Participant(TimeStamp):
     middle_name = models.CharField("Фамилия", max_length=100)
     last_name = models.CharField("Отчество", max_length=100)
     organization = models.CharField("Организация", max_length=100)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="participants")
 
     def __str__(self):
         return f"{self.first_name} {self.middle_name} {self.last_name}"

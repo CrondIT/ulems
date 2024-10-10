@@ -1,0 +1,11 @@
+{% extends "home/layout.html" %}
+
+{% block body %}
+    <h1>Мероприятие {{even.id}}</h1>
+    <ul>
+         <li>{{event.title}}</li>
+         <li>{{event.print_title}}</li>
+         <li>{{event.description}}</li>
+         <li>с {{event.from_date}} по {{event.to_date}}</li>
+    </ul> 
+{% endblock %}
