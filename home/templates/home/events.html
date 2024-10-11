@@ -4,7 +4,9 @@
     <h1>Мероприятия</h1>
     <ul>
         {% for event in events %}
-            <li>{{event.title}} с {{event.from_date}} по {{event.to_date}}</li>
+            
+            <li>{{event.title}} с {{event.from_date}} по {{event.to_date}}  <a href="{% url 'home:event' event.id %}">Подробнее</a></li>
+        </a>
         {% endfor %}
     </ul>
 {% endblock %}
