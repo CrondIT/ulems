@@ -31,7 +31,7 @@ class Participant(TimeStamp):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="participants")
 
     def __str__(self):
-        return f"{self.first_name} {self.middle_name} {self.last_name}"
+        return f"{self.first_name} {self.middle_name} {self.last_name} - {self.event}"
     
     class Meta:
         verbose_name = 'Участник'

@@ -1,0 +1,13 @@
+{% extends "home/layout.html" %}
+
+{% block body %}
+    <h1>Участник {{participant.id}}</h1>
+    <ul>
+         <li>Фамилия: {{participant.first_name}}</li>
+         <li>Имя: {{participant.middle_name}}</li>
+         <li>Отчество: {{participant.last_name}}</li>
+         <li>Организация: {{participant.organization}}</li>
+         <li>Мероприятие: {{participant.event}}</li>
+    </ul> 
+    <a href="{% url 'home:participants' %}">Назад</a>
+{% endblock %}

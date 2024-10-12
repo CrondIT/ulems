@@ -6,7 +6,8 @@
         {% for event in events %}
             
             <li>{{event.title}} с {{event.from_date}} по {{event.to_date}}  <a href="{% url 'home:event' event.id %}">Подробнее</a></li>
-        </a>
+        {% empty %}    
+            <li>Нет мероприятий</li>
         {% endfor %}
     </ul>
 {% endblock %}

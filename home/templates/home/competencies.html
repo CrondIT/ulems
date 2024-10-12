@@ -1,0 +1,12 @@
+{% extends "home/layout.html" %}
+
+{% block body %}
+    <h1>Компетенции (номинации)</h1>
+    <ul>
+        {% for competency in competencies %}
+            <li>{{competency.title}} {{competency.print_title}} <a href="{% url 'home:competency' competency.id %}">Подробнее</a></li></li>
+        {% empty %}    
+            <li>Нет участников</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

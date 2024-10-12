@@ -5,6 +5,8 @@
     <ul>
         {% for category in categories %}
             <li>Наименование: {{category.title}} Для печати: {{category.print_title}}</li>
+        {% empty %}    
+            <li>Нет категорий</li>
         {% endfor %}
     </ul>
 {% endblock %}
