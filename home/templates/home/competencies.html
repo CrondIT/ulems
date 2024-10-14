@@ -6,7 +6,7 @@
         {% for competency in competencies %}
             <li>{{competency.title}} {{competency.print_title}} <a href="{% url 'home:competency' competency.id %}">Подробнее</a></li></li>
         {% empty %}    
-            <li>Нет участников</li>
+            <li>Нет компетенций</li>
         {% endfor %}
     </ul>
 {% endblock %}
