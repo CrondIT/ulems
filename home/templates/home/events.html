@@ -1,13 +1,35 @@
 {% extends "home/layout.html" %}
 
+{% block title %}Мероприятия{% endblock %}
 {% block body %}
+
     <h1>Мероприятия</h1>
-    <ul>
+    
+    <table class = "dtable">
+        <tr>
+            <th>Наименование</th>
+            <th>Наименование для печати</th>
+            <th>Дата начала</th>
+            <th>Дата окончания</th>
+            <th>Дата создания</th>
+            <th>Дата изменения</th>
+            <th>Примечания</th>
+        </tr>
         {% for event in events %}
+            <tr>
+                <td>{{event.title}}</td>
+                <td>{{event.print_title}}</td>
+                <td>{{event.from_date}}</td>
+                <td>{{event.to_date}}</td>
+                <td>{{event.created_date}}</td>
+                <td>{{event.updated_date}}</td>
+                <td> <a href="{% url 'home:event' event.id %}">Подробнее</a></td>
+               
+            </tr>
+   
+        {% empty %}   
             
-            <li>{{event.title}} с {{event.from_date}} по {{event.to_date}}  <a href="{% url 'home:event' event.id %}">Подробнее</a></li>
-        {% empty %}    
-            <li>Нет мероприятий</li>
+            Нет мероприятий
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

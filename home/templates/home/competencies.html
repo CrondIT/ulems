@@ -1,12 +1,31 @@
 {% extends "home/layout.html" %}
-
+{% block title %}Компетенции{% endblock %}
 {% block body %}
     <h1>Компетенции (номинации)</h1>
-    <ul>
+
+    <table class = "dtable">
+        <tr>
+            <th>Наименование</th>
+            <th>Наименование для печати</th>
+            <th>Дата создания</th>
+            <th>Дата изменения</th>
+            <th>Примечания</th>
+        </tr>
+    
         {% for competency in competencies %}
-            <li>{{competency.title}} {{competency.print_title}} <a href="{% url 'home:competency' competency.id %}">Подробнее</a></li></li>
+
+            <tr>
+                <td>{{competency.title}}</td>
+                <td>{{competency.print_title}}</td>
+                <td>{{competency.created_date}}</td>
+                <td>{{competency.updated_date}}</td>
+                <td> <a href="{% url 'home:competency' competency.id %}">Подробнее</a></td>
+            </tr>
+          
         {% empty %}    
-            <li>Нет компетенций</li>
+            Нет компетенций
         {% endfor %}
-    </ul>
+   
+
+    </table>
 {% endblock %}

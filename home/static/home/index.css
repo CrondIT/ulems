@@ -69,4 +69,23 @@
     flex-grow: 1;
 }
 
+/* таблицы */
+.dtable {
+
+    border: 1px solid #163832;
+    border-collapse: collapse;
+   
+    
+    th {
+
+        padding: 2px;
+        
+        border: 1px solid #163832;
+     }
+    td {
+        padding: 2px;
+        border: 1px solid #163832;
+     }
+}
+
 

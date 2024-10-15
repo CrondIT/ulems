@@ -1,12 +1,29 @@
 {% extends "home/layout.html" %}
-
+{% block title %}Категории{% endblock %}
 {% block body %}
     <h1>Категории участников</h1>
-    <ul>
+
+    <table class = "dtable">
+        <tr>
+            <th>Наименование</th>
+            <th>Наименование для печати</th>
+            <th>Дата создания</th>
+            <th>Дата изменения</th>
+            <th>Примечания</th>
+        </tr>
+   
         {% for category in categories %}
-            <li>Наименование: {{category.title}} Для печати: {{category.print_title}}</li>
+            <tr>
+                <td>{{category.title}}</td>
+                <td>{{category.print_title}}</td>
+                <td>{{category.created_date}}</td>
+                <td>{{category.updated_date}}</td>
+                <td> <a href="{% url 'home:category' category.id %}">Подробнее</a></td>
+            </tr>
+           
         {% empty %}    
-            <li>Нет категорий</li>
+            Нет категорий
         {% endfor %}
-    </ul>
+   
+    </table>
 {% endblock %}
