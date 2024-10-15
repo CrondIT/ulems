@@ -16,6 +16,10 @@ def event(request, event_id):
         "event": event
     })
      
+def add_event(request):
+    return render(request, "home/event/add_event.html", {
+        
+    })     
 
 def  categories(request):
     return render(request, "home/categories.html", {

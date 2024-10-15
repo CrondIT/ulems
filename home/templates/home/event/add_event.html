@@ -2,15 +2,16 @@
 
 {% block body %}
     <h1>Мероприятие {{even.id}}</h1>
-    <ul>
-         <li>{{event.title}}</li>
-         <li>{{event.print_title}}</li>
-         <li>{{event.description}}</li>
-         <li>с {{event.from_date}} по {{event.to_date}}</li>
-    </ul> 
+ 
     <div class = "features">
         <form method="POST">
-            
+            {% csrf_token %}
+            <input type="text" placeholder="Наименование" class="form-control"><br>
+            <input type="text" placeholder="Наименование для печати" class="form-control"><br>
+            <textarea class="form-control" placeholder="Описание" ></textarea><br>
+            <input type="date" placeholder="Дата начала" class="form-control"><br>
+            <input type="date" placeholder="Дата окончания" class="form-control"><br>
+            <button class="btn btn-success" type="submit">Добавить</button>
         </form>
     </div>
     <a href="{% url 'home:events' %}">Назад</a>
