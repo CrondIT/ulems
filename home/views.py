@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Event, Category, Participant, Competency
+from .forms import AddEventForm
 
 # Create your views here.
 def index(request):
@@ -17,9 +18,21 @@ def event(request, event_id):
     })
      
 def add_event(request):
-    return render(request, "home/event/add_event.html", {
-        
-    })     
+    error=""
+    if request.method == "POST":
+        form = AddEventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home:events')
+        else:
+            error="Ошибка заполнения"
+
+    form = AddEventForm()
+    data = {
+        'form': form,  
+        'error': error
+    }
+    return render(request, "home/event/add_event.html", data)     
 
 def  categories(request):
     return render(request, "home/categories.html", {
