@@ -1,5 +1,5 @@
 {% extends "home/layout.html" %}
-{% block title %}Категории{% endblock %}
+{% block title %} {{ title }} {% endblock %}
 {% block body %}
     <h1>Категории участников</h1>
 
@@ -12,13 +12,25 @@
             <th>Примечания</th>
         </tr>
    
+        <tr>
+            {% for field in form %}
+                <td>{{ field }}</td>
+            {% endfor %}
+            <td></td>
+            <td></td>
+            <td><button class="btn btn-success" name="save">Сохранить</button></td>
+        </tr>
+
         {% for category in categories %}
             <tr>
                 <td>{{category.title}}</td>
                 <td>{{category.print_title}}</td>
                 <td>{{category.created_date}}</td>
                 <td>{{category.updated_date}}</td>
-                <td> <a href="{% url 'home:category' category.id %}">Подробнее</a></td>
+                <td> 
+                    <button class="btn btn-success" name="edit">Изменить</button>
+                    <button class="btn btn-success" name="delete">Удалить</button>
+                </td> 
             </tr>
            
         {% empty %}    

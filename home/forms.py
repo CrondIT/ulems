@@ -1,4 +1,4 @@
-from .models import Event
+from .models import Event, Category
 from django.forms import ModelForm, TextInput, DateInput, Textarea
 
 class AddEventForm(ModelForm):
@@ -28,3 +28,18 @@ class AddEventForm(ModelForm):
                 'placeholder': 'Дата окончания'
             })
         }
+
+class CategoryForm(ModelForm):
+    class Meta:
+        model = Category
+        fields = ['title', 'print_title']
+        widgets = {
+                "title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование'
+                }),
+                "print_title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование для печати'
+                })
+            }

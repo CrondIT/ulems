@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Event, Category, Participant, Competency
-from .forms import AddEventForm
+from .forms import AddEventForm, CategoryForm
 
 # Create your views here.
 def index(request):
@@ -35,9 +35,12 @@ def add_event(request):
     return render(request, "home/event/add_event.html", data)     
 
 def  categories(request):
-    return render(request, "home/categories.html", {
-        "categories": Category.objects.all()
-    })
+    form = CategoryForm
+    context = {}
+    context['categories'] = Category.objects.all()
+    context['title'] = 'Категории'
+    context['form'] = form
+    return render(request, "home/categories.html", context)
 
 def category(request, category_id):
     category = Category.objects.get(pk=category_id)
