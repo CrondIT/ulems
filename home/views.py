@@ -34,12 +34,33 @@ def add_event(request):
     }
     return render(request, "home/event/add_event.html", data)     
 
-def  categories(request):
-    form = CategoryForm
+def categories(request):
+    form = CategoryForm()
+    error=""
     context = {}
     context['categories'] = Category.objects.all()
     context['title'] = 'Категории'
+       
+    if request.method == 'POST':
+        
+        if 'save' in request.POST:
+            form = CategoryForm(request.POST)
+            if form.is_valid():
+                form.save()
+            else:
+                error="Ошибка заполнения"    
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            category = Category.objects.get(id=pk)
+            category.delete()  
+        elif 'edit' in request.POST:
+            pk = request.POST.get('edit')
+            category = Category.objects.get(id=pk)   
+            form = CategoryForm(instance=category)
+
     context['form'] = form
+    context['error'] = error  
+
     return render(request, "home/categories.html", context)
 
 def category(request, category_id):
