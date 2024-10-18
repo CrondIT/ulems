@@ -46,9 +46,18 @@ def categories(request):
         if 'save' in request.POST:
             form = CategoryForm(request.POST)
             if form.is_valid():
+                pk = request.POST.get('save')
+                if not pk:
+                    form = Category(request.POST)
+                else:
+                    category = Category.objects.get(id=pk)
+                    form = CategoryForm(request.POST, instance=category)
+                
                 form.save()
+                form = CategoryForm()
             else:
                 error="Ошибка заполнения"    
+
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             category = Category.objects.get(id=pk)

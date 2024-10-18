@@ -14,26 +14,26 @@
                 <th>Дата изменения</th>
                 <th>Примечания</th>
             </tr>
-    
-            <tr>
-                {% for field in form %}
-                    <td>{{ field }}</td>
-                {% endfor %}
-                <td><span>{{ error }}</span></td>
-                <td></td>
-                <td><button class="btn btn-success" name="save">Сохранить</button></td>
-            </tr>
+            {% if not form.instance.id %}
+                <tr>
+                {% include 'home/category.html' %}
+                </tr>
+            {% endif %}    
 
             {% for category in categories %}
                 <tr>
-                    <td>{{category.title}}</td>
-                    <td>{{category.print_title}}</td>
-                    <td>{{category.created_date}}</td>
-                    <td>{{category.updated_date}}</td>
-                    <td> 
-                        <button class="btn btn-success" name="edit" value="{{ category.id }}" formnovalidate>Изменить</button>
-                        <button class="btn btn-success" name="delete" value="{{ category.id }}" formnovalidate>Удалить</button>
-                    </td> 
+                    {% if form.instance.id == category.id %}
+                        {% include 'home/category.html' %}
+                    {% else %}
+                        <td>{{category.title}}</td>
+                        <td>{{category.print_title}}</td>
+                        <td>{{category.created_date}}</td>
+                        <td>{{category.updated_date}}</td>
+                        <td> 
+                            <button class="btn btn-success" name="edit" value="{{ category.id }}" formnovalidate>Изменить</button>
+                            <button class="btn btn-success" name="delete" value="{{ category.id }}" formnovalidate>Удалить</button>
+                        </td> 
+                    {% endif %}
                 </tr>
             
             {% empty %}    
