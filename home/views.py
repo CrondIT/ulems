@@ -34,6 +34,7 @@ def add_event(request):
     }
     return render(request, "home/event/add_event.html", data)     
 
+# -------------------------------------------------------------------------------
 def categories(request):
     form = CategoryForm()
     error=""
@@ -42,22 +43,15 @@ def categories(request):
     context['title'] = 'Категории'
        
     if request.method == 'POST':
-        
         if 'save' in request.POST:
-            form = CategoryForm(request.POST)
-            if form.is_valid():
-                pk = request.POST.get('save')
-                if not pk:
-                    form = Category(request.POST)
-                else:
-                    category = Category.objects.get(id=pk)
-                    form = CategoryForm(request.POST, instance=category)
-                
-                form.save()
-                form = CategoryForm()
+            pk = request.POST.get('save')
+            if not pk:
+                form = CategoryForm(request.POST)
             else:
-                error="Ошибка заполнения"    
-
+                category = Category.objects.get(id=pk)
+                form = CategoryForm(request.POST, instance=category)
+            form.save()
+            form = CategoryForm()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             category = Category.objects.get(id=pk)
@@ -66,12 +60,16 @@ def categories(request):
             pk = request.POST.get('edit')
             category = Category.objects.get(id=pk)   
             form = CategoryForm(instance=category)
+        elif 'sort':
+            context['categories'] = Category.objects.order_by(request.POST['sort'])
+            form = CategoryForm(request.POST)
 
     context['form'] = form
     context['error'] = error  
 
     return render(request, "home/categories.html", context)
 
+# ------------------------------------------------------------------------------------
 def category(request, category_id):
     category = Category.objects.get(pk=category_id)
     return render(request, "home/category/category.html", {

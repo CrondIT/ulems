@@ -47,6 +47,7 @@ class Category(TimeStamp):
     class Meta:
         verbose_name = 'Категория участника'
         verbose_name_plural = 'Категории участников'
+        # ordering = ['title']
 
 class Competency(TimeStamp):
     title = models.CharField("Компетенция (номинация)", max_length=100)

@@ -4,15 +4,6 @@
     padding: 0;
    
 }
-.main-body{
-    background-color:#fAF1DE;
-}
-
-.container{
-    max-width: 1140px;  
-    padding: 0 15px;
-    margin: 0 auto;
-}
 
 /* HEADER */
 
@@ -69,24 +60,6 @@
     flex-grow: 1;
 }
 
-/* таблицы */
-.dtable {
-
-    border: 1px solid #163832;
-    border-collapse: collapse;
-   
-    
-    th {
-
-        padding: 2px;
-        
-        border: 1px solid #163832;
-     }
-    td {
-        padding: 2px;
-        border: 1px solid #163832;
-     }
-}
 
 /* формы */
 form {
