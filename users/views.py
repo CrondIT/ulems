@@ -8,7 +8,7 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
     
-    return render(request, "users/user.html")
+    return render(request, "home/index.html")
     
 
 def login_view(request):
