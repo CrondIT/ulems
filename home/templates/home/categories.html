@@ -25,6 +25,11 @@
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="updated_date"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="-updated_date"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
+                <th>
+                    Автор
+                    <button class="btn btn-outline-info" name="sort" formnovalidate value="author"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info" name="sort" formnovalidate value="-author"><i class='fa fa-long-arrow-down'></i></button>
+                </th>
                 <th>Примечания</th>
             </tr>
 
@@ -46,6 +51,7 @@
                         <td>{{category.print_title}}</td>
                         <td>{{category.created_date}}</td>
                         <td>{{category.updated_date}}</td>
+                        <td>{{category.author}}</td>
                         <td> 
                             <button class="btn btn-outline-success" name="edit" value="{{ category.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
                             <button class="btn btn-outline-danger" name="delete" value="{{ category.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>

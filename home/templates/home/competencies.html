@@ -9,6 +9,7 @@
             <th>Наименование для печати</th>
             <th>Дата создания</th>
             <th>Дата изменения</th>
+            <th>Автор</th>
             <th>Примечания</th>
         </tr>
     
@@ -19,6 +20,7 @@
                 <td>{{competency.print_title}}</td>
                 <td>{{competency.created_date}}</td>
                 <td>{{competency.updated_date}}</td>
+                <td>{{competency.author}}</td>
                 <td> <a href="{% url 'home:competency' competency.id %}">Подробнее</a></td>
             </tr>
           

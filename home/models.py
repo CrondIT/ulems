@@ -1,14 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # class for record's created time and updated time
+# -----------------------------------------------------------------------------------
 class TimeStamp(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, editable=False, blank=True, on_delete=models.CASCADE, null=True)
 
     class Meta:
         abstract = True
 
-
+# -----------------------------------------------------------------------------------
 class Event(TimeStamp):
     title = models.CharField('Название', max_length=200, default='Новое мероприятие')
     print_title = models.TextField('Название для печати')
@@ -22,7 +25,7 @@ class Event(TimeStamp):
     class Meta:
         verbose_name = 'Мероприятие'
         verbose_name_plural = 'Мероприятия'
-
+# -----------------------------------------------------------------------------------
 class Participant(TimeStamp):
     first_name = models.CharField("Имя", max_length=100)
     middle_name = models.CharField("Фамилия", max_length=100)
@@ -36,7 +39,7 @@ class Participant(TimeStamp):
     class Meta:
         verbose_name = 'Участник'
         verbose_name_plural = 'Участники'
-
+# -----------------------------------------------------------------------------------
 class Category(TimeStamp):
     title = models.CharField("Категория участника", max_length=100)
     print_title = models.TextField('Название для печати')
@@ -48,7 +51,7 @@ class Category(TimeStamp):
         verbose_name = 'Категория участника'
         verbose_name_plural = 'Категории участников'
         # ordering = ['title']
-
+# -----------------------------------------------------------------------------------
 class Competency(TimeStamp):
     title = models.CharField("Компетенция (номинация)", max_length=100)
     print_title = models.TextField('Название для печати')
