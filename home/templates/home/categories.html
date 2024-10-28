@@ -10,25 +10,30 @@
             <tr>
                 <th>№</th>
                 <th>
-                    Наименование
+                    Наименование </br>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="title"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="-title"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>Наименование для печати</th>
                 <th>
-                    Дата создания
+                    Дата создания </br>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="created_date"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="-created_date"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Дата изменения
+                    Дата изменения </br>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="updated_date"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info" name="sort" formnovalidate value="-updated_date"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Автор
-                    <button class="btn btn-outline-info" name="sort" formnovalidate value="author"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info" name="sort" formnovalidate value="-author"><i class='fa fa-long-arrow-down'></i></button>
+                    Создатель </br>
+                    <button class="btn btn-outline-info" name="sort" formnovalidate value="created_by"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info" name="sort" formnovalidate value="-created_by"><i class='fa fa-long-arrow-down'></i></button>
+                </th>
+                <th>
+                    Изменил </br>
+                    <button class="btn btn-outline-info" name="sort" formnovalidate value="updated_by"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info" name="sort" formnovalidate value="-updated_by"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>Примечания</th>
             </tr>
@@ -49,9 +54,10 @@
                         <td>{{forloop.counter}}</td>
                         <td>{{category.title}}</td>
                         <td>{{category.print_title}}</td>
-                        <td>{{category.created_date}}</td>
-                        <td>{{category.updated_date}}</td>
-                        <td>create: {{category.created_by}} update: {{category.updated_by}}</td>
+                        <td>{{category.created_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{category.updated_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{category.created_by}}</td>
+                        <td>{{category.updated_by}}</td>
                         <td> 
                             <button class="btn btn-outline-success" name="edit" value="{{ category.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
                             <button class="btn btn-outline-danger" name="delete" value="{{ category.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>

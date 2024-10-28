@@ -51,9 +51,14 @@ def categories(request):
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
+                
                 form = CategoryForm(request.POST)
+                usr = form.save(commit=False)
+                usr.created_by = request.user
+
             else:
                 category = Category.objects.get(id=pk)
+                category.updated_by = request.user
                 form = CategoryForm(request.POST, instance=category)
             form.save()
             form = CategoryForm()
@@ -64,10 +69,7 @@ def categories(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             category = Category.objects.get(id=pk)   
-            
-            category.updated_by = request.user
             form = CategoryForm(instance=category)
-            
         elif 'sort':
             context['categories'] = Category.objects.order_by(request.POST['sort'])
             form = CategoryForm(request.POST)
