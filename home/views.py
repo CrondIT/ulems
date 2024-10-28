@@ -4,6 +4,7 @@ from .forms import AddEventForm, CategoryForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def index(request):
@@ -46,6 +47,7 @@ def categories(request):
     context['title'] = 'Категории'
        
     if request.method == 'POST':
+        
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
@@ -62,7 +64,10 @@ def categories(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             category = Category.objects.get(id=pk)   
+            
+            category.updated_by = request.user
             form = CategoryForm(instance=category)
+            
         elif 'sort':
             context['categories'] = Category.objects.order_by(request.POST['sort'])
             form = CategoryForm(request.POST)

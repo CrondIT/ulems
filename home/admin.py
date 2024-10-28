@@ -2,11 +2,18 @@ from django.contrib import admin
 from .models import Competency, Event, Category, Participant
 
 # Register your models here.
-class CategoryAdmin(admin.ModelAdmin):
-    fields = ['title', 'print_title', 'created_date', 'updated_date', 'author']
-    readonly_fields =  ['created_date', 'updated_date', 'author']
+class AuditAdmin(admin.ModelAdmin):
+    fieldset_preset = ['created_date', 'updated_date', 'created_by', 'updated_by']
+    readonly_fields =  ['created_date', 'updated_date', 'created_by', 'updated_by']
+    actions_on_top = True
 
-admin.site.register(Competency)
-admin.site.register(Event)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Participant)
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        obj.save()
+
+admin.site.register(Competency, AuditAdmin)
+admin.site.register(Event, AuditAdmin)
+admin.site.register(Category, AuditAdmin)
+admin.site.register(Participant, AuditAdmin)

@@ -51,7 +51,7 @@
                         <td>{{category.print_title}}</td>
                         <td>{{category.created_date}}</td>
                         <td>{{category.updated_date}}</td>
-                        <td>{{category.author}}</td>
+                        <td>create: {{category.created_by}} update: {{category.updated_by}}</td>
                         <td> 
                             <button class="btn btn-outline-success" name="edit" value="{{ category.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
                             <button class="btn btn-outline-danger" name="delete" value="{{ category.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>

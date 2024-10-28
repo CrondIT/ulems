@@ -6,8 +6,10 @@ from django.contrib.auth.models import User
 class TimeStamp(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, editable=False, blank=True, on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(User, related_name='%(app_label)s_%(class)s_created_related', blank=True, on_delete=models.CASCADE, null=True)
+    updated_by = models.ForeignKey(User, related_name='%(app_label)s_%(class)s_updated_related', blank=True, on_delete=models.CASCADE, null=True)
 
+   
     class Meta:
         abstract = True
 
