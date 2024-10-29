@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Event, Category, Participant, Competency
-from .forms import AddEventForm, CategoryForm
+from .forms import AddEventForm, CategoryForm, ParticipantForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -87,9 +87,8 @@ def category(request, category_id):
     })
 # ------------------------------------------------------------------------------------
 def  participants(request):
-    return render(request, "home/participants.html", {
-        "participants": Participant.objects.all()
-    })
+    
+    return render(request, "home/participants.html", {"participants":Participant.objects.all()})
 # ------------------------------------------------------------------------------------
 def  participant(request, participant_id):
     participant = Participant.objects.get(pk=participant_id)
