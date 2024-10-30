@@ -9,21 +9,4 @@ class Migration(migrations.Migration):
         ('home', '0020_alter_participant_category'),
     ]
 
-    operations = [
-        migrations.RemoveField(
-            model_name='category',
-            name='author',
-        ),
-        migrations.RemoveField(
-            model_name='competency',
-            name='author',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='author',
-        ),
-        migrations.RemoveField(
-            model_name='participant',
-            name='author',
-        ),
-    ]
+    pass

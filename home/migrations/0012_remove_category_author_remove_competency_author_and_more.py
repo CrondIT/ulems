@@ -13,22 +13,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='category',
-            name='author',
-        ),
-        migrations.RemoveField(
-            model_name='competency',
-            name='author',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='author',
-        ),
-        migrations.RemoveField(
-            model_name='participant',
-            name='author',
-        ),
+      
         migrations.AddField(
             model_name='category',
             name='created_by',

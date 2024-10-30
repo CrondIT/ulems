@@ -1,4 +1,4 @@
-from .models import Event, Category, Participant
+from .models import Event, Category, Participant, Competency
 from django.forms import ModelForm, TextInput, DateInput, Textarea
 
 class AddEventForm(ModelForm):
@@ -63,3 +63,19 @@ class ParticipantForm(ModelForm):
                     'placeholder': 'Отчество'
                 })
             }
+        
+
+class CompetencyForm(ModelForm):
+    class Meta:
+        model = Competency
+        fields = ['title', 'print_title']
+        widgets = {
+                "title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование'
+                }),
+                "print_title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование для печати'
+                })
+            }        

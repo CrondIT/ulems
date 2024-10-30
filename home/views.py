@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Event, Category, Participant, Competency
-from .forms import AddEventForm, CategoryForm, ParticipantForm
+from .models import Event, Category, Participant, Competency, Competency
+from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -87,8 +87,45 @@ def category(request, category_id):
     })
 # ------------------------------------------------------------------------------------
 def  participants(request):
+    form = ParticipantForm()
+    error=""
+    context = {}
+    context['participants'] = Participant.objects.all()
+    context['title'] = 'Участники'
+       
+    if request.method == 'POST':
+        
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                
+                form = ParticipantForm(request.POST)
+                usr = form.save(commit=False)
+                usr.created_by = request.user
+
+            else:
+                participant = Participant.objects.get(id=pk)
+                participant.updated_by = request.user
+                form = ParticipantForm(request.POST, instance=participant)
+            form.save()
+            form = ParticipantForm()
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            participant = Participant.objects.get(id=pk)
+            participant.delete()  
+        elif 'edit' in request.POST:
+            pk = request.POST.get('edit')
+            participant = Participant.objects.get(id=pk)   
+            form = ParticipantForm(instance=participant)
+        elif 'sort':
+            context['categories'] = Participant.objects.order_by(request.POST['sort'])
+            form = ParticipantForm(request.POST)
+
+    context['form'] = form
+    context['error'] = error  
+
+    return render(request, "home/participants.html", context)
     
-    return render(request, "home/participants.html", {"participants":Participant.objects.all()})
 # ------------------------------------------------------------------------------------
 def  participant(request, participant_id):
     participant = Participant.objects.get(pk=participant_id)
@@ -97,12 +134,48 @@ def  participant(request, participant_id):
     })
 # ------------------------------------------------------------------------------------
 def  competencies(request):
-    return render(request, "home/competencies.html", {
-        "competencies": Competency.objects.all()
-    })
+    form = CompetencyForm()
+    error=""
+    context = {}
+    context['competencies'] = Competency.objects.all()
+    context['title'] = 'Компетенции'
+       
+    if request.method == 'POST':
+       
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                 
+                form = CompetencyForm(request.POST)
+                usr = form.save(commit=False)
+                usr.created_by = request.user
+
+            else:
+                competency = Competency.objects.get(id=pk)
+                competency.updated_by = request.user
+                form = CompetencyForm(request.POST, instance=competency)
+            form.save()
+            form = CompetencyForm()
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            competency = Competency.objects.get(id=pk)
+            competency.delete()  
+        elif 'edit' in request.POST:
+            pk = request.POST.get('edit')
+            competency = Competency.objects.get(id=pk)   
+            form = CompetencyForm(instance=competency)
+        elif 'sort':
+            context['competencies'] = Competency.objects.order_by(request.POST['sort'])
+            form = CompetencyForm(request.POST)
+    context['form'] = form
+    context['error'] = error  
+
+    return render(request, "home/competencies.html", context)
 # ------------------------------------------------------------------------------------
 def  competency(request, competency_id):
     competency = Competency.objects.get(pk=competency_id)
     return render(request, "home/competency/competency.html", {
         "competency": competency
     })
+
+
