@@ -118,7 +118,7 @@ def  participants(request):
             participant = Participant.objects.get(id=pk)   
             form = ParticipantForm(instance=participant)
         elif 'sort':
-            context['categories'] = Participant.objects.order_by(request.POST['sort'])
+            context['participants'] = Participant.objects.order_by(request.POST['sort'])
             form = ParticipantForm(request.POST)
 
     context['form'] = form
