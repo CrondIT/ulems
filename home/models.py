@@ -56,8 +56,8 @@ class Competency(TimeStamp):
 
 # -----------------------------------------------------------------------------------
 class Participant(TimeStamp):
-    first_name = models.CharField("Имя", max_length=100)
-    middle_name = models.CharField("Фамилия", max_length=100)
+    first_name = models.CharField("Фамилия", max_length=100)
+    middle_name = models.CharField("Имя", max_length=100)
     last_name = models.CharField("Отчество", max_length=100)
     organization = models.CharField("Организация", max_length=100)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="participants", null=True)

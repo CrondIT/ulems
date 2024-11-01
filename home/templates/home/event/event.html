@@ -7,6 +7,10 @@
          <li>{{event.print_title}}</li>
          <li>{{event.description}}</li>
          <li>с {{event.from_date}} по {{event.to_date}}</li>
+         <li>{{event.created_date|date:'d.m.Y H:i'}}</li>
+         <li>{{event.updated_date|date:'d.m.Y H:i'}}</li>
+         <li>{{event.created_by}}</li>
+         <li>{{event.updated_by}}</li>
     </ul> 
   
     <a href="{% url 'home:events' %}">Назад</a>

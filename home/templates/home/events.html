@@ -13,6 +13,8 @@
             <th>Дата окончания</th>
             <th>Дата создания</th>
             <th>Дата изменения</th>
+            <th>Создал</th>
+            <th>Изменил</th>
             <th>Примечания</th>
         </tr>
         {% for event in events %}
@@ -21,9 +23,14 @@
                 <td>{{event.print_title}}</td>
                 <td>{{event.from_date}}</td>
                 <td>{{event.to_date}}</td>
-                <td>{{event.created_date}}</td>
-                <td>{{event.updated_date}}</td>
-                <td> <a href="{% url 'home:event' event.id %}">Подробнее</a></td>
+                <td>{{event.created_date|date:'d.m.Y H:i'}}</td>
+                <td>{{event.updated_date|date:'d.m.Y H:i'}}</td>
+                <td>{{event.created_by}}</td>
+                <td>{{event.updated_by}}</td>
+                <td> 
+                    <a href="{% url 'home:event' event.id %}">Подробнее</a>
+                    <p><input type="radio" name="select_event" value ="{{ event.id }}" checked>Выбрать</p>
+                </td>
                
             </tr>
    
