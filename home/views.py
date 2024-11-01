@@ -40,6 +40,7 @@ def add_event(request):
 
 # ------------------------------------------------------------------------------------
 def categories(request):
+    
     form = CategoryForm()
     error=""
     context = {}

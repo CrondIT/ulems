@@ -31,6 +31,7 @@ class Event(TimeStamp):
 
 # -----------------------------------------------------------------------------------
 class Category(TimeStamp):
+   
     title = models.CharField("Категория участника", max_length=100)
     print_title = models.TextField('Название для печати')
 
