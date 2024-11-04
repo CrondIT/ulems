@@ -43,6 +43,8 @@ def add_event(request):
     if request.method == "POST":
         form = AddEventForm(request.POST)
         if form.is_valid():
+            usr = form.save(commit=False)
+            usr.created_by = request.user
             form.save()
             return redirect('home:events')
         else:
