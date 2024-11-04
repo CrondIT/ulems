@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h1>Категории участников</h1>
+    <h4>Категории участников мероприятия: {{ current_event}}</h4>
 
     <table class = "table table-bordered table-light">
         <form method="POST" action="{% url 'home:categories' %}">

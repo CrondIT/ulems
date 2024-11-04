@@ -2,41 +2,49 @@
 
 {% block title %}Мероприятия{% endblock %}
 {% block body %}
-
-    <h1>Мероприятия</h1>
+    <span>{{ error }}</span>
+    <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
     <td> <a href="{% url 'home:add_event' %}">Добавить мероприятие</a></td>
     <table class = "table table-bordered table-light">
-        <tr>
-            <th>Наименование</th>
-            <th>Наименование для печати</th>
-            <th>Дата начала</th>
-            <th>Дата окончания</th>
-            <th>Дата создания</th>
-            <th>Дата изменения</th>
-            <th>Создал</th>
-            <th>Изменил</th>
-            <th>Примечания</th>
-        </tr>
-        {% for event in events %}
+        <form method="POST" action="{% url 'home:events' %}">
+            {% csrf_token %} 
+        <head>    
             <tr>
-                <td>{{event.title}}</td>
-                <td>{{event.print_title}}</td>
-                <td>{{event.from_date}}</td>
-                <td>{{event.to_date}}</td>
-                <td>{{event.created_date|date:'d.m.Y H:i'}}</td>
-                <td>{{event.updated_date|date:'d.m.Y H:i'}}</td>
-                <td>{{event.created_by}}</td>
-                <td>{{event.updated_by}}</td>
-                <td> 
-                    <a href="{% url 'home:event' event.id %}">Подробнее</a>
-                    <p><input type="radio" name="select_event" value ="{{ event.id }}" checked>Выбрать</p>
-                </td>
-               
+                <th>Наименование</th>
+                <th>Наименование для печати</th>
+                <th>Дата начала</th>
+                <th>Дата окончания</th>
+                <th>Дата создания</th>
+                <th>Дата изменения</th>
+                <th>Создал</th>
+                <th>Изменил</th>
+                <th>Примечания</th>
             </tr>
-   
-        {% empty %}   
-            
-            Нет мероприятий
-        {% endfor %}
+        </head>
+        <tbody class="table-group-divider"> 
+            {% for event in events %}
+                <tr>
+                    <td>{{event.title}}</td>
+                    <td>{{event.print_title}}</td>
+                    <td>{{event.from_date}}</td>
+                    <td>{{event.to_date}}</td>
+                    <td>{{event.created_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{event.updated_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{event.created_by}}</td>
+                    <td>{{event.updated_by}}</td>
+                    <td> 
+                        <a href="{% url 'home:event' event.id %}">Подробнее</a>
+                        <p><button class="btn btn-outline-success btn-sm" name="select" value="{{ event.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
+                        </p>
+                    </td>
+                
+                </tr>
+    
+            {% empty %}   
+                
+                Нет мероприятий
+            {% endfor %}
+        </form>    
+        </tbody>
     </table>
 {% endblock %}

@@ -1,4 +1,4 @@
-from .models import Event, Category, Participant, Competency
+from .models import Event, Category, Participant, Competency, Profile
 from django.forms import ModelForm, TextInput, DateInput, Textarea
 
 class AddEventForm(ModelForm):
@@ -78,4 +78,9 @@ class CompetencyForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Наименование для печати'
                 })
-            }        
+            }   
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['current_event']

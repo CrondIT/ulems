@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h1>Компетенции (номинации)</h1>
+    <h4>Компетенции (номинации) мероприятия: {{ current_event}}</h4>
 
     <table class = "table table-bordered table-light">
         <form method="POST" action="{% url 'home:competencies' %}">

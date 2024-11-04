@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Event, Category, Participant, Competency, Competency
-from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm
+from .models import Event, Category, Participant, Competency, Competency, User, Profile
+from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -11,9 +11,26 @@ def index(request):
     return render(request,"home/index.html")
 # ------------------------------------------------------------------------------------
 def  events(request):
-    return render(request, "home/events.html", {
-        "events": Event.objects.all()
-    })
+    
+    error = ""
+    context = {}
+    context['events'] = Event.objects.all()
+    context['title'] = 'Мероприятия'
+    context['current_event'] = request.user.profile.current_event 
+    if request.method == "POST":
+       
+        if 'select' in request.POST:
+            pk = request.POST.get("select")
+            event = Event.objects.get(id=pk)
+            request.user.profile.current_event = event
+            context['current_event'] = request.user.profile.current_event
+            request.user.save()
+        else:
+            error = "Нужно выбрать мероприятие!"
+
+        
+    context['error'] = error
+    return render(request, "home/events.html", context)
 # ------------------------------------------------------------------------------------
 def event(request, event_id):
     event = Event.objects.get(pk=event_id)
@@ -46,7 +63,7 @@ def categories(request):
     context = {}
     context['categories'] = Category.objects.all()
     context['title'] = 'Категории'
-       
+    context['current_event'] = request.user.profile.current_event   
     if request.method == 'POST':
         
         if 'save' in request.POST:
@@ -93,6 +110,7 @@ def  participants(request):
     context = {}
     context['participants'] = Participant.objects.all()
     context['title'] = 'Участники'
+    context['current_event'] = request.user.profile.current_event
        
     if request.method == 'POST':
         
@@ -140,7 +158,7 @@ def  competencies(request):
     context = {}
     context['competencies'] = Competency.objects.all()
     context['title'] = 'Компетенции'
-       
+    context['current_event'] = request.user.profile.current_event      
     if request.method == 'POST':
        
         if 'save' in request.POST:
