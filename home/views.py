@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Event, Category, Participant, Competency, Competency, User, Profile
-from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, ProfileForm
+from .models import Event, Category, Participant, Competency, Competency
+from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -75,6 +75,7 @@ def categories(request):
                 form = CategoryForm(request.POST)
                 usr = form.save(commit=False)
                 usr.created_by = request.user
+                usr.event_related = context['current_event']
 
             else:
                 category = Category.objects.get(id=pk)
@@ -123,6 +124,7 @@ def  participants(request):
                 form = ParticipantForm(request.POST)
                 usr = form.save(commit=False)
                 usr.created_by = request.user
+                usr.event_related = context['current_event']
 
             else:
                 participant = Participant.objects.get(id=pk)
@@ -161,6 +163,7 @@ def  competencies(request):
     context['competencies'] = Competency.objects.all()
     context['title'] = 'Компетенции'
     context['current_event'] = request.user.profile.current_event      
+    
     if request.method == 'POST':
        
         if 'save' in request.POST:
@@ -170,6 +173,7 @@ def  competencies(request):
                 form = CompetencyForm(request.POST)
                 usr = form.save(commit=False)
                 usr.created_by = request.user
+                usr.event_related = context['current_event']
 
             else:
                 competency = Competency.objects.get(id=pk)

@@ -11,10 +11,10 @@ class TimeStamp(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, related_name='%(app_label)s_%(class)s_created_related', blank=True, on_delete=models.CASCADE, null=True)
     updated_by = models.ForeignKey(User, related_name='%(app_label)s_%(class)s_updated_related', blank=True, on_delete=models.CASCADE, null=True)
-    
    
     class Meta:
         abstract = True
+
 
 # -----------------------------------------------------------------------------------
 class Event(TimeStamp):
@@ -32,7 +32,15 @@ class Event(TimeStamp):
         verbose_name_plural = 'Мероприятия'
 
 # -----------------------------------------------------------------------------------
-class Category(TimeStamp):
+class EventRelated(models.Model):
+
+    event_related = models.ForeignKey(Event, related_name='%(app_label)s_%(class)s_event_related', blank=True, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        abstract = True              
+
+# -----------------------------------------------------------------------------------
+class Category(TimeStamp, EventRelated):
    
     title = models.CharField("Категория участника", max_length=100)
     print_title = models.TextField('Название для печати')
@@ -45,7 +53,7 @@ class Category(TimeStamp):
         verbose_name_plural = 'Категории участников'
         # ordering = ['title']
 # -----------------------------------------------------------------------------------
-class Competency(TimeStamp):
+class Competency(TimeStamp, EventRelated):
     title = models.CharField("Компетенция (номинация)", max_length=100)
     print_title = models.TextField('Название для печати')
 
@@ -57,12 +65,11 @@ class Competency(TimeStamp):
         verbose_name_plural = 'Компетенции (номинации)'
 
 # -----------------------------------------------------------------------------------
-class Participant(TimeStamp):
+class Participant(TimeStamp, EventRelated):
     first_name = models.CharField("Фамилия", max_length=100)
     middle_name = models.CharField("Имя", max_length=100)
     last_name = models.CharField("Отчество", max_length=100)
     organization = models.CharField("Организация", max_length=100)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="participants", null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="participants", null=True)
     competency = models.ForeignKey(Competency, on_delete=models.CASCADE, related_name="participants", null=True)
 
@@ -93,3 +100,6 @@ class Profile(TimeStamp):
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
+
+
+  

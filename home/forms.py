@@ -48,7 +48,7 @@ class CategoryForm(ModelForm):
 class ParticipantForm(ModelForm):
     class Meta:
         model = Participant
-        fields = ['first_name', 'middle_name', 'last_name', 'organization', 'event', 'category', 'competency']
+        fields = ['first_name', 'middle_name', 'last_name', 'organization', 'category', 'competency']
         widgets = {
                 "first_name": TextInput(attrs={
                     'class': 'form-control',

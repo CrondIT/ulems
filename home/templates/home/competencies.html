@@ -50,7 +50,7 @@
                 <tr>
                     {% if form.instance.id == competency.id %}
                         {% include 'home/competency.html' %}
-                    {% else %}
+                    {% elif competency.event_related == current_event %}
                         <td>{{forloop.counter}}</td>
                         <td>{{competency.title}}</td>
                         <td>{{competency.print_title}}</td>
@@ -59,8 +59,8 @@
                         <td>{{competency.created_by}}</td>
                         <td>{{competency.updated_by}}</td>
                         <td> 
-                            <button class="btn btn-outline-success" name="edit" value="{{ category.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger" name="delete" value="{{ category.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            <button class="btn btn-outline-success" name="edit" value="{{ competency.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                            <button class="btn btn-outline-danger" name="delete" value="{{ competency.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                         </td> 
                     {% endif %}
                 </tr>
