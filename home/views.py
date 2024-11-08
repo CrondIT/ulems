@@ -25,6 +25,13 @@ def  events(request):
             request.user.profile.current_event = event
             context['current_event'] = request.user.profile.current_event
             request.user.save()
+        elif 'info' in request.POST:
+            pk = request.POST.get("info")
+            return redirect( 'home:event',pk)  
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            category = Event.objects.get(id=pk)
+            category.delete()     
         else:
             error = "Нужно выбрать мероприятие!"
 
@@ -47,6 +54,7 @@ def add_event(request):
             usr.created_by = request.user
             form.save()
             return redirect('home:events')
+        
         else:
             error="Ошибка заполнения"
 

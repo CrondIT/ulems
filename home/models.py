@@ -82,8 +82,8 @@ class Participant(TimeStamp, EventRelated):
 
 # -----------------------------------------------------------------------------------
 class Profile(TimeStamp):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    current_event = models.OneToOneField(Event, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    current_event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True)
     
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
