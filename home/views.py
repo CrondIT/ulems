@@ -14,9 +14,9 @@ def  events(request):
     
     error = ""
     context = {}
-    context['events'] = Event.objects.all()
     context['title'] = 'Мероприятия'
     context['current_event'] = request.user.profile.current_event 
+    context['events'] = Event.objects.filter(created_by=request.user)
     if request.method == "POST":
        
         if 'select' in request.POST:
@@ -71,7 +71,7 @@ def categories(request):
     form = CategoryForm()
     error=""
     context = {}
-    context['categories'] = Category.objects.all()
+    context['categories'] = Category.objects.filter(created_by=request.user)
     context['title'] = 'Категории'
     context['current_event'] = request.user.profile.current_event   
     if request.method == 'POST':
@@ -119,7 +119,7 @@ def  participants(request):
     form = ParticipantForm()
     error=""
     context = {}
-    context['participants'] = Participant.objects.all()
+    context['participants'] = Participant.objects.filter(created_by=request.user)
     context['title'] = 'Участники'
     context['current_event'] = request.user.profile.current_event
        
@@ -168,7 +168,7 @@ def  competencies(request):
     form = CompetencyForm()
     error=""
     context = {}
-    context['competencies'] = Competency.objects.all()
+    context['competencies'] = Competency.objects.filter(created_by=request.user)
     context['title'] = 'Компетенции'
     context['current_event'] = request.user.profile.current_event      
     
