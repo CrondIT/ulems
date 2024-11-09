@@ -64,6 +64,15 @@ class ParticipantForm(ModelForm):
                 })
             }
         
+    def __init__(self, *args, **kwargs):
+      	# Extract the user from the view
+        user = kwargs.pop('user')
+        current_event = kwargs.pop('current_event')
+        super(ParticipantForm, self).__init__(*args, **kwargs)
+        # Filter 
+        self.fields['category'].queryset = Category.objects.filter(event_related=current_event, created_by=user)    
+        self.fields['competency'].queryset = Competency.objects.filter(event_related=current_event, created_by=user)  
+        
 
 class CompetencyForm(ModelForm):
     class Meta:

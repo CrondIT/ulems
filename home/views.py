@@ -3,13 +3,12 @@ from .models import Event, Category, Participant, Competency, Competency
 from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def index(request):
     return render(request,"home/index.html")
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def  events(request):
     
     error = ""
@@ -39,12 +38,14 @@ def  events(request):
     context['error'] = error
     return render(request, "home/events.html", context)
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def event(request, event_id):
     event = Event.objects.get(pk=event_id)
     return render(request, "home/event/event.html", {
         "event": event
     })
 # ------------------------------------------------------------------------------------    
+@login_required(login_url="login")
 def add_event(request):
     error=""
     if request.method == "POST":
@@ -66,6 +67,7 @@ def add_event(request):
     return render(request, "home/event/add_event.html", data)     
 
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def categories(request):
     
     form = CategoryForm()
@@ -109,34 +111,38 @@ def categories(request):
     return render(request, "home/categories.html", context)
 
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def category(request, category_id):
     category = Category.objects.get(pk=category_id)
     return render(request, "home/category/category.html", {
         "category": category
     })
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def  participants(request):
-    form = ParticipantForm()
+    
     error=""
     context = {}
     context['participants'] = Participant.objects.filter(created_by=request.user)
     context['title'] = 'Участники'
     context['current_event'] = request.user.profile.current_event
-       
+    context['user'] = request.user
+    form = ParticipantForm(user=request.user, current_event=request.user.profile.current_event)
+
     if request.method == 'POST':
         
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
                 
-                form = ParticipantForm(request.POST)
+                form = ParticipantForm(request.POST, context)
                 usr = form.save(commit=False)
-                usr.created_by = request.user
+                usr.created_by = context['user']
                 usr.event_related = context['current_event']
 
             else:
                 participant = Participant.objects.get(id=pk)
-                participant.updated_by = request.user
+                participant.updated_by = context['user']
                 form = ParticipantForm(request.POST, instance=participant)
             form.save()
             form = ParticipantForm()
@@ -158,12 +164,14 @@ def  participants(request):
     return render(request, "home/participants.html", context)
     
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def  participant(request, participant_id):
     participant = Participant.objects.get(pk=participant_id)
     return render(request, "home/participant/participant.html", {
         "participant": participant
     })
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def  competencies(request):
     form = CompetencyForm()
     error=""
@@ -205,6 +213,7 @@ def  competencies(request):
 
     return render(request, "home/competencies.html", context)
 # ------------------------------------------------------------------------------------
+@login_required(login_url="login")
 def  competency(request, competency_id):
     competency = Competency.objects.get(pk=competency_id)
     return render(request, "home/competency/competency.html", {
