@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 # class for record's created time and updated time
+
 # -----------------------------------------------------------------------------------
 class TimeStamp(models.Model):
     
@@ -15,6 +16,10 @@ class TimeStamp(models.Model):
     class Meta:
         abstract = True
 
+# -----------------------------------------------------------------------------------
+def user_directory_path(instance, filename):
+    # путь, куда будет осуществлена загрузка MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.created_by.id, filename)
 
 # -----------------------------------------------------------------------------------
 class Event(TimeStamp):
@@ -23,7 +28,7 @@ class Event(TimeStamp):
     description = models.TextField('Описание') 
     from_date = models.DateField('Дата начала')
     to_date = models.DateField('Дата окончания')
-   
+    cover = models.ImageField(upload_to=user_directory_path, null=True)
     def __str__(self):
         return self.title
 
