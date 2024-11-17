@@ -1,10 +1,10 @@
 from .models import Event, Category, Participant, Competency, Profile
-from django.forms import ModelForm, TextInput, DateInput, Textarea
+from django.forms import ModelForm, TextInput, DateInput, Textarea, ImageField
 
 class AddEventForm(ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'print_title', 'description','from_date','to_date']
+        fields = ['title', 'print_title', 'description','from_date','to_date','cover']
 
         widgets = {
             "title": TextInput(attrs={

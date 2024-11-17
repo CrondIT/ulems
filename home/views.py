@@ -49,7 +49,7 @@ def event(request, event_id):
 def add_event(request):
     error=""
     if request.method == "POST":
-        form = AddEventForm(request.POST)
+        form = AddEventForm(request.POST, request.FILES)
         if form.is_valid():
             usr = form.save(commit=False)
             usr.created_by = request.user
