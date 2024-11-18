@@ -11,7 +11,11 @@
          <li>{{event.updated_date|date:'d.m.Y H:i'}}</li>
          <li>{{event.created_by}}</li>
          <li>{{event.updated_by}}</li>
-    </ul> 
+         <li>{{event.cover}}</li>
+        
+    </ul>
+
+    <img src="media/{{event.cover}}" alt="Cover"> 
   
     <a href="{% url 'home:events' %}">Назад</a>
 {% endblock %}

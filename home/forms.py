@@ -1,10 +1,12 @@
 from .models import Event, Category, Participant, Competency, Profile
-from django.forms import ModelForm, TextInput, DateInput, Textarea, ImageField
+from django.forms import ModelForm, TextInput, DateInput, Textarea
+
 
 class AddEventForm(ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'print_title', 'description','from_date','to_date','cover']
+        label = {'from_date':'label1'}
 
         widgets = {
             "title": TextInput(attrs={
@@ -15,19 +17,22 @@ class AddEventForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Наименование для печати'
             }),
-             "description": Textarea(attrs={
+            "description": Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Описание'
             }),
-             "from_date": DateInput(attrs={
+            "from_date": DateInput(attrs={
                 'class': 'form-control',
+                'type': 'date',
                 'placeholder': 'Дата начала'
             }),
-             "to_date": DateInput(attrs={
+            "to_date": DateInput(attrs={
                 'class': 'form-control',
+                'type': 'date',
                 'placeholder': 'Дата окончания'
             })
         }
+        
 
 class CategoryForm(ModelForm):
     class Meta:

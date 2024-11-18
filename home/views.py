@@ -17,7 +17,6 @@ def  events(request):
     context['current_event'] = request.user.profile.current_event 
     context['events'] = Event.objects.filter(created_by=request.user)
     if request.method == "POST":
-       
         if 'select' in request.POST:
             pk = request.POST.get("select")
             event = Event.objects.get(id=pk)
