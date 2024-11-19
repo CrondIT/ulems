@@ -17,7 +17,6 @@ def  events(request):
     context['current_event'] = request.user.profile.current_event 
     context['events'] = Event.objects.filter(created_by=request.user)
     if request.method == "POST":
-       
         if 'select' in request.POST:
             pk = request.POST.get("select")
             event = Event.objects.get(id=pk)
@@ -49,7 +48,7 @@ def event(request, event_id):
 def add_event(request):
     error=""
     if request.method == "POST":
-        form = AddEventForm(request.POST)
+        form = AddEventForm(request.POST, request.FILES)
         if form.is_valid():
             usr = form.save(commit=False)
             usr.created_by = request.user
