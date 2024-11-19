@@ -12,11 +12,11 @@
          <li>{{event.created_by}}</li>
          <li>{{event.updated_by}}</li>
          <li>{{event.cover}}</li>
-         <li>media: {{MEDIA_URL}}{{STATIC_URL}}</li>
+         <li>media:{{event.cover.url}} {{MEDIA_URL}}{{STATIC_URL}}</li>
         
     </ul>
 
-    <img src="/media/{{event.cover}}" width="320pt"  alt="Cover"> <br>
+    <img src="{{event.cover.url}}" width="320pt"  alt="Cover"> <br>
   
     <a href="{% url 'home:events' %}">Назад</a>
 {% endblock %}
