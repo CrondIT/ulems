@@ -13,4 +13,6 @@ urlpatterns=[
     path("participant/<int:participant_id>", views.participant, name="participant"),
     path("competencies", views.competencies, name="competencies"),
     path("competency/<int:competency_id>", views.competency, name="competency"),
+    path("user_images", views.user_images, name="user_images"),
+    
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Event, Category, Participant, Competency, Competency
-from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm
+from .models import Event, Category, Participant, Competency, Competency, UserImage
+from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, UserImageForm
 from django.contrib.auth.decorators import login_required
 
 # ------------------------------------------------------------------------------------
@@ -219,4 +219,52 @@ def  competency(request, competency_id):
         "competency": competency
     })
 
+# ------------------------------------------------------------------------------------
+@login_required(login_url="login")
+def user_images(request):
+    
+    form = UserImageForm()
+    error=""
+    context = {}
+    context['user_images'] = UserImage.objects.filter(created_by=request.user)
+    context['title'] = 'Изображения'
+    context['current_user'] = request.user   
+    if request.method == 'POST':
+        
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                
+                form = UserImageForm(request.POST, request.FILES)
+                usr = form.save(commit=False)
+                usr.created_by = request.user
+            else:
+                user_image = UserImage.objects.get(id=pk)
+                user_image.updated_by = request.user
+                form = UserImageForm(request.POST, request.FILES, instance=user_image)
+            form.save()
+            form = UserImageForm()
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            user_image = UserImage.objects.get(id=pk)
+            user_image.delete()  
+        elif 'edit' in request.POST:
+            pk = request.POST.get('edit')
+            user_image = UserImage.objects.get(id=pk)   
+            form = UserImageForm(instance=user_image)
+        elif 'sort':
+            context['user_images'] = UserImage.objects.order_by(request.POST['sort'])
+            form = UserImageForm(request.POST)
 
+    context['form'] = form
+    context['error'] = error  
+
+    return render(request, "home/user_images.html", context)
+
+# ------------------------------------------------------------------------------------
+@login_required(login_url="login")
+def user_image(request, user_image_id):
+    user_image = UserImage.objects.get(pk=user_image_id)
+    return render(request, "home/category/category.html", {
+        "category": category
+    })

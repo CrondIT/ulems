@@ -23,6 +23,17 @@ def user_directory_path(instance, filename):
     return 'user_{0}/{1}'.format(instance.created_by.id, filename)
 
 # -----------------------------------------------------------------------------------
+class UserImage(TimeStamp):
+    title = models.CharField('Название', max_length=200)
+    image = models.ImageField(upload_to=user_directory_path, null=True)
+    
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Изображениe'
+        verbose_name_plural = 'Изображения'
+# -----------------------------------------------------------------------------------
 class Event(TimeStamp):
     title = models.CharField('Название', max_length=200, default='Новое мероприятие')
     print_title = models.TextField('Название для печати')

@@ -1,4 +1,4 @@
-from .models import Event, Category, Participant, Competency, Profile
+from .models import Event, Category, Participant, Competency, Profile, UserImage
 from django.forms import ModelForm, TextInput, DateInput, Textarea
 
 
@@ -48,7 +48,18 @@ class CategoryForm(ModelForm):
                     'placeholder': 'Наименование для печати'
                 })
             }
-        
+
+class UserImageForm(ModelForm):
+    class Meta:
+        model = UserImage
+        fields = ['title', 'image']
+        widgets = {
+                "title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование'
+                })
+              
+            }        
 
 class ParticipantForm(ModelForm):
     class Meta:
