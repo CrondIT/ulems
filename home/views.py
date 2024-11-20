@@ -234,7 +234,6 @@ def user_images(request):
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                
                 form = UserImageForm(request.POST, request.FILES)
                 usr = form.save(commit=False)
                 usr.created_by = request.user
@@ -262,9 +261,3 @@ def user_images(request):
     return render(request, "home/user_images.html", context)
 
 # ------------------------------------------------------------------------------------
-@login_required(login_url="login")
-def user_image(request, user_image_id):
-    user_image = UserImage.objects.get(pk=user_image_id)
-    return render(request, "home/category/category.html", {
-        "category": category
-    })

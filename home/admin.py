@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Competency, Event, Category, Participant, Profile
+from .models import Competency, Event, Category, Participant, Profile, UserImage
 
 # Register your models here.
 class AuditAdmin(admin.ModelAdmin):
@@ -18,3 +18,4 @@ admin.site.register(Event, AuditAdmin)
 admin.site.register(Category, AuditAdmin)
 admin.site.register(Participant, AuditAdmin)
 admin.site.register(Profile, AuditAdmin)
+admin.site.register(UserImage, AuditAdmin)

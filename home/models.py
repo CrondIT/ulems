@@ -31,7 +31,7 @@ class UserImage(TimeStamp):
         return self.title
 
     class Meta:
-        verbose_name = 'Изображениe'
+        verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 # -----------------------------------------------------------------------------------
 class Event(TimeStamp):

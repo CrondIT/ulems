@@ -55,14 +55,15 @@
                 <tr>
                     {% if form.instance.id == user_image.id %}
                         {% include 'home/user_image.html' %}
+                    {% else %}    
                         <td>{{forloop.counter}}</td>
+                        <td><a href=""></a><img src="{{user_image.image.url}}" width="100pt"  alt="User Image"></a></td>
                         <td>{{user_image.title}}</td>
                         <td>{{user_image.image}}</td>
                         <td>{{user_image.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{user_image.updated_date|date:'d.m.Y H:i'}}</td>
                         <td>{{user_image.created_by}}</td>
                         <td>{{user_image.updated_by}}</td>
-                        <td>{{user_image.event_related}}</td>
                         <td> 
                             <button class="btn btn-outline-success" name="edit" value="{{ user_image.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
                             <button class="btn btn-outline-danger" name="delete" value="{{ user_image.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
