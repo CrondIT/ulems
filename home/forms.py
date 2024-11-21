@@ -5,7 +5,7 @@ from django.forms import ModelForm, TextInput, DateInput, Textarea
 class AddEventForm(ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'print_title', 'description','from_date','to_date','cover']
+        fields = ['title', 'print_title', 'description','from_date','to_date','cover','image']
         label = {'from_date':'label1'}
 
         widgets = {
@@ -32,6 +32,14 @@ class AddEventForm(ModelForm):
                 'placeholder': 'Дата окончания'
             })
         }
+
+        def __init__(self, *args, **kwargs):
+            # Extract the user from the view
+            user = kwargs.pop('user')
+            super(ParticipantForm, self).__init__(*args, **kwargs)
+            # Filter 
+            self.fields['image'].queryset = Category.objects.filter(created_by=user)    
+                
         
 
 class CategoryForm(ModelForm):
