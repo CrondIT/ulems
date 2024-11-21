@@ -28,7 +28,7 @@ class UserImage(TimeStamp):
     image = models.ImageField(upload_to=user_directory_path, null=True)
     
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     class Meta:
         verbose_name = 'Изображение'
@@ -42,6 +42,7 @@ class Event(TimeStamp):
     to_date = models.DateField('Дата окончания')
     cover = models.ImageField(upload_to=user_directory_path, null=True)
     image = models.ForeignKey(UserImage, on_delete=models.CASCADE, related_name="event_cover", null=True)
+    
     def __str__(self):
         return self.title
 
@@ -64,7 +65,7 @@ class Category(TimeStamp, EventRelated):
     print_title = models.TextField('Название для печати')
 
     def __str__(self):
-        return self.title
+        return str(self.title)
     
     class Meta:
         verbose_name = 'Категория участника'
@@ -76,7 +77,7 @@ class Competency(TimeStamp, EventRelated):
     print_title = models.TextField('Название для печати')
 
     def __str__(self):
-        return self.title
+        return str(self.title)
     
     class Meta:
         verbose_name = 'Компетенция (номинация)'

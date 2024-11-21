@@ -1,7 +1,11 @@
+""" import render and redirect """
 from django.shortcuts import render, redirect
-from .models import Event, Category, Participant, Competency, Competency, UserImage
-from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, UserImageForm
+
 from django.contrib.auth.decorators import login_required
+
+from .models import Event, Category, Participant, Competency, UserImage
+
+from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, UserImageForm
 
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
