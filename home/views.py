@@ -5,20 +5,21 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Event, Category, Participant, Competency, UserImage
 
-from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, UserImageForm
+from .forms import AddEventForm, CategoryForm, ParticipantForm
+from .forms import CompetencyForm, UserImageForm
 
-# ------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
 @login_required(login_url="login")
 def index(request):
     """ View main (starter) page """
-    return render(request,"home/index.html")
+    return render(request, "home/index.html")
 
 
-
-# ------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 @login_required(login_url="login")
-def  events(request):
-    """ 
+def events(request):
+    """
         Print, select and delete events in table.
         Also detailed event view and add event (open in separate page).
     """
@@ -30,34 +31,38 @@ def  events(request):
     if request.method == "POST":
         if 'select' in request.POST:
             pk = request.POST.get("select")
-            selected_item = context['events'].get(id=pk)
-            request.user.profile.current_event = selected_item
+            select_item = context['events'].get(id=pk)
+            request.user.profile.current_event = select_item
             context['current_event'] = request.user.profile.current_event
             request.user.save()
         elif 'info' in request.POST:
             pk = request.POST.get("info")
-            return redirect( 'home:event',pk)  
+            return redirect('home:event', pk)
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            item_to_delete = Event.objects.get(id=pk)
-            item_to_delete.delete()     
+            delete_item = Event.objects.get(id=pk)
+            delete_item.delete()
         else:
             error = "Нужно выбрать мероприятие!"
             context['error'] = error
     return render(request, "home/events.html", context)
-# ------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------
 @login_required(login_url="login")
 def event(request, event_id):
     """ Detailed event view. """
-    selected_event = Event.objects.get(pk=event_id)
+    select_item = Event.objects.get(pk=event_id)
     return render(request, "home/event/event.html", {
-        "event": selected_event
+        "event": select_item
     })
-# ------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------------------
 @login_required(login_url="login")
 def add_event(request):
     """ Add new event. """
-    error=""
+    error = ""
     if request.method == "POST":
         form = AddEventForm(request.POST, request.FILES)
         if form.is_valid():
@@ -66,21 +71,22 @@ def add_event(request):
             form.save()
             return redirect('home:events')
         else:
-            error="Ошибка заполнения"
+            error = "Ошибка заполнения"
 
     form = AddEventForm()
     data = {
-        'form': form,  
+        'form': form,
         'error': error
     }
     return render(request, "home/event/add_event.html", data)
 
-# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 @login_required(login_url="login")
 def categories(request):
-    """ View, add, edit and delete categories i table."""    
+    """ View, add, edit and delete categories in table."""
     form = CategoryForm()
-    error=""
+    error = ""
     context = {}
     context['categories'] = Category.objects.filter(created_by=request.user)
     context['title'] = 'Категории'
@@ -118,50 +124,48 @@ def categories(request):
 
     return render(request, "home/categories.html", context)
 
-# ------------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
 @login_required(login_url="login")
 def category(request, category_id):
     category = Category.objects.get(pk=category_id)
     return render(request, "home/category/category.html", {
         "category": category
     })
-# ------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------
 @login_required(login_url="login")
-def  participants(request):
-    
-    error=""
+def participants(request):
+    error = ""
     context = {}
     context['participants'] = Participant.objects.filter(created_by=request.user)
     context['title'] = 'Участники'
     context['current_event'] = request.user.profile.current_event
     context['user'] = request.user
     form = ParticipantForm(user=request.user, current_event=request.user.profile.current_event)
-
     if request.method == 'POST':
-        
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                
                 form = ParticipantForm(request.POST, context)
                 usr = form.save(commit=False)
                 usr.created_by = context['user']
                 usr.event_related = context['current_event']
-
             else:
-                participant = Participant.objects.get(id=pk)
-                participant.updated_by = context['user']
-                form = ParticipantForm(request.POST, instance=participant)
+                save_item = Participant.objects.get(id=pk)
+                save_item.updated_by = context['user']
+                form = ParticipantForm(request.POST, instance=save_item)
             form.save()
             form = ParticipantForm()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            participant = Participant.objects.get(id=pk)
-            participant.delete()  
+            delete_item = Participant.objects.get(id=pk)
+            delete_item.delete()  
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            participant = Participant.objects.get(id=pk)   
-            form = ParticipantForm(instance=participant)
+            edit_item = Participant.objects.get(id=pk)   
+            form = ParticipantForm(instance=edit_item)
         elif 'sort':
             context['participants'] = Participant.objects.order_by(request.POST['sort'])
             form = ParticipantForm(request.POST)
@@ -170,14 +174,17 @@ def  participants(request):
     context['error'] = error  
 
     return render(request, "home/participants.html", context)
-    
+
+
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
-def  participant(request, participant_id):
+def participant(request, participant_id):
     participant = Participant.objects.get(pk=participant_id)
     return render(request, "home/participant/participant.html", {
         "participant": participant
     })
+
+
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def  competencies(request):
