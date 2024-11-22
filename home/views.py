@@ -1,4 +1,4 @@
-""" import render and redirect """
+""" Import render and redirect. """
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
@@ -10,21 +10,28 @@ from .forms import AddEventForm, CategoryForm, ParticipantForm, CompetencyForm, 
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def index(request):
+    """ View main (starter) page """
     return render(request,"home/index.html")
+
+
+
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def  events(request):
-    
+    """ 
+        Print, select and delete events in table.
+        Also detailed event view and add event (open in separate page).
+    """
     error = ""
     context = {}
     context['title'] = 'Мероприятия'
-    context['current_event'] = request.user.profile.current_event 
+    context['current_event'] = request.user.profile.current_event
     context['events'] = Event.objects.filter(created_by=request.user)
     if request.method == "POST":
         if 'select' in request.POST:
             pk = request.POST.get("select")
-            event = Event.objects.get(id=pk)
-            request.user.profile.current_event = event
+            selected_item = context['events'].get(id=pk)
+            request.user.profile.current_event = selected_item
             context['current_event'] = request.user.profile.current_event
             request.user.save()
         elif 'info' in request.POST:
@@ -32,24 +39,24 @@ def  events(request):
             return redirect( 'home:event',pk)  
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            category = Event.objects.get(id=pk)
-            category.delete()     
+            item_to_delete = Event.objects.get(id=pk)
+            item_to_delete.delete()     
         else:
             error = "Нужно выбрать мероприятие!"
-
-        
-    context['error'] = error
+            context['error'] = error
     return render(request, "home/events.html", context)
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def event(request, event_id):
-    event = Event.objects.get(pk=event_id)
+    """ Detailed event view. """
+    selected_event = Event.objects.get(pk=event_id)
     return render(request, "home/event/event.html", {
-        "event": event
+        "event": selected_event
     })
-# ------------------------------------------------------------------------------------    
+# ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def add_event(request):
+    """ Add new event. """
     error=""
     if request.method == "POST":
         form = AddEventForm(request.POST, request.FILES)
@@ -58,7 +65,6 @@ def add_event(request):
             usr.created_by = request.user
             form.save()
             return redirect('home:events')
-        
         else:
             error="Ошибка заполнения"
 
@@ -67,49 +73,48 @@ def add_event(request):
         'form': form,  
         'error': error
     }
-    return render(request, "home/event/add_event.html", data)     
+    return render(request, "home/event/add_event.html", data)
 
 # ------------------------------------------------------------------------------------
 @login_required(login_url="login")
 def categories(request):
-    
+    """ View, add, edit and delete categories i table."""    
     form = CategoryForm()
     error=""
     context = {}
     context['categories'] = Category.objects.filter(created_by=request.user)
     context['title'] = 'Категории'
-    context['current_event'] = request.user.profile.current_event   
+    context['current_event'] = request.user.profile.current_event
     if request.method == 'POST':
-        
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                
                 form = CategoryForm(request.POST)
                 usr = form.save(commit=False)
                 usr.created_by = request.user
                 usr.event_related = context['current_event']
-
             else:
-                category = Category.objects.get(id=pk)
-                category.updated_by = request.user
-                form = CategoryForm(request.POST, instance=category)
+                save_item = Category.objects.get(id=pk)
+                save_item.updated_by = request.user
+                form = CategoryForm(request.POST, instance=save_item)
             form.save()
             form = CategoryForm()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            category = Category.objects.get(id=pk)
-            category.delete()  
+            delete_item = Category.objects.get(id=pk)
+            delete_item.delete()  
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            category = Category.objects.get(id=pk)   
-            form = CategoryForm(instance=category)
+            edit_item = Category.objects.get(id=pk)   
+            form = CategoryForm(instance=edit_item)
         elif 'sort':
             context['categories'] = Category.objects.order_by(request.POST['sort'])
             form = CategoryForm(request.POST)
+        else:
+            pass
 
     context['form'] = form
-    context['error'] = error  
+    context['error'] = error
 
     return render(request, "home/categories.html", context)
 
