@@ -51,11 +51,10 @@
 
           
             {% for category in categories %}
-                
-                <tr>
+                 <tr>
                     {% if form.instance.id == category.id %}
                         {% include 'home/category.html' %}
-                    {% elif category.event_related == current_event %}
+                    {% else %}
                         <td>{{forloop.counter}}</td>
                         <td>{{category.title}}</td>
                         <td>{{category.print_title}}</td>

@@ -1,13 +1,15 @@
-from .models import Event, Category, Participant, Competency, Profile, UserImage
+from .models import Event, Category, Participant, Competency
+from .models import Profile, UserImage
+
+
 from django.forms import ModelForm, TextInput, DateInput, Textarea
 
 
 class AddEventForm(ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'print_title', 'description','from_date','to_date','cover','image']
-        label = {'from_date':'label1'}
-
+        fields = ['title', 'print_title', 'description',
+                  'from_date', 'to_date', 'cover', 'image']
         widgets = {
             "title": TextInput(attrs={
                 'class': 'form-control',
@@ -38,9 +40,10 @@ class AddEventForm(ModelForm):
             user = kwargs.pop('user')
             super(ParticipantForm, self).__init__(*args, **kwargs)
             # Filter 
-            self.fields['image'].queryset = Category.objects.filter(created_by=user)    
-                
-        
+            self.fields['image'].queryset = Category.objects.filter(
+                created_by=user
+            )
+
 
 class CategoryForm(ModelForm):
     class Meta:
@@ -57,6 +60,7 @@ class CategoryForm(ModelForm):
                 })
             }
 
+
 class UserImageForm(ModelForm):
     class Meta:
         model = UserImage
@@ -66,13 +70,14 @@ class UserImageForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Наименование'
                 })
-              
-            }        
+            }
+
 
 class ParticipantForm(ModelForm):
     class Meta:
         model = Participant
-        fields = ['first_name', 'middle_name', 'last_name', 'organization', 'category', 'competency']
+        fields = ['first_name', 'middle_name', 'last_name', 'organization',
+                  'category', 'competency']
         widgets = {
                 "first_name": TextInput(attrs={
                     'class': 'form-control',
@@ -82,21 +87,27 @@ class ParticipantForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Имя'
                 }),
-                 "last_name": TextInput(attrs={
+                "last_name": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Отчество'
                 })
             }
-        
+
     def __init__(self, *args, **kwargs):
       	# Extract the user from the view
-        user = kwargs.pop('user')
-        current_event = kwargs.pop('current_event')
+        user = kwargs.pop('current_user')
+        event = kwargs.pop('current_event')
         super(ParticipantForm, self).__init__(*args, **kwargs)
-        # Filter 
-        self.fields['category'].queryset = Category.objects.filter(event_related=current_event, created_by=user)    
-        self.fields['competency'].queryset = Competency.objects.filter(event_related=current_event, created_by=user)  
-        
+        # Filter
+        self.fields['category'].queryset = Category.objects.filter(
+            event_related=event,
+            created_by=user
+        )
+        self.fields['competency'].queryset = Competency.objects.filter(
+            event_related=event,
+            created_by=user
+        )
+
 
 class CompetencyForm(ModelForm):
     class Meta:
@@ -112,6 +123,7 @@ class CompetencyForm(ModelForm):
                     'placeholder': 'Наименование для печати'
                 })
             }   
+
 
 class ProfileForm(ModelForm):
     class Meta:
