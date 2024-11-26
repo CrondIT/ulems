@@ -42,11 +42,13 @@ def events(request):
         elif 'info' in request.POST:
             pk = request.POST.get("info")
             return redirect('home:event', pk)
+        elif 'edit' in request.POST:
+            pass
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Event.objects.get(id=pk)
             delete_item.delete()
-        elif 'sort':
+        elif 'sort' in request.POST:
             context['events'] = context['events'].order_by(
                 request.POST['sort']
                 )
@@ -127,7 +129,7 @@ def categories(request):
             pk = request.POST.get('edit')
             edit_item = Category.objects.get(id=pk)
             form = CategoryForm(instance=edit_item)
-        elif 'sort':
+        elif 'sort' in request.POST:
             context['categories'] = context['categories'].order_by(
                 request.POST['sort']
                 )
@@ -208,7 +210,7 @@ def participants(request):
                 current_user=context['current_user'],
                 current_event=context['current_event']
                 )
-        elif 'sort':
+        elif 'sort' in request.POST:
             context['participants'] = context['participants'].order_by(
                     request.POST['sort']
                     )
@@ -271,7 +273,7 @@ def competencies(request):
             pk = request.POST.get('edit')
             edit_item = Competency.objects.get(id=pk)   
             form = CompetencyForm(instance=edit_item)
-        elif 'sort':
+        elif 'sort' in request.POST:
             context['competencies'] = context['competencies'] .order_by(
                 request.POST['sort']
                 )
@@ -333,7 +335,7 @@ def user_images(request):
             pk = request.POST.get('edit')
             user_image = UserImage.objects.get(id=pk)   
             form = UserImageForm(instance=user_image)
-        elif 'sort':
+        elif 'sort' in request.POST:
             context['user_images'] = context['user_images'].order_by(
                 request.POST['sort']
                 )
