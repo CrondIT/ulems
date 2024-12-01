@@ -43,7 +43,9 @@ def events(request):
             pk = request.POST.get("info")
             return redirect('home:event', pk)
         elif 'edit' in request.POST:
-            pass
+            pk = request.POST.get("info")
+            return redirect('home:event', pk)
+            
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Event.objects.get(id=pk)
