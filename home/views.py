@@ -43,8 +43,9 @@ def events(request):
             pk = request.POST.get("info")
             return redirect('home:view_event', pk)
         elif 'edit' in request.POST:
-            pk = request.POST.get("edit")
-            return redirect('home:edit_event', pk)
+            pass
+            # pk = request.POST.get("edit")
+            # return redirect('home:edit_event', pk)
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Event.objects.get(id=pk)
@@ -91,6 +92,7 @@ def add_event(request):
     }
     return render(request, "home/event/add_event.html", data)
 
+
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
 def edit_event(request, pk):
@@ -117,6 +119,7 @@ def edit_event(request, pk):
         'error': error
     }
     return render(request, "home/event/edit_event.html", data)
+
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
