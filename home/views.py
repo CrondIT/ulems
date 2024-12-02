@@ -41,11 +41,10 @@ def events(request):
             request.user.save()
         elif 'info' in request.POST:
             pk = request.POST.get("info")
-            return redirect('home:event', pk)
+            return redirect('home:view_event', pk)
         elif 'edit' in request.POST:
-            pk = request.POST.get("info")
-            return redirect('home:event', pk)
-            
+            pk = request.POST.get("edit")
+            return redirect('home:edit_event', pk)
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Event.objects.get(id=pk)
@@ -62,10 +61,10 @@ def events(request):
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
-def event(request, event_id):
+def view_event(request, event_id):
     """ Detailed selected event view. """
     select_item = Event.objects.get(pk=event_id)
-    return render(request, "home/event/event.html", {
+    return render(request, "home/event/view_event.html", {
         "event": select_item
     })
 
@@ -92,6 +91,32 @@ def add_event(request):
     }
     return render(request, "home/event/add_event.html", data)
 
+# ----------------------------------------------------------------------------
+@login_required(login_url="login")
+def edit_event(request, pk):
+    """ Edit event. """
+    error = "увше умуте"
+    edit_event = Event.objects.get(id=pk)
+    if request.method == "POST":
+        form = AddEventForm(
+            request.POST, 
+            request.FILES, 
+            instance=edit_event
+            )
+        if form.is_valid():
+            usr = form.save(commit=False)
+            usr.updated_by = request.user
+            form.save()
+            return redirect('home:events')
+        else:
+            error = "Ошибка заполнения"
+
+    form = AddEventForm()
+    data = {
+        'form': form,
+        'error': error
+    }
+    return render(request, "home/event/edit_event.html", data)
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")

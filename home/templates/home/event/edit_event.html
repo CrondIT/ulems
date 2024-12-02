@@ -1,1 +1,22 @@
 {% extends "home/layout.html" %}
+{% block body %}
+    <h1>Редактировать мероприятие {{even.id}}</h1>
+    <span>{{ error }}</span>
+    <div class = "mb-2">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+
+            {{form.title}}<br>
+            {{form.print_title}}<br>
+            {{form.description}}<br>
+            Дата начала: {{form.from_date}}<br>
+            Дата окончания: {{form.to_date}}<br>
+            Изображение обложки: {{form.cover}}<br>
+            Изображение обложки: {{form.image}}<br>
+            <span>{{ error }}</span><br>
+            <button class="btn btn-success" type="submit">Добавить</button>
+        </form>
+    </div>
+    <a href="{% url 'home:events' %}">Назад</a>
+{% endblock %}
