@@ -94,16 +94,17 @@ def add_event(request):
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
-def edit_event(request, pk):
+def edit_event(request, event_id):
     """ Edit event. """
     error = "увше умуте"
-    edit_event = Event.objects.get(id=pk)
-    if request.method == "POST":
-        form = AddEventForm(
+    edit_event = Event.objects.get(id=event_id)
+    form = AddEventForm(
             request.POST, 
             request.FILES, 
             instance=edit_event
             )
+    if request.method == "POST":
+        
         if form.is_valid():
             usr = form.save(commit=False)
             usr.updated_by = request.user
@@ -112,7 +113,7 @@ def edit_event(request, pk):
         else:
             error = "Ошибка заполнения"
 
-    form = AddEventForm()
+    # form = AddEventForm()
     data = {
         'form': form,
         'error': error
