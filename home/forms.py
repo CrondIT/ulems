@@ -4,6 +4,10 @@ from .models import Profile, UserImage
 
 from django.forms import ModelForm, TextInput, DateInput, Textarea
 
+from django.utils import timezone
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout
 
 class AddEventForm(ModelForm):
     class Meta:
@@ -25,12 +29,14 @@ class AddEventForm(ModelForm):
             }),
             "from_date": DateInput(attrs={
                 'class': 'form-control',
-                'type': 'date',
+                'type': 'date-local',
+                'id': 'calendar_field',
                 'placeholder': 'Дата начала'
             }),
             "to_date": DateInput(attrs={
                 'class': 'form-control',
-                'type': 'date',
+                'type': 'date-local',
+                'id': 'calendar_field',
                 'placeholder': 'Дата окончания'
             })
         }

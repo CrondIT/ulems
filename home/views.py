@@ -97,27 +97,25 @@ def add_event(request):
 def edit_event(request, event_id):
     """ Edit event. """
     error = "увше умуте"
-    edit_event = Event.objects.get(id=event_id)
-    form = AddEventForm(
-            request.POST, 
-            request.FILES, 
-            instance=edit_event
+    edit_item = Event.objects.get(id=event_id)
+    form = AddEventForm( 
+            instance=edit_item,
             )
     if request.method == "POST":
-        
         if form.is_valid():
             usr = form.save(commit=False)
             usr.updated_by = request.user
             form.save()
             return redirect('home:events')
         else:
-            error = "Ошибка заполнения"
+                error = "Ошибка заполнения"
 
     # form = AddEventForm()
     data = {
         'form': form,
-        'error': error
-    }
+        'error': error,
+        'event': edit_item
+           }
     return render(request, "home/event/edit_event.html", data)
 
 
