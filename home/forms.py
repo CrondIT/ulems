@@ -13,33 +13,8 @@ class AddEventForm(ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'print_title', 'description',
-                  'from_date', 'to_date', 'cover', 'image']
-        widgets = {
-            "title": TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Наименование'
-            }),
-            "print_title": TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Наименование для печати'
-            }),
-            "description": Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Описание'
-            }),
-            "from_date": DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date-local',
-                'id': 'calendar_field',
-                'placeholder': 'Дата начала'
-            }),
-            "to_date": DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date-local',
-                'id': 'calendar_field',
-                'placeholder': 'Дата окончания'
-            })
-        }
+                  'from_date', 'to_date', 'image'
+                  ]
 
         def __init__(self, *args, **kwargs):
             # Extract the user from the view

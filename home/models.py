@@ -51,7 +51,6 @@ class Event(TimeStamp):
     description = models.TextField('Описание')
     from_date = models.DateField('Дата начала')
     to_date = models.DateField('Дата окончания')
-    cover = models.ImageField(upload_to=user_directory_path, null=True)
     image = models.ForeignKey(UserImage, on_delete=models.CASCADE,
                               related_name="event_cover", null=True)
 
