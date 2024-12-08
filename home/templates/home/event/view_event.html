@@ -2,16 +2,17 @@
 
 {% block body %}
     <h1>Просмотр мероприятия {{even.id}}</h1>
+    <div class="container-fluid" style="max-width: 800px; margin: auto;">
     <span>{{ error }}</span>
     <ul>
          <li>{{event.title}}</li>
          <li>{{event.print_title}}</li>
          <li>{{event.description}}</li>
          <li>с {{event.from_date}} по {{event.to_date}}</li>
-         <li>{{event.created_date|date:'d.m.Y H:i'}}</li>
-         <li>{{event.updated_date|date:'d.m.Y H:i'}}</li>
-         <li>{{event.created_by}}</li>
-         <li>{{event.updated_by}}</li>
+         <li>Дата создания {{event.created_date|date:'d.m.Y H:i'}}</li>
+         <li>Дата изменения {{event.updated_date|date:'d.m.Y H:i'}}</li>
+         <li>Создал {{event.created_by}}</li>
+         <li>Изменил {{event.updated_by}}</li>
     
         
     </ul>
@@ -19,5 +20,6 @@
    
     <h1>Фото 2 </h1>
     <img src="{{event.image.image.url}}" width="320pt"  alt="Cover"> <br>
-    <a href="{% url 'home:events' %}">Назад</a>
+    <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Назад</button>
+    </div>
 {% endblock %}

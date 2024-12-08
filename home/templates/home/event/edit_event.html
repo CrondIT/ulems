@@ -1,22 +1,29 @@
 {% extends "home/layout.html" %}
-{% load crispy_forms_tags %}
-
 {% block body %}
     <h1>Редактировать мероприятие {{even.id}}</h1>
-    <span>{{ error }}</span>
-    <div class = "mb-2">
-        <form method="post" enctype="multipart/form-data">
+   
+    
+        <form class="mb-2" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-
-            <div class="col-6">
-                {% crispy form %}
-                
+            <div class="container-fluid" style="max-width: 800px; margin: auto;">
+                {{form.as_table}} </br>
                 <img src="{{event.image.image.url}}" width="320pt"  alt="Cover"> <br>
-                <span>{{ error }}</span><br>
-                <button class="btn btn-success" type="submit">Сохранить</button>
+                <span>{{ errors }}</span><br>
+
+                <button class="btn btn-outline-success btn-lg" type="submit">Сохранить</button>
+                <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Отмена</button>
             </div>
 
+           
         </form>
-    </div>
-    <a href="{% url 'home:events' %}">Назад</a>
+
+       
+            {% if form.errors %}
+            <ul>
+                {% for error in form.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}    
+
 {% endblock %}

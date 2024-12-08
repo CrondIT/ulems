@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Event, Category, Participant, Competency, UserImage
 
-from .forms import AddEventForm, CategoryForm, ParticipantForm
+from .forms import EventForm, CategoryForm, ParticipantForm
 from .forms import CompetencyForm, UserImageForm
 
 
@@ -30,7 +30,7 @@ def events(request):
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['events'] = Event.objects.filter(
-        created_by=context['current_user'] 
+        created_by=context['current_user']
         )
     if request.method == "POST":
         if 'select' in request.POST:
@@ -75,48 +75,50 @@ def add_event(request):
     """ Add new event. """
     error = ""
     if request.method == "POST":
-        form = AddEventForm(request.POST, request.FILES)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             usr = form.save(commit=False)
             usr.created_by = request.user
             form.save()
             return redirect('home:events')
         else:
-            error = "Ошибка заполнения"
+            error = form.errors
 
-    form = AddEventForm()
-    data = {
+    form = EventForm()
+    context = {
         'form': form,
         'error': error
     }
-    return render(request, "home/event/add_event.html", data)
+    return render(request, "home/event/add_event.html", context)
 
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
 def edit_event(request, event_id):
     """ Edit event. """
-    error = "увше умуте"
+    errors = "no error "
     edit_item = Event.objects.get(id=event_id)
-    form = AddEventForm( 
+    form = EventForm(
             instance=edit_item,
             )
     if request.method == "POST":
+        form = EventForm(request.POST, request.FILES, instance=edit_item)
         if form.is_valid():
             usr = form.save(commit=False)
             usr.updated_by = request.user
             form.save()
+            errors = errors + " save"
             return redirect('home:events')
         else:
-                error = "Ошибка заполнения"
-
+            errors = errors + "Error"
+            
     # form = AddEventForm()
-    data = {
+    context = {
         'form': form,
-        'error': error,
+        'errors': errors,
         'event': edit_item
            }
-    return render(request, "home/event/edit_event.html", data)
+    return render(request, "home/event/edit_event.html", context)
 
 
 # ----------------------------------------------------------------------------

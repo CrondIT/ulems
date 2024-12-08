@@ -2,19 +2,39 @@ from .models import Event, Category, Participant, Competency
 from .models import Profile, UserImage
 
 
-from django.forms import ModelForm, TextInput, DateInput, Textarea
+from django.forms import ModelForm, TextInput, DateInput
+from django.forms import Textarea
 
-from django.utils import timezone
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout
-
-class AddEventForm(ModelForm):
+class EventForm(ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'print_title', 'description',
-                  'from_date', 'to_date', 'image'
-                  ]
+                  'from_date', 'to_date', 'image']
+        widgets = {
+            "title": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Наименование'
+            }),
+            "print_title": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Наименование для печати'
+            }),
+            "description": Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Описание'
+            }),
+            "from_date": DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control',
+                'type': "date",
+                'placeholder': 'Дата начала'
+            }),
+            "to_date": DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'placeholder': 'Дата окончания'
+            })
+        }
 
         def __init__(self, *args, **kwargs):
             # Extract the user from the view
