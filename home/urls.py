@@ -21,5 +21,4 @@ urlpatterns=[
          name="competency"
          ),
     path("user_images", views.user_images, name="user_images"),
-    
 ]
