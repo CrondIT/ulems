@@ -20,6 +20,10 @@
    
     <h1>Фото 2 </h1>
     <img src="{{event.image.image.url}}" width="320pt"  alt="Cover"> <br>
-    <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Назад</button>
+    <p> </p><br>
+    <form action="{% url 'home:events' %}">
+        <button class="btn btn-outline-success btn-lg">Отмена</button>
+    </form>
+    
     </div>
 {% endblock %}

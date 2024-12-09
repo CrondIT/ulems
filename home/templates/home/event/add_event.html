@@ -3,17 +3,16 @@
 
 {% block body %}
     <h1>Добавить мероприятие {{even.id}}</h1>
- 
-   
+    <div class="container-fluid" style="max-width: 800px; margin: auto;">
         <form class ="mb-2" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="container-fluid" style="max-width: 800px; margin: auto;">
+            
                 {{ form }}
                 <span>{{ error }}</span><br>
-                <button class="btn btn-outline-success btn-lg" type="submit">Добавить</button>
-                <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Отмена</button>
-            </div>
+                <button class="btn btn-outline-success btn-lg" name="save" type="submit">Добавить</button>
+                <button class="btn btn-outline-success btn-lg" href="{% url 'home:events' %}">Отмена</button>
+           
         </form>
-   
-  
+        <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Отмена</button>
+   </div>
 {% endblock %}

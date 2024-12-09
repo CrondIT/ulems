@@ -10,8 +10,8 @@
                 <img src="{{event.image.image.url}}" width="320pt"  alt="Cover"> <br>
                 <span>{{ errors }}</span><br>
 
-                <button class="btn btn-outline-success btn-lg" type="submit">Сохранить</button>
-                <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Отмена</button>
+                <button class="btn btn-outline-success btn-lg" name="save" type="submit">Сохранить</button>
+                <button class="btn btn-outline-success btn-lg" name="cancel" type="submit" href="{% url 'home:events' %}">Отмена</button>
             </div>
 
            

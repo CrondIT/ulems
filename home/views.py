@@ -74,8 +74,12 @@ def view_event(request, event_id):
 def add_event(request):
     """ Add new event. """
     error = ""
+    form = EventForm(request.POST, request.FILES)
+   
     if request.method == "POST":
-        form = EventForm(request.POST, request.FILES)
+       
+      
+            
         if form.is_valid():
             usr = form.save(commit=False)
             usr.created_by = request.user
@@ -83,6 +87,8 @@ def add_event(request):
             return redirect('home:events')
         else:
             error = form.errors
+       
+
 
     form = EventForm()
     context = {
