@@ -10,9 +10,9 @@
                 {{ form }}
                 <span>{{ error }}</span><br>
                 <button class="btn btn-outline-success btn-lg" name="save" type="submit">Добавить</button>
-                <button class="btn btn-outline-success btn-lg" href="{% url 'home:events' %}">Отмена</button>
-           
         </form>
-        <button class="btn btn-outline-success btn-lg" type="submit" href="{% url 'home:events' %}">Отмена</button>
+        <form action="{% url 'home:events' %}">
+            <button class="btn btn-outline-success btn-lg">Отмена</button>
+        </form>
    </div>
 {% endblock %}
