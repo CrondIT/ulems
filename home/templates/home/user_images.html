@@ -57,7 +57,7 @@
                         {% include 'home/user_image.html' %}
                     {% else %}    
                         <td>{{forloop.counter}}</td>
-                        <td><a href=""></a><img src="{{user_image.image.url}}" width="100pt"  alt="User Image"></a></td>
+                        <td><a href="{{user_image.image.url}}"><img src="{{user_image.image.url}}" width="100pt"  alt="User Image"></a></td>
                         <td>{{user_image.title}}</td>
                         <td>{{user_image.image}}</td>
                         <td>{{user_image.created_date|date:'d.m.Y H:i'}}</td>
