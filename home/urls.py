@@ -21,4 +21,7 @@ urlpatterns=[
          name="competency"
          ),
     path("user_images", views.user_images, name="user_images"),
+    path("user_image/<int:user_image_id>/edit",
+         views.edit_template, name="edit_template"
+         ),
 ]

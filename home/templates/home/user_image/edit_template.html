@@ -1,0 +1,20 @@
+{% extends "home/layout.html" %}
+{% block body %}
+    <h1>Редактировать печатную форму {{user_image_id}}</h1>
+   
+    
+    <form class="mb-2" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container-fluid" style="max-width: 800px; margin: auto;">
+            {{form.as_table}} </br>
+            <img src="{{user_image.image.url}}" width="320pt"  alt="Cover"> <br>
+            <span>{{ errors }}</span><br>
+
+            <button class="btn btn-outline-success btn-lg" name="save" type="submit">Сохранить</button>
+            <button class="btn btn-outline-success btn-lg" name="cancel" type="submit" href="{% url 'home:user_images' %}">Отмена</button>
+        </div>
+
+       
+    </form>
+
+{% endblock %}

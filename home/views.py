@@ -77,9 +77,7 @@ def add_event(request):
     form = EventForm(request.POST, request.FILES)
    
     if request.method == "POST":
-       
-      
-            
+           
         if form.is_valid():
             usr = form.save(commit=False)
             usr.created_by = request.user
@@ -87,8 +85,6 @@ def add_event(request):
             return redirect('home:events')
         else:
             error = form.errors
-       
-
 
     form = EventForm()
     context = {
@@ -366,11 +362,14 @@ def user_images(request):
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             user_image = UserImage.objects.get(id=pk)
-            user_image.delete()  
+            user_image.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            user_image = UserImage.objects.get(id=pk)   
+            user_image = UserImage.objects.get(id=pk)
             form = UserImageForm(instance=user_image)
+        elif 'edit_template' in request.POST:
+            pk = request.POST.get('edit_template')
+            return redirect('home:edit_template', pk)
         elif 'sort' in request.POST:
             context['user_images'] = context['user_images'].order_by(
                 request.POST['sort']
@@ -384,4 +383,31 @@ def user_images(request):
 
     return render(request, "home/user_images.html", context)
 
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+@login_required(login_url="login")
+def edit_template(request, user_image_id):
+    """ Edit template with user image. """
+    errors = "no error "
+    edit_item = UserImage.objects.get(id=user_image_id)
+    form = UserImageForm(
+            instance=edit_item,
+            )
+    if request.method == "POST":
+        form = UserImageForm(request.POST, request.FILES, instance=edit_item)
+        if form.is_valid():
+            usr = form.save(commit=False)
+            usr.updated_by = request.user
+            form.save()
+            errors = errors + " save"
+            return redirect('home:user_images')
+        else:
+            errors = errors + "Error"
+            
+    # form = AddEventForm()
+    context = {
+        'form': form,
+        'errors': errors,
+        'event': edit_item
+           }
+    return render(request, "home/user_image/edit_template.html", context)
+

@@ -66,6 +66,7 @@
                         <td>{{user_image.updated_by}}</td>
                         <td> 
                             <button class="btn btn-outline-success" name="edit" value="{{ user_image.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                            <button class="btn btn-outline-success" name="edit_template" value="{{ user_image.id }}" formnovalidate title="Редактировать печатную форму"><i class='fa fa-file-o'></i></button>
                             <button class="btn btn-outline-danger" name="delete" value="{{ user_image.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                         </td> 
                     {% endif %}
