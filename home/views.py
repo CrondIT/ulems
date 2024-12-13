@@ -407,7 +407,7 @@ def edit_template(request, user_image_id):
     context = {
         'form': form,
         'errors': errors,
-        'event': edit_item
+        'user_image': edit_item
            }
     return render(request, "home/user_image/edit_template.html", context)
 
