@@ -384,6 +384,7 @@ def user_images(request):
 
     return render(request, "home/user_images.html", context)
 
+
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
 def print_templates(request, user_image_id):
@@ -428,11 +429,11 @@ def print_templates(request, user_image_id):
                 edit_item = PrintTemplate.objects.get(id=pk)   
                 form = PrintTemplateForm(instance=edit_item)
         elif 'sort' in request.POST:
-                context['print_templates'] = context['print_templates'] .order_by(
+                context['print_templates'] = context['print_templates'].order_by(
                     request.POST['sort']
                     )
         else:
-            pass   
+            pass
   
     # context = {'form': form, 'errors': errors,'user_image': edit_user_image}
     context['form'] = form
