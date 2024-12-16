@@ -1,9 +1,9 @@
 from .models import Event, Category, Participant, Competency
-from .models import Profile, UserImage
+from .models import Profile, UserImage, PrintTemplate
 
 
 from django.forms import ModelForm, TextInput, DateInput
-from django.forms import Textarea
+from django.forms import Textarea, Select, NumberInput
 
 
 class EventForm(ModelForm):
@@ -130,3 +130,29 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['current_event']
+
+
+class PrintTemplateForm(ModelForm):
+    class Meta:
+        model = PrintTemplate
+        fields = ['print_item',
+                  'start_x',
+                  'start_y',
+                  'delta_x',
+                  'delta_y',
+                  'font_size'
+                 ]
+        widgets = {
+                "print_item": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Поле печати'
+                }),
+                "start_x": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Начальная позиция по Х'
+                }),
+                "start_y": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Начальная позиция по Y'
+                })
+            }   

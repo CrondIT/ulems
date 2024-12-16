@@ -2,25 +2,96 @@
 {% block body %}
     <h1>Редактировать печатную форму {{user_image.id}}</h1>
    
+    <div class="container-fluid" style="max-width: 800px; margin: auto;">
+        <form class="mb-2" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+    
+            {{form.as_table}} </br>
+        
+            <span>{{ errors }}</span><br>
+
+            <button class="btn btn-outline-success btn-lg" name="save" type="submit">Сохранить</button>
+            <button class="btn btn-outline-success btn-lg" name="cancel" type="submit" href="{% url 'home:user_images' %}">Отмена</button>
+        </form>
+    </div>
     <div style="display: flex;">
         <div>
             <img src="{{user_image.image.url}}" width="320pt"  alt="Cover"> <br>
         </div>   
 
-        <div class="container-fluid" style="max-width: 800px; margin: auto;">
-            <form class="mb-2" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+                   
+            <table class = "table table-bordered table-light">
+                <form method="post" enctype="multipart/form-data" action="{% url 'home:user_images' %}">
+                    {% csrf_token %} 
+                       
+                    <tr>
+                        <th>№</th>
+                        <th>
+                            Поле для печати </br>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="title"><i class='fa fa-long-arrow-up'></i></button>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-title"><i class='fa fa-long-arrow-down'></i></button>
+                        </th>
+                        <th>
+                            Начальная Х </br>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="image"><i class='fa fa-long-arrow-up'></i></button>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-image"><i class='fa fa-long-arrow-down'></i></button>
+                        </th>
+                        <th>
+                            Начальная Y </br>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="created_date"><i class='fa fa-long-arrow-up'></i></button>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-created_date"><i class='fa fa-long-arrow-down'></i></button>
+                        </th>
+                        <th>
+                            Дельта Х </br>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="updated_date"><i class='fa fa-long-arrow-up'></i></button>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-updated_date"><i class='fa fa-long-arrow-down'></i></button>
+                        </th>
+                        <th>
+                            Дельта Y </br>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="created_by"><i class='fa fa-long-arrow-up'></i></button>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-created_by"><i class='fa fa-long-arrow-down'></i></button>
+                        </th>
+                        <th>
+                            Размер шрифта </br>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="updated_by"><i class='fa fa-long-arrow-up'></i></button>
+                            <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-updated_by"><i class='fa fa-long-arrow-down'></i></button>
+                        </th>
+                        <th>Примечания</th>
+                    </tr>
         
-                {{form.as_table}} </br>
-            
-                <span>{{ errors }}</span><br>
-
-                <button class="btn btn-outline-success btn-lg" name="save" type="submit">Сохранить</button>
-                <button class="btn btn-outline-success btn-lg" name="cancel" type="submit" href="{% url 'home:user_images' %}">Отмена</button>
-            </div>
-
-      
-            </form>
+                    {% if not form.instance.id %}
+                        <tr>
+                            {% include 'home/print_template.html' %}
+                        </tr>
+                    {% endif %}   
+        
+                  
+                    {% for print_tepmlate in print_templates %}
+                        
+                        <tr>
+                            {% if form.instance.id == print_template.id %}
+                                {% include 'home/print_template.html' %}
+                            {% else %}    
+                                <td>{{forloop.counter}}</td>
+                                <td>{{print_tepmlate.print_item}}</td>
+                                <td>{{print_tepmlate.start_x}}</td>
+                                <td>{{print_tepmlate.start_y}}</td>
+                                <td>{{print_tepmlate.delta_x}}</td>
+                                <td>{{print_tepmlate.delta_y}}</td>
+                                <td>{{print_tepmlate.font_size}}</td>
+                                <td> 
+                                    <button class="btn btn-outline-success" name="edit" value="{{ user_image.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                                    <button class="btn btn-outline-danger" name="delete" value="{{ user_image.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                                </td> 
+                            {% endif %}
+                        </tr>
+                    
+                        {% empty %}    
+                            Нет настроек
+                    {% endfor %}
+                </form>
+            </table>
+           
     </div>
 
 {% endblock %}

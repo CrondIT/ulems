@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.conf import settings
 
 # class for record's created time and updated time
 
@@ -150,3 +149,26 @@ class Profile(TimeStamp):
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
+
+# -----------------------------------------------------------------------------------
+class PrintTemplate(TimeStamp):
+    print_item = models.CharField(max_length=25, choices=[
+        ('event', 'Мероприятие'),
+        ('category', 'Категория'),
+        ('competency', 'Компетенция (номинация)'),
+        ('fio', 'Фамилия Имя Отчество'),
+        ('text','Текст участника'),
+        ('custom_text', 'Произвольный техт')
+        ]) 
+    start_x = models.PositiveSmallIntegerField()
+    start_y = models.PositiveSmallIntegerField()
+    delta_x = models.PositiveSmallIntegerField()
+    delta_y = models.PositiveSmallIntegerField()
+    font_size = models.PositiveSmallIntegerField()
+    
+    def __str__(self):
+        return f"Profile: {self.target}"    
+    
+    class Meta:
+        verbose_name = 'Шаблон печати'
+        verbose_name_plural = 'Шаблоны печати'
