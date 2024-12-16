@@ -22,6 +22,11 @@ urlpatterns=[
          ),
     path("user_images", views.user_images, name="user_images"),
     path("user_image/<int:user_image_id>/edit",
-         views.edit_template, name="edit_template"
+         views.user_images, name="user_image"
+         ),
+    path("print_templates", views.print_templates, name="print_templates"),
+    path("print_template/<int:print_template_id>",
+         views.print_template,
+         name="print_template"
          ),
 ]

@@ -4,9 +4,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Event, Category, Participant, Competency, UserImage
+from .models import PrintTemplate
 
 from .forms import EventForm, CategoryForm, ParticipantForm
-from .forms import CompetencyForm, UserImageForm
+from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
 
 # --------------------------------------------------------------------------
@@ -332,7 +333,7 @@ def competency(request, competency_id):
 @login_required(login_url="login")
 def user_images(request):
     """ View, add, edit and delete user images in table.
-        Filter for current user.
+        Filter for event and current user.
     """
     form = UserImageForm()
     error = ""
@@ -367,9 +368,9 @@ def user_images(request):
             pk = request.POST.get('edit')
             user_image = UserImage.objects.get(id=pk)
             form = UserImageForm(instance=user_image)
-        elif 'edit_template' in request.POST:
-            pk = request.POST.get('edit_template')
-            return redirect('home:edit_template', pk)
+        elif 'edit_print_templates' in request.POST:
+            pk = request.POST.get('edit_print_templates')
+            return redirect('home:print_templates', pk)
         elif 'sort' in request.POST:
             context['user_images'] = context['user_images'].order_by(
                 request.POST['sort']
@@ -385,29 +386,61 @@ def user_images(request):
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
-def edit_template(request, user_image_id):
+def print_templates(request, user_image_id):
     """ Edit template with user image. """
-    errors = "no error "
-    edit_item = UserImage.objects.get(id=user_image_id)
-    form = UserImageForm(
-            instance=edit_item,
-            )
-    if request.method == "POST":
-        form = UserImageForm(request.POST, request.FILES, instance=edit_item)
-        if form.is_valid():
-            usr = form.save(commit=False)
-            usr.updated_by = request.user
-            form.save()
-            errors = errors + " save"
-            return redirect('home:user_images')
-        else:
-            errors = errors + "Error"
-            
-    # form = AddEventForm()
-    context = {
-        'form': form,
-        'errors': errors,
-        'user_image': edit_item
-           }
-    return render(request, "home/user_image/edit_template.html", context)
+   
+    edit_user_image = UserImage.objects.get(id=user_image_id)
+    
+    form = PrintTemplateForm()
+    errors = ""
+    context = {}
+    context['title'] = 'Настройка печати'
+    context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
+    context['user_image_id'] = user_image_id
+    context['user_image'] = edit_user_image
+    context['print_templates'] = PrintTemplate.objects.filter(
+        created_by=context['current_user'],
+        user_image_related=context['user_image_id']
+        )
+    
 
+    if request.method == "POST":
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                form = PrintTemplateForm(request.POST)
+                usr = form.save(commit=False)
+                usr.created_by = context['current_user']
+                usr.user_image_related = context['user_image_id']
+            else:
+                save_item = PrintTemplate.objects.get(id=pk)
+                save_item.updated_by = context['current_user']
+                form = PrintTemplateForm(request.POST, instance=save_item)
+            form.save()
+            form = PrintTemplateForm()
+        elif 'delete' in request.POST:
+                pk = request.POST.get('delete')
+                delete_item = PrintTemplate.objects.get(id=pk)
+                delete_item.delete()
+        elif 'edit' in request.POST:
+                pk = request.POST.get('edit')
+                edit_item = PrintTemplate.objects.get(id=pk)   
+                form = PrintTemplateForm(instance=edit_item)
+        elif 'sort' in request.POST:
+                context['print_templates'] = context['print_templates'] .order_by(
+                    request.POST['sort']
+                    )
+        else:
+            pass   
+  
+    # context = {'form': form, 'errors': errors,'user_image': edit_user_image}
+    context['form'] = form
+    return render(request, "home/user_image/print_templates.html", context)
+
+@login_required(login_url="login")
+def print_template(request, print_template_id):
+    competency = Competency.objects.get(pk=print_template_id)
+    return render(request, "home/user_image/print_template.html", {
+        "print_template": print_template
+    })

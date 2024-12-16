@@ -154,5 +154,17 @@ class PrintTemplateForm(ModelForm):
                 "start_y": NumberInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Начальная позиция по Y'
+                }),
+                "delta_x": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Дельта X'
+                }),
+                "delta_y": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Дельта Y'
+                }),
+                "font_size": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Размер шрифта'
                 })
             }   

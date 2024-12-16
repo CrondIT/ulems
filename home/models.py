@@ -165,6 +165,10 @@ class PrintTemplate(TimeStamp):
     delta_x = models.PositiveSmallIntegerField()
     delta_y = models.PositiveSmallIntegerField()
     font_size = models.PositiveSmallIntegerField()
+    user_image_related = models.ForeignKey(
+        UserImage, related_name='%(app_label)s_%(class)s_user_image_related',
+        blank=True, on_delete=models.CASCADE, null=True
+        )
     
     def __str__(self):
         return f"Profile: {self.target}"    
