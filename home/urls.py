@@ -21,10 +21,10 @@ urlpatterns = [
          name="competency"
          ),
     path("user_images", views.user_images, name="user_images"),
-    path("user_image/<int:user_image_id>/edit",
-         views.user_images, name="user_image"
-         ),
-    path("user_image/print_templates", views.print_templates, name="print_templates"),
+    # path("user_image/<int:user_image_id>/edit",
+    #     views.user_images, name="user_image"
+    #     ),
+    #vpath("print_templates_table", views.print_templates, name="print_templates_table"),
     
-    # path("print_template/<int:print_template_id>", views.print_template,  name="print_template" ),
+    path("print_templates", views.print_templates,  name="print_templates" ),
 ]

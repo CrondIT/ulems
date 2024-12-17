@@ -133,6 +133,11 @@ class Profile(TimeStamp):
         on_delete=models.SET_NULL,
         null=True
         )
+    current_image = models.ForeignKey(
+        UserImage,
+        on_delete=models.SET_NULL,
+        null=True
+        )
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -171,7 +176,7 @@ class PrintTemplate(TimeStamp):
         )
     
     def __str__(self):
-        return f"Profile: {self.target}"    
+        return f"Шаблон печати: {self.user_image_related} для {self.print_item}"    
     
     class Meta:
         verbose_name = 'Шаблон печати'

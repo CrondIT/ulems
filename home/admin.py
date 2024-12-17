@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Competency, Event, Category, Participant
-from .models import Profile, UserImage
+from .models import Profile, UserImage, PrintTemplate
 
 
 # Register your models here.
@@ -25,3 +25,4 @@ admin.site.register(Category, AuditAdmin)
 admin.site.register(Participant, AuditAdmin)
 admin.site.register(Profile, AuditAdmin)
 admin.site.register(UserImage, AuditAdmin)
+admin.site.register(PrintTemplate, AuditAdmin)

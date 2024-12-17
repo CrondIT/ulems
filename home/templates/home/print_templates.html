@@ -49,27 +49,27 @@
         
                     {% if not form.instance.id %}
                         <tr>
-                            {% include 'home/user_image/print_template.html' %}
+                            {% include 'home/print_template.html' %}
                         </tr>
                     {% endif %}   
         
                   
-                    {% for print_tepmlate in print_templates %}
+                    {% for pt in print_templates %}
                         
                         <tr>
-                            {% if form.instance.id == print_template.id %}
+                            {% if form.instance.id == pt.id %}
                                 {% include 'home/print_template.html' %}
                             {% else %}    
                                 <td>{{forloop.counter}}</td>
-                                <td>{{print_tepmlate.print_item}}</td>
-                                <td>{{print_tepmlate.start_x}}</td>
-                                <td>{{print_tepmlate.start_y}}</td>
-                                <td>{{print_tepmlate.delta_x}}</td>
-                                <td>{{print_tepmlate.delta_y}}</td>
-                                <td>{{print_tepmlate.font_size}}</td>
+                                <td>{{pt.print_item}}</td>
+                                <td>{{pt.start_x}}</td>
+                                <td>{{pt.start_y}}</td>
+                                <td>{{pt.delta_x}}</td>
+                                <td>{{pt.delta_y}}</td>
+                                <td>{{pt.font_size}}</td>
                                 <td> 
-                                    <button class="btn btn-outline-success" name="edit" value="{{ user_image.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                                    <button class="btn btn-outline-danger" name="delete" value="{{ user_image.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                                    <button class="btn btn-outline-success" name="edit" value="{{ pt.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                                    <button class="btn btn-outline-danger" name="delete" value="{{ pt.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                                 </td> 
                             {% endif %}
                         </tr>

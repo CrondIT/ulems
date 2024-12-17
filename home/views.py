@@ -351,7 +351,7 @@ def user_images(request):
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
             else:
-                user_image = UserImage.objects.get(id=pk)
+                user_image = context['user_images'].get(id=pk)
                 user_image.updated_by = context['current_user']
                 form = UserImageForm(
                     request.POST,
@@ -362,15 +362,19 @@ def user_images(request):
             form = UserImageForm()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            user_image = UserImage.objects.get(id=pk)
+            user_image = context['user_images'].get(id=pk)
             user_image.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            user_image = UserImage.objects.get(id=pk)
+            user_image = context['user_images'].get(id=pk)
             form = UserImageForm(instance=user_image)
         elif 'edit_print_templates' in request.POST:
             pk = request.POST.get('edit_print_templates')
-            return redirect('home:print_templates', pk)
+            user_image = context['user_images'].get(id=pk)
+            request.user.profile.current_image = user_image
+            request.user.save()
+            return redirect('home:print_templates')
+
         elif 'sort' in request.POST:
             context['user_images'] = context['user_images'].order_by(
                 request.POST['sort']
@@ -387,25 +391,21 @@ def user_images(request):
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
-def print_templates(request, user_image_id):
+def print_templates(request):
     """ Edit template with user image. """
-   
-    edit_user_image = UserImage.objects.get(id=user_image_id)
     
+  
     form = PrintTemplateForm()
-    errors = ""
+    error = ""
     context = {}
     context['title'] = 'Настройка печати'
-    context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
-    context['user_image_id'] = user_image_id
-    context['user_image'] = edit_user_image
+    context['user_image'] = request.user.profile.current_image
+    context['user_image_id'] = context['user_image'].id
     context['print_templates'] = PrintTemplate.objects.filter(
         created_by=context['current_user'],
-        user_image_related=context['user_image_id']
+        user_image_related=context['user_image']
         )
-    
-
     if request.method == "POST":
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -413,7 +413,7 @@ def print_templates(request, user_image_id):
                 form = PrintTemplateForm(request.POST)
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
-                usr.user_image_related = context['user_image_id']
+                usr.user_image_related = context['user_image']
             else:
                 save_item = PrintTemplate.objects.get(id=pk)
                 save_item.updated_by = context['current_user']
@@ -437,11 +437,5 @@ def print_templates(request, user_image_id):
   
     # context = {'form': form, 'errors': errors,'user_image': edit_user_image}
     context['form'] = form
-    return render(request, "home/user_image/print_templates.html", context)
-
-@login_required(login_url="login")
-def print_template(request, print_template_id):
-    competency = Competency.objects.get(pk=print_template_id)
-    return render(request, "home/user_image/print_template.html", {
-        "print_template": print_template
-    })
+    context['error'] = error
+    return render(request, "home/print_templates.html", context)
