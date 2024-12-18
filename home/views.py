@@ -76,9 +76,7 @@ def add_event(request):
     """ Add new event. """
     error = ""
     form = EventForm(request.POST, request.FILES)
-   
     if request.method == "POST":
-           
         if form.is_valid():
             usr = form.save(commit=False)
             usr.created_by = request.user
@@ -114,8 +112,6 @@ def edit_event(request, event_id):
             return redirect('home:events')
         else:
             errors = errors + "Error"
-            
-    # form = AddEventForm()
     context = {
         'form': form,
         'errors': errors,
@@ -166,7 +162,6 @@ def categories(request):
             context['categories'] = context['categories'].order_by(
                 request.POST['sort']
                 )
-           # form = CategoryForm(request.POST)
         else:
             pass
 
@@ -204,7 +199,6 @@ def participants(request):
         current_user=context['current_user'],
         current_event=context['current_event']
         )
-
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -247,11 +241,6 @@ def participants(request):
             context['participants'] = context['participants'].order_by(
                     request.POST['sort']
                     )
-     #       form = ParticipantForm(
-     #           request.POST,
-     #           current_user=context['current_user'],
-     #           current_event=context['current_event']
-     #           )
         else:
             pass
 
@@ -278,7 +267,7 @@ def competencies(request):
     error = ""
     context = {}
     context['title'] = 'Компетенции'
-    context['current_event'] = request.user.profile.current_event      
+    context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['competencies'] = Competency.objects.filter(
         created_by=context['current_user'],
@@ -293,24 +282,23 @@ def competencies(request):
                 usr.created_by = context['current_user']
                 usr.event_related = context['current_event']
             else:
-                save_item = Competency.objects.get(id=pk)
+                save_item = context['competencies'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = CompetencyForm(request.POST, instance=save_item)
             form.save()
             form = CompetencyForm()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            delete_item = Competency.objects.get(id=pk)
+            delete_item = context['competencies'].get(id=pk)
             delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            edit_item = Competency.objects.get(id=pk)   
+            edit_item = context['competencies'].get(id=pk)   
             form = CompetencyForm(instance=edit_item)
         elif 'sort' in request.POST:
             context['competencies'] = context['competencies'] .order_by(
                 request.POST['sort']
                 )
-        #    form = CompetencyForm(request.POST)
         else:
             pass
 
@@ -374,12 +362,10 @@ def user_images(request):
             request.user.profile.current_image = user_image
             request.user.save()
             return redirect('home:print_templates')
-
         elif 'sort' in request.POST:
             context['user_images'] = context['user_images'].order_by(
                 request.POST['sort']
                 )
-        #    form = UserImageForm(request.POST)
         else:
             pass
 
@@ -393,8 +379,6 @@ def user_images(request):
 @login_required(login_url="login")
 def print_templates(request):
     """ Edit template with user image. """
-    
-  
     form = PrintTemplateForm()
     error = ""
     context = {}
@@ -415,27 +399,25 @@ def print_templates(request):
                 usr.created_by = context['current_user']
                 usr.user_image_related = context['user_image']
             else:
-                save_item = PrintTemplate.objects.get(id=pk)
+                save_item = context['print_templates'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = PrintTemplateForm(request.POST, instance=save_item)
             form.save()
             form = PrintTemplateForm()
         elif 'delete' in request.POST:
-                pk = request.POST.get('delete')
-                delete_item = PrintTemplate.objects.get(id=pk)
-                delete_item.delete()
+            pk = request.POST.get('delete')
+            delete_item = context['print_templates'].get(id=pk)
+            delete_item.delete()
         elif 'edit' in request.POST:
-                pk = request.POST.get('edit')
-                edit_item = PrintTemplate.objects.get(id=pk)   
-                form = PrintTemplateForm(instance=edit_item)
+            pk = request.POST.get('edit')
+            edit_item = context['print_templates'].get(id=pk)
+            form = PrintTemplateForm(instance=edit_item)
         elif 'sort' in request.POST:
-                context['print_templates'] = context['print_templates'].order_by(
-                    request.POST['sort']
-                    )
+            context['print_templates'] = context['print_templates'].order_by(
+                request.POST['sort']
+                )
         else:
             pass
-  
-    # context = {'form': form, 'errors': errors,'user_image': edit_user_image}
     context['form'] = form
     context['error'] = error
     return render(request, "home/print_templates.html", context)

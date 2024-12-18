@@ -50,8 +50,11 @@ class Event(TimeStamp):
     description = models.TextField('Описание')
     from_date = models.DateField('Дата начала')
     to_date = models.DateField('Дата окончания')
-    image = models.ForeignKey(UserImage, on_delete=models.CASCADE,
-                              related_name="event_cover", null=True)
+    image = models.ForeignKey(UserImage,
+                              on_delete=models.CASCADE,
+                              related_name="event_cover",
+                              null=True
+                              )
 
     def __str__(self):
         return self.title
@@ -70,7 +73,7 @@ class EventRelated(models.Model):
         )
 
     class Meta:
-        abstract = True              
+        abstract = True
 
 
 # -----------------------------------------------------------------------------------
@@ -118,7 +121,8 @@ class Participant(TimeStamp, EventRelated):
         )
 
     def __str__(self):
-        return f" {self.first_name} {self.middle_name} {self.last_name} - {self.event_related} {self.category} "
+        return f" {self.first_name} {self.middle_name} {self.last_name} -  {
+            self.event_related} {self.category} "
 
     class Meta:
         verbose_name = 'Участник'
@@ -155,6 +159,7 @@ class Profile(TimeStamp):
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
 
+
 # -----------------------------------------------------------------------------------
 class PrintTemplate(TimeStamp):
     print_item = models.CharField(max_length=25, choices=[
@@ -162,9 +167,9 @@ class PrintTemplate(TimeStamp):
         ('category', 'Категория'),
         ('competency', 'Компетенция (номинация)'),
         ('fio', 'Фамилия Имя Отчество'),
-        ('text','Текст участника'),
+        ('text', 'Текст участника'),
         ('custom_text', 'Произвольный техт')
-        ]) 
+        ])
     start_x = models.PositiveSmallIntegerField()
     start_y = models.PositiveSmallIntegerField()
     delta_x = models.PositiveSmallIntegerField()
@@ -174,10 +179,11 @@ class PrintTemplate(TimeStamp):
         UserImage, related_name='%(app_label)s_%(class)s_user_image_related',
         blank=True, on_delete=models.CASCADE, null=True
         )
-    
+
     def __str__(self):
-        return f"Шаблон печати: {self.user_image_related} для {self.print_item}"    
-    
+        return f"Шаблон печати: {self.user_image_related} для {
+                self.print_item}"
+
     class Meta:
         verbose_name = 'Шаблон печати'
         verbose_name_plural = 'Шаблоны печати'
