@@ -4,7 +4,7 @@
    
     <div style="display: flex;">
         <div>
-            <img src="{{user_image.image.url}}" width="320pt"  alt="Cover"> <br>
+            <img src="{{user_image.image.url}}" width="360pt"  alt="Cover"> <br>
         </div>   
 
                    
@@ -60,7 +60,7 @@
                                 {% include 'home/print_template.html' %}
                             {% else %}    
                                 <td>{{forloop.counter}}</td>
-                                <td>{{pt.print_item}}</td>
+                                <td>{{pt.get_print_item_display}}</td>
                                 <td>{{pt.start_x}}</td>
                                 <td>{{pt.start_y}}</td>
                                 <td>{{pt.delta_x}}</td>

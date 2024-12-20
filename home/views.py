@@ -10,7 +10,7 @@ from .forms import EventForm, CategoryForm, ParticipantForm
 from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
 
-# --------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 @login_required(login_url="login")
 def index(request):
     """ View main (starter) page """
