@@ -3,7 +3,7 @@
 {% block body %}
     <h4>Участники мероприятия: {{ current_event }}</h4>
     <h4>Пользователь: {{current_user}}</h4>
-    {{ error }}
+    {{ error }} All_selected: {{ all_selected }}
 
     <div class = "table-responsive">
 
@@ -73,7 +73,11 @@
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="updated_by"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-updated_by"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
-                <th>Примечания</th>
+                <th>
+                    Примечания </br>
+                    <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="снять ввыделение"><i class='fa fa-square-o'></i></button>
+                </th>
             </tr>
         </head>
         
@@ -103,6 +107,11 @@
                         <td>{{participant.updated_by}}</td>
                         <td>{{participant.event_related}}</td>
                         <td> 
+                            {% if all_selected %}
+                                <input class="form-check-input" type="checkbox" name="select" value="{{ participant.id }}" checked>
+                            {% else %}    
+                                <input class="form-check-input" type="checkbox" name="select" value="{{ participant.id }}" unchecked>
+                            {% endif %}    
                             <button class="btn btn-outline-success btn-sm" name="edit" value="{{ participant.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
                             <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ participant.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                         </td> 

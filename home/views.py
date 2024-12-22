@@ -186,9 +186,11 @@ def participants(request):
     """ View, add, edit and delete participants in table.
         Filter for current user and selected event.
     """
-    error = ""
+    
+    error = "s"
     context = {}
     context['title'] = 'Участники'
+    context['all_selected'] = False
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['participants'] = Participant.objects.filter(
@@ -228,7 +230,7 @@ def participants(request):
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Participant.objects.get(id=pk)
-            delete_item.delete()  
+            delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = Participant.objects.get(id=pk)
@@ -241,6 +243,12 @@ def participants(request):
             context['participants'] = context['participants'].order_by(
                     request.POST['sort']
                     )
+        elif 'select_all' in request.POST:
+            error = "all selected pressed"
+            context['all_selected'] = True
+        elif 'deselect_all' in request.POST:
+            error = "all selected pressed"
+            context['all_selected'] = False    
         else:
             pass
 
