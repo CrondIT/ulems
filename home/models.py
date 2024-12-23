@@ -53,7 +53,8 @@ class Event(TimeStamp):
     image = models.ForeignKey(UserImage,
                               on_delete=models.CASCADE,
                               related_name="event_cover",
-                              null=True
+                              null=True,
+                              blank=True
                               )
 
     def __str__(self):

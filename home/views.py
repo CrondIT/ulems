@@ -14,7 +14,9 @@ from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 @login_required(login_url="login")
 def index(request):
     """ View main (starter) page """
-    return render(request, "home/index.html")
+    context = {}
+    context['current_event'] = request.user.profile.current_event
+    return render(request, "home/index.html", context)
 
 
 # ----------------------------------------------------------------------------
@@ -64,32 +66,38 @@ def events(request):
 @login_required(login_url="login")
 def view_event(request, event_id):
     """ Detailed selected event view. """
+    context = {}
+    context['current_event'] = request.user.profile.current_event
     select_item = Event.objects.get(pk=event_id)
-    return render(request, "home/event/view_event.html", {
-        "event": select_item
-    })
+    context['event'] = select_item
+    return render(request, "home/event/view_event.html", context)
 
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
 def add_event(request):
     """ Add new event. """
+    context = {}
     error = ""
-    form = EventForm(request.POST, request.FILES)
+    context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
+    form = EventForm(
+        request.POST,
+        request.FILES,
+        current_user=context['current_user']
+        )
     if request.method == "POST":
         if form.is_valid():
             usr = form.save(commit=False)
-            usr.created_by = request.user
+            usr.created_by = context['current_user']
             form.save()
             return redirect('home:events')
         else:
             error = form.errors
 
-    form = EventForm()
-    context = {
-        'form': form,
-        'error': error
-    }
+    context['form'] = form
+    context['error'] = error
+
     return render(request, "home/event/add_event.html", context)
 
 
@@ -98,6 +106,8 @@ def add_event(request):
 def edit_event(request, event_id):
     """ Edit event. """
     errors = "no error "
+    context = {}
+    context['current_event'] = request.user.profile.current_event
     edit_item = Event.objects.get(id=event_id)
     form = EventForm(
             instance=edit_item,
@@ -112,11 +122,11 @@ def edit_event(request, event_id):
             return redirect('home:events')
         else:
             errors = errors + "Error"
-    context = {
-        'form': form,
-        'errors': errors,
-        'event': edit_item
-           }
+   
+    context['form'] = form
+    context['errors'] = errors
+    context['event'] = edit_item
+   
     return render(request, "home/event/edit_event.html", context)
 
 
@@ -336,6 +346,7 @@ def user_images(request):
     context = {}
     context['title'] = 'Изображения'
     context['current_user'] = request.user
+    context['current_event'] = request.user.profile.current_event
     context['user_images'] = UserImage.objects.filter(
         created_by=context['current_user']
         )
@@ -393,6 +404,7 @@ def print_templates(request):
     context['title'] = 'Настройка печати'
     context['current_user'] = request.user
     context['user_image'] = request.user.profile.current_image
+    context['current_event'] = request.user.profile.current_event
     context['user_image_id'] = context['user_image'].id
     context['print_templates'] = PrintTemplate.objects.filter(
         created_by=context['current_user'],

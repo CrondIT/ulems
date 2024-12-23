@@ -1,16 +1,27 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h4>Участники мероприятия: {{ current_event }}</h4>
-    <h4>Пользователь: {{current_user}}</h4>
-    {{ error }} All_selected: {{ all_selected }}
-
+    <h4>Участники мероприятия: {{ current_event }} Пользователь: {{current_user}}</h4>
+   
     <div class = "table-responsive">
-
     <table class = "table table-bordered table-light table-sm align-bottom">
         
         <form method="POST" action="{% url 'home:participants' %}">
             {% csrf_token %} 
+        <div class="accordion" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    Импорт
+                  </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.
+                    </div>
+                </div>
+            </div>
+        </div>
         <head>       
             <tr>
                 <th>№</th>

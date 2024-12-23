@@ -20,17 +20,18 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class = "nav-link" href ={% url 'home:events' %}>Мероприятия</a>
-                        <a class = "nav-link" href ={% url 'home:categories' %}>Категории</a>
-                        <a class = "nav-link" href ={% url 'home:competencies' %}>Компетенции</a>
-                        <a class = "nav-link" href ='#metka'>Награды</a>
-                        <a class = "nav-link" href ={% url 'home:participants' %}>Участники</a>
+                        {% if current_event %}
+                            <a class = "nav-link" href ={% url 'home:categories' %}>Категории</a>
+                            <a class = "nav-link" href ={% url 'home:competencies' %}>Компетенции</a>
+                            <a class = "nav-link" href ='#metka'>Награды</a>
+                            <a class = "nav-link" href ={% url 'home:participants' %}>Участники</a>
+                        {% endif %}
                         <a class = "nav-link" href ={% url 'home:user_images' %}>Изображения</a>
                         <a class = "nav-link" href ={% url 'logout' %}>Выйти</a>
                     </div>
                 </div>
             </div>
         </nav>
-    
         <div class = "container-fluid">
             {% block body %}
             {% endblock %}

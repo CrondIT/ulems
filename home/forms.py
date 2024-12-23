@@ -36,14 +36,14 @@ class EventForm(ModelForm):
             })
         }
 
-        def __init__(self, *args, **kwargs):
-            # Extract the user from the view
-            user = kwargs.pop('user')
-            super(ParticipantForm, self).__init__(*args, **kwargs)
-            # Filter 
-            self.fields['image'].queryset = Category.objects.filter(
-                created_by=user
-            )
+    def __init__(self, *args, **kwargs):
+        # Extract the user from the view
+        user = kwargs.pop('current_user')
+        super(EventForm, self).__init__(*args, **kwargs)
+        # Filter 
+        self.fields['image'].queryset = Category.objects.filter(
+            created_by=user
+        )
 
 
 class CategoryForm(ModelForm):
@@ -91,6 +91,10 @@ class ParticipantForm(ModelForm):
                 "last_name": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Отчество'
+                }),
+                 "organization": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Организация'
                 })
             }
 
