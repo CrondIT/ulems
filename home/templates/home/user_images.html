@@ -21,6 +21,16 @@
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-image"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
+                    Ширина </br>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="width"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-width"><i class='fa fa-long-arrow-down'></i></button>
+                </th>
+                <th>
+                    Высота </br>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="height"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-height"><i class='fa fa-long-arrow-down'></i></button>
+                </th>
+                <th>
                     Дата создания </br>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="created_date"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-created_date"><i class='fa fa-long-arrow-down'></i></button>
@@ -60,6 +70,8 @@
                         <td><a href="{{user_image.image.url}}"><img src="{{user_image.image.url}}" width="100pt"  alt="User Image"></a></td>
                         <td>{{user_image.title}}</td>
                         <td>{{user_image.image}}</td>
+                        <td>{{user_image.width}}</td>
+                        <td>{{user_image.height}}</td>
                         <td>{{user_image.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{user_image.updated_date|date:'d.m.Y H:i'}}</td>
                         <td>{{user_image.created_by}}</td>

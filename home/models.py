@@ -33,6 +33,8 @@ def user_directory_path(instance, filename):
 class UserImage(TimeStamp):
     title = models.CharField('Название', max_length=200)
     image = models.ImageField(upload_to=user_directory_path, null=True)
+    width = models.PositiveSmallIntegerField('Ширина, мм', default=210)
+    height = models.PositiveSmallIntegerField('Высота, мм', default=297)
 
     def __str__(self):
         return str(self.title)

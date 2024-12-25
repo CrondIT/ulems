@@ -65,12 +65,18 @@ class CategoryForm(ModelForm):
 class UserImageForm(ModelForm):
     class Meta:
         model = UserImage
-        fields = ['title', 'image']
+        fields = ['title', 'image', 'width', 'height']
         widgets = {
                 "title": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Наименование'
-                })
+                }),
+                "width": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ширина, мм'}),
+                "height": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Высота, мм'})
             }
 
 
@@ -92,7 +98,7 @@ class ParticipantForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Отчество'
                 }),
-                 "organization": TextInput(attrs={
+                "organization": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Организация'
                 })
