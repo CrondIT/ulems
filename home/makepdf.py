@@ -4,33 +4,12 @@ from reportlab.lib.units import mm
 from reportlab.lib.colors import white
 from reportlab.lib.styles import ParagraphStyle
 
-
 import textwrap as textwrap
-import csv
+
 
 # cyrillic font
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-
-# load data from csv file
-# default path = data.csv
-def load_data(path):
-    data = []
-    with open(path) as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            data.append({"Prefix": row["Prefix"],
-                         "Surname": row["Surname"],
-                         "Name": row["Name"],
-                         "MiddleName": row["MiddleName"],
-                         "Category": row["Category"],
-                         "Competence": row["Competence"],
-                         "Award": row["Award"],
-                         "CreationDate": row["CreationDate"],
-                         "Creator": row["Creator"],
-                         "ChangeDate": row["ChangeDate"],
-                         "ChangedBy": row["ChangedBy"]})
-    return data
 
 def split_string(text, textwidth, strings):
     lines=[]
@@ -49,41 +28,28 @@ def split_string(text, textwidth, strings):
     #      can.drawString(405, 773 - (n*15), l)
     return lines
 
-def main():
-    pagesize=(210 * mm, 297 * mm)
-    c = canvas.Canvas("helloworld.pdf", pagesize)
+def make_pdf(page_width, page_height,
+             font_size, image, texts,
+             start_x, start_y):
+    
+    page_size = (210 * mm, 297 * mm)
+    canva = canvas.Canvas("helloworld.pdf", page_size)
     pdfmetrics.registerFont(TTFont("Arial", "ARIAL.TTF"))
+    img = ImageReader(image)
+    # for text in texts:
+    canva.setFont("Arial", font_size)
+    canva.setFillColor(white)
+    canva.drawImage(img, 0, 0, 210 * mm, 296 * mm)
+    canva.drawString(start_x, start_y, texts)
+      
+       # textlines=split_string(text, 25, 1)
+       # print(textlines)
+       # for n, l in enumerate(textlines,1):
+       # print(texts)
+       # canva.drawString(start_x, start_y, texts)
 
+    canva.showPage()
 
-    data = load_data("data.csv")
+    canva.save()
+   
 
-    img = ImageReader("d1.png")
-    # Get the width and height of the image.
-    img_w, img_h = img.getSize()
-    # h - img_h is the height of the sheet minus the height
-    # of the image.
-
-
-
-    for  participant in data:
-        c.setFont("Arial", 18)
-        c.setFillColor(white)
-        c.drawImage(img, 0, 0, 210 * mm, 297 * mm)
-        fio = participant["Surname"] + " " + participant["Name"] + " " + participant["MiddleName"]
-        c.drawString(60, 510, fio)
-        # c.drawString(60, 380, participant["Competence"])
-
-        textlines=split_string(participant["Competence"], 25, 2)
-        print(textlines)
-        for n, l in enumerate(textlines,1):
-            print(l)
-            c.drawString(60, 380-(n*40),l)
-
-        c.showPage()
-
-    c.save()
-    print("End")
-
-
-if __name__ == "__main__":
-    main()

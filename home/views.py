@@ -9,6 +9,8 @@ from .models import PrintTemplate
 from .forms import EventForm, CategoryForm, ParticipantForm
 from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
+from . import makepdf
+
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
@@ -404,11 +406,17 @@ def print_templates(request):
     context['title'] = 'Настройка печати'
     context['current_user'] = request.user
     context['user_image'] = request.user.profile.current_image
+    context['image_width'] = context['user_image'].image.width
+    context['image_height'] = context['user_image'].image.height
     context['current_event'] = request.user.profile.current_event
     context['user_image_id'] = context['user_image'].id
     context['print_templates'] = PrintTemplate.objects.filter(
         created_by=context['current_user'],
         user_image_related=context['user_image']
+        )
+    context['participants'] = Participant.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
         )
     if request.method == "POST":
         if 'save' in request.POST:
@@ -436,6 +444,13 @@ def print_templates(request):
             context['print_templates'] = context['print_templates'].order_by(
                 request.POST['sort']
                 )
+        elif 'preview' in request.POST:
+            error = "press preview" 
+            pk = request.POST.get('preview')
+            print_item = context['print_templates'].get(id=pk)
+            mypdf = makepdf.make_pdf(context['user_image'].width, context['user_image'].height,
+             print_item.font_size, print_item.user_image_related.image, "Иванов Иван Иванович",
+             print_item.start_x, print_item.start_y)
         else:
             pass
     context['form'] = form
