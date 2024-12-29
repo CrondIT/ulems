@@ -110,12 +110,17 @@ def edit_event(request, event_id):
     errors = "no error "
     context = {}
     context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
     edit_item = Event.objects.get(id=event_id)
-    form = EventForm(
-            instance=edit_item,
-            )
+    form = EventForm(instance=edit_item,
+                     current_user=context['current_user']
+                     )
     if request.method == "POST":
-        form = EventForm(request.POST, request.FILES, instance=edit_item)
+        form = EventForm(request.POST,
+                         request.FILES,
+                         instance=edit_item,
+                         current_user=context['current_user']
+                         )
         if form.is_valid():
             usr = form.save(commit=False)
             usr.updated_by = request.user
@@ -124,11 +129,11 @@ def edit_event(request, event_id):
             return redirect('home:events')
         else:
             errors = errors + "Error"
-   
+
     context['form'] = form
     context['errors'] = errors
     context['event'] = edit_item
-   
+
     return render(request, "home/event/edit_event.html", context)
 
 
@@ -198,7 +203,7 @@ def participants(request):
     """ View, add, edit and delete participants in table.
         Filter for current user and selected event.
     """
-    
+
     error = "s"
     context = {}
     context['title'] = 'Участники'
@@ -448,9 +453,13 @@ def print_templates(request):
             error = "press preview" 
             pk = request.POST.get('preview')
             print_item = context['print_templates'].get(id=pk)
-            mypdf = makepdf.make_pdf(context['user_image'].width, context['user_image'].height,
-             print_item.font_size, print_item.user_image_related.image, "Иванов Иван Иванович",
-             print_item.start_x, print_item.start_y)
+            mypdf = makepdf.make_pdf(context['user_image'].width,
+                                     context['user_image'].height,
+                                     print_item.font_size,
+                                     print_item.user_image_related.image,
+                                     "Петров Иван Сидорович",
+                                     print_item.start_x, print_item.start_y
+                                     )
         else:
             pass
     context['form'] = form

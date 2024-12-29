@@ -53,7 +53,7 @@
                     {% elif competency.event_related == current_event %}
                         <td>{{forloop.counter}}</td>
                         <td>{{competency.title}}</td>
-                        <td>{{competency.print_title}}</td>
+                        <td>{{competency.print_title|linebreaks}}</td>
                         <td>{{competency.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{competency.updated_date|date:'d.m.Y H:i'}}</td>
                         <td>{{competency.created_by}}</td>

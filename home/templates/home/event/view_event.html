@@ -6,8 +6,8 @@
     <span>{{ error }}</span>
     <ul>
          <li>{{event.title}}</li>
-         <li>{{event.print_title}}</li>
-         <li>{{event.description}}</li>
+         <li>{{event.print_title|linebreaks}}</li>
+         <li>{{event.description|linebreaks}}</li>
          <li>с {{event.from_date}} по {{event.to_date}}</li>
          <li>Дата создания {{event.created_date|date:'d.m.Y H:i'}}</li>
          <li>Дата изменения {{event.updated_date|date:'d.m.Y H:i'}}</li>

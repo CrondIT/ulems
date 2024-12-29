@@ -16,8 +16,9 @@ class EventForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Наименование'
             }),
-            "print_title": TextInput(attrs={
+            "print_title": Textarea(attrs={
                 'class': 'form-control',
+                'rows': 4,
                 'placeholder': 'Наименование для печати'
             }),
             "description": Textarea(attrs={
@@ -41,7 +42,7 @@ class EventForm(ModelForm):
         user = kwargs.pop('current_user')
         super(EventForm, self).__init__(*args, **kwargs)
         # Filter 
-        self.fields['image'].queryset = Category.objects.filter(
+        self.fields['image'].queryset = UserImage.objects.filter(
             created_by=user
         )
 
@@ -55,10 +56,13 @@ class CategoryForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Наименование'
                 }),
-                "print_title": TextInput(attrs={
+                "print_title": Textarea(attrs={
                     'class': 'form-control',
+                    'rows': 4,
                     'placeholder': 'Наименование для печати'
                 })
+              
+                
             }
 
 
@@ -101,6 +105,14 @@ class ParticipantForm(ModelForm):
                 "organization": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Организация'
+                }),
+                "category": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Категория'
+                }),
+                "competency": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Компетенция'
                 })
             }
 
@@ -129,8 +141,9 @@ class CompetencyForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Наименование'
                 }),
-                "print_title": TextInput(attrs={
+                "print_title": Textarea(attrs={
                     'class': 'form-control',
+                    'rows': 4,
                     'placeholder': 'Наименование для печати'
                 })
             }   
@@ -151,7 +164,7 @@ class PrintTemplateForm(ModelForm):
                   'delta_x',
                   'delta_y',
                   'font_size'
-                 ]
+                  ]
         widgets = {
                 "print_item": Select(attrs={
                     'class': 'form-control',
@@ -177,4 +190,4 @@ class PrintTemplateForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Размер шрифта'
                 })
-            }   
+            }

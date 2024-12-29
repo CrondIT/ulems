@@ -57,7 +57,7 @@
                     {% else %}
                         <td>{{forloop.counter}}</td>
                         <td>{{category.title}}</td>
-                        <td>{{category.print_title}}</td>
+                        <td>{{category.print_title|linebreaks}}</td>
                         <td>{{category.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{category.updated_date|date:'d.m.Y H:i'}}</td>
                         <td>{{category.created_by}}</td>
