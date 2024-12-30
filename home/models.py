@@ -176,7 +176,7 @@ class PrintTemplate(TimeStamp):
     start_x = models.PositiveSmallIntegerField()
     start_y = models.PositiveSmallIntegerField()
     delta_x = models.PositiveSmallIntegerField()
-    delta_y = models.PositiveSmallIntegerField()
+    font_color = models.CharField(max_length=25, null=True)
     font_size = models.PositiveSmallIntegerField()
     user_image_related = models.ForeignKey(
         UserImage, related_name='%(app_label)s_%(class)s_user_image_related',

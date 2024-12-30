@@ -162,7 +162,7 @@ class PrintTemplateForm(ModelForm):
                   'start_x',
                   'start_y',
                   'delta_x',
-                  'delta_y',
+                  'font_color',
                   'font_size'
                   ]
         widgets = {
@@ -182,9 +182,10 @@ class PrintTemplateForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Дельта X'
                 }),
-                "delta_y": NumberInput(attrs={
+                "font_color": TextInput(attrs={
+                    'type': 'color',
                     'class': 'form-control',
-                    'placeholder': 'Дельта Y'
+                    'placeholder': 'Цвет шрифта'
                 }),
                 "font_size": NumberInput(attrs={
                     'class': 'form-control',

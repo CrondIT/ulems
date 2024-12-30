@@ -28,12 +28,12 @@
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-print_item"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Начальная Х </br>
+                    Начальная Х, мм </br>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="start_x"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-start_x"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Начальная Y </br>
+                    Начальная Y, мм </br>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="start_y"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-start_x"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
@@ -43,7 +43,7 @@
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-delta_x"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Дельта Y </br>
+                    Цвет шрифта </br>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="delta_y"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-delta_y"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
@@ -72,7 +72,7 @@
                                 <td>{{pt.start_x}}</td>
                                 <td>{{pt.start_y}}</td>
                                 <td>{{pt.delta_x}}</td>
-                                <td>{{pt.delta_y}}</td>
+                                <td <span style="background-color: {{pt.font_color}}" >{{pt.font_color}} </span></td>
                                 <td>{{pt.font_size}}</td>
                                 <td> 
                                     <button class="btn btn-outline-success" name="edit" value="{{ pt.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
