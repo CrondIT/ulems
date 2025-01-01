@@ -60,3 +60,33 @@ def make_pdf(page_width, page_height,
     canva.save()
    
 
+def make_pdf2(page_data, text_data):
+    page_width = page_data['page_width'] * mm
+    page_height = page_data['page_height'] * mm
+    page_size = (page_width, page_height)
+    canva = canvas.Canvas("helloworld.pdf", page_size)
+    pdfmetrics.registerFont(TTFont("Arial", "ARIAL.TTF"))
+    image = page_data['image']
+    img = ImageReader(image)
+    canva.drawImage(img, 0, 0, page_width, page_height)
+    for td in text_data:
+        canva.setFont("Arial", td['font_size'])
+        canva.setFillColor(td['font_color'])
+        
+        #canva.drawString(start_x * mm, start_y * mm, texts)
+
+        text = canva.beginText(td['start_x'] * mm, td['start_y'] * mm)
+        text.setFont("Arial", td['font_size'])
+        text.setLeading(td['delta_x'])
+        text.textLines(td['text'])
+        canva.drawText(text)
+
+       # textlines=split_string(text, 25, 1)
+       # print(textlines)
+       # for n, l in enumerate(textlines,1):
+       # print(texts)
+       # canva.drawString(start_x, start_y, texts)
+
+    canva.showPage()
+
+    canva.save()

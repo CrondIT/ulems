@@ -406,7 +406,6 @@ def user_images(request):
 def print_templates(request):
     """ Edit template with user image. """
     form = PrintTemplateForm()
-    error = ""
     context = {}
     context['title'] = 'Настройка печати'
     context['current_user'] = request.user
@@ -449,10 +448,46 @@ def print_templates(request):
             context['print_templates'] = context['print_templates'].order_by(
                 request.POST['sort']
                 )
+        elif 'preview_all' in request.POST:
+            page_data = {}
+            text_data = []
+            pk = request.POST.get('selected')
+            participant = context['participants'].get(id=pk)
+            for print_template in context['print_templates']:
+                img = print_template.user_image_related.image
+                match print_template.print_item:
+                    case "fio":
+                        text = f" {participant.first_name}  {
+                                   participant.middle_name} {
+                                   participant.last_name}"
+                    case "category":
+                        text = participant.category.print_title
+                    case "competency":
+                        text = participant.competency.print_title
+                    case "event":
+                        text = participant.event_related.print_title
+                    case _:
+                        text = "просто произвольный текст потому что я еще ничего не придумал"
+
+                text_data.append({"print_item": print_template.print_item,
+                                  "start_x": print_template.start_x,
+                                  "start_y": print_template.start_y,
+                                  "delta_x": print_template.delta_x,
+                                  "font_color": print_template.font_color,
+                                  "font_size": print_template.font_size,
+                                  "text": text
+                                  })
+            
+            page_data['page_width'] = context['user_image'].width
+            page_data['page_height'] = context['user_image'].height
+            page_data['image'] = img
+            context['error'] = page_data
+            mypdf = makepdf.make_pdf2(page_data, text_data)
         elif 'preview' in request.POST:
-            error = "press preview" 
+            
             pk = request.POST.get('preview')
             print_item = context['print_templates'].get(id=pk)
+            context['error'] = print_item.user_image_related.image
             mypdf = makepdf.make_pdf(context['user_image'].width,
                                      context['user_image'].height,
                                      print_item.font_size,
@@ -460,8 +495,9 @@ def print_templates(request):
                                      "Петров Иван Сидорович",
                                      print_item.start_x, print_item.start_y
                                      )
+            
         else:
             pass
     context['form'] = form
-    context['error'] = error
+   
     return render(request, "home/print_templates.html", context)
