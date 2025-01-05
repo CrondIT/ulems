@@ -1,5 +1,5 @@
 from .models import Event, Category, Participant, Competency
-from .models import Profile, UserImage, PrintTemplate
+from .models import Profile, UserImage, PrintTemplate, Award
 
 
 from django.forms import ModelForm, TextInput, DateInput
@@ -41,7 +41,7 @@ class EventForm(ModelForm):
         # Extract the user from the view
         user = kwargs.pop('current_user')
         super(EventForm, self).__init__(*args, **kwargs)
-        # Filter 
+        # Filter
         self.fields['image'].queryset = UserImage.objects.filter(
             created_by=user
         )
@@ -50,7 +50,7 @@ class EventForm(ModelForm):
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['title', 'print_title']
+        fields = ['title', 'print_title', 'badge', 'certificate']
         widgets = {
                 "title": TextInput(attrs={
                     'class': 'form-control',
@@ -60,10 +60,28 @@ class CategoryForm(ModelForm):
                     'class': 'form-control',
                     'rows': 4,
                     'placeholder': 'Наименование для печати'
+                }),
+                "badge": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Бэдж'
+                }),
+                "certificate": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Сертификат'
                 })
-              
-                
             }
+      
+    def __init__(self, *args, **kwargs):
+        # Extract the user from the view
+        user = kwargs.pop('current_user')
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        # Filter
+        self.fields['badge'].queryset = UserImage.objects.filter(
+            created_by=user
+        )
+        self.fields['certificate'].queryset = UserImage.objects.filter(
+            created_by=user
+        )
 
 
 class UserImageForm(ModelForm):
@@ -88,7 +106,7 @@ class ParticipantForm(ModelForm):
     class Meta:
         model = Participant
         fields = ['first_name', 'middle_name', 'last_name', 'organization',
-                  'category', 'competency']
+                  'category', 'competency', 'award']
         widgets = {
                 "first_name": TextInput(attrs={
                     'class': 'form-control',
@@ -113,13 +131,21 @@ class ParticipantForm(ModelForm):
                 "competency": Select(attrs={
                     'class': 'form-control',
                     'placeholder': 'Компетенция'
+                }),
+                "award": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Награда'
                 })
             }
 
     def __init__(self, *args, **kwargs):
-      	# Extract the user from the view
+        # Extract the user from the view
         user = kwargs.pop('current_user')
         event = kwargs.pop('current_event')
+        flag = False
+        if kwargs.pop('current_competency') is not None:
+            award_competency = kwargs.pop('current_competency')
+            flag = True
         super(ParticipantForm, self).__init__(*args, **kwargs)
         # Filter
         self.fields['category'].queryset = Category.objects.filter(
@@ -130,6 +156,17 @@ class ParticipantForm(ModelForm):
             event_related=event,
             created_by=user
         )
+        if flag:
+            self.fields['award'].queryset = Award.objects.filter(
+                event_related=event,
+                created_by=user,
+                competency=award_competency
+            )
+        else:
+            self.fields['award'].queryset = Award.objects.filter(
+                event_related=event,
+                created_by=user,
+            )
 
 
 class CompetencyForm(ModelForm):
@@ -146,7 +183,7 @@ class CompetencyForm(ModelForm):
                     'rows': 4,
                     'placeholder': 'Наименование для печати'
                 })
-            }   
+            }
 
 
 class ProfileForm(ModelForm):
@@ -192,3 +229,37 @@ class PrintTemplateForm(ModelForm):
                     'placeholder': 'Размер шрифта'
                 })
             }
+
+
+class AwardForm(ModelForm):
+    class Meta:
+        model = Award
+        fields = ['title', 'competency', 'award']
+        widgets = {
+                "title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование'
+                }),
+                "competency": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Компетенция'
+                }),
+                "award": Select(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Награда'
+                })
+            }
+
+    def __init__(self, *args, **kwargs):
+        # Extract the user from the view
+        user = kwargs.pop('current_user')
+        event = kwargs.pop('current_event')
+        super(AwardForm, self).__init__(*args, **kwargs)
+        # Filter
+        self.fields['award'].queryset = UserImage.objects.filter(
+            created_by=user
+        )
+        self.fields['competency'].queryset = Competency.objects.filter(
+            event_related=event,
+            created_by=user
+        )

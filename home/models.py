@@ -78,11 +78,23 @@ class EventRelated(models.Model):
     class Meta:
         abstract = True
 
-
+    
 # -----------------------------------------------------------------------------------
 class Category(TimeStamp, EventRelated):
     title = models.CharField("Категория участника", max_length=100)
     print_title = models.TextField('Название для печати')
+    badge = models.ForeignKey(UserImage,
+                              on_delete=models.SET_NULL,
+                              related_name="category_badge",
+                              null=True,
+                              blank=True
+                              )
+    certificate = models.ForeignKey(UserImage,
+                                    on_delete=models.SET_NULL,
+                                    related_name="category_certificate",
+                                    null=True,
+                                    blank=True
+                                    )
 
     def __str__(self):
         return str(self.title)
@@ -90,7 +102,6 @@ class Category(TimeStamp, EventRelated):
     class Meta:
         verbose_name = 'Категория участника'
         verbose_name_plural = 'Категории участников'
-        # ordering = ['title']
 
 
 # -----------------------------------------------------------------------------------
@@ -104,6 +115,31 @@ class Competency(TimeStamp, EventRelated):
     class Meta:
         verbose_name = 'Компетенция (номинация)'
         verbose_name_plural = 'Компетенции (номинации)'
+
+
+# -----------------------------------------------------------------------------------
+class Award(TimeStamp, EventRelated):
+    title = models.CharField("Награда", max_length=100)
+    competency = models.ForeignKey(
+        Competency, on_delete=models.SET_NULL,
+        related_name="award_competency",
+        null=True,
+        blank=True
+        )
+    award = models.ForeignKey(UserImage,
+                              on_delete=models.SET_NULL,
+                              related_name="award_image",
+                              null=True,
+                              blank=True
+                              )
+
+    def __str__(self):
+        return f"{self.title} в {
+                self.competency}"
+
+    class Meta:
+        verbose_name = 'Награда'
+        verbose_name_plural = 'Награды'
 
 
 # -----------------------------------------------------------------------------------
@@ -122,10 +158,16 @@ class Participant(TimeStamp, EventRelated):
         related_name="participants",
         null=True
         )
+    award = models.ForeignKey(
+        Award, on_delete=models.SET_NULL,
+        related_name="participant_award",
+        null=True,
+        blank=True
+        )
 
     def __str__(self):
         return f" {self.first_name} {self.middle_name} {self.last_name} -  {
-            self.event_related} {self.category} "
+            self.event_related} {self.category}"
 
     class Meta:
         verbose_name = 'Участник'

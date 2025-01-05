@@ -1,10 +1,10 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h4>Категории участников мероприятия: {{ current_event}}</h4>
+    <h4>Награды (дипломы) компетенций: {{ current_event}}</h4>
 
     <table class = "table table-bordered table-light">
-        <form method="POST" action="{% url 'home:categories' %}">
+        <form method="POST" action="{% url 'home:awards' %}">
             {% csrf_token %} 
                
             <tr>
@@ -15,13 +15,14 @@
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-title"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Наименование для печати
+                    Компетенция </br>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="competency"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-competency"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
-                    Бэдж
-                </th>
-                <th>
-                    Сертификат
+                    Награда </br>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="award"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-award"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
                     Дата создания </br>
@@ -53,35 +54,31 @@
 
             {% if not form.instance.id %}
                 <tr>
-                    {% include 'home/category.html' %}
+                    {% include 'home/award.html' %}
                 </tr>
             {% endif %}   
 
             <tbody class="table-group-divider">
-            {% for category in categories %}
+            {% for award in awards %}
                  <tr>
-                    {% if form.instance.id == category.id %}
-                        {% include 'home/category.html' %}
+                    {% if form.instance.id == award.id %}
+                        {% include 'home/award.html' %}
                     {% else %}
                         <td>{{forloop.counter}}</td>
-                        <td>{{category.title}}</td>
-                        <td>{{category.print_title|linebreaks}}</td>
-                        <td>{{category.badge}}</td>
-                        <td>{{category.certificate}}</td>
-                        <td>{{category.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{category.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{category.created_by}}</td>
-                        <td>{{category.updated_by}}</td>
-                        <td>{{category.event_related}}</td>
+                        <td>{{award.title}}</td>
+                        <td>{{award.competency}}</td>
+                        <td>{{award.award}}</td>
+                        <td>{{award.created_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{award.updated_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{award.created_by}}</td>
+                        <td>{{award.updated_by}}</td>
+                        <td>{{award.event_related}}</td>
                         <td> 
-                            <button class="btn btn-outline-success" name="edit" value="{{ category.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger" name="delete" value="{{ category.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            <button class="btn btn-outline-success" name="edit" value="{{ award.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                            <button class="btn btn-outline-danger" name="delete" value="{{ award.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                         </td> 
                     {% endif %}
                 </tr>
-            
-                {% empty %}    
-                    Нет категорий
             {% endfor %}
         </form>
         <tbody> 

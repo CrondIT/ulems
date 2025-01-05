@@ -26,5 +26,7 @@ urlpatterns = [
     #     ),
     #vpath("print_templates_table", views.print_templates, name="print_templates_table"),
     
-    path("print_templates", views.print_templates,  name="print_templates" ),
+    path("print_templates", views.print_templates,  name="print_templates"),
+    path("awards", views.awards, name="awards"),
+   
 ]

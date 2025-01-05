@@ -23,7 +23,7 @@
                         {% if current_event %}
                             <a class = "nav-link" href ={% url 'home:categories' %}>Категории</a>
                             <a class = "nav-link" href ={% url 'home:competencies' %}>Компетенции</a>
-                            <a class = "nav-link" href ='#metka'>Награды</a>
+                            <a class = "nav-link" href ={% url 'home:awards' %}>Награды</a>
                             <a class = "nav-link" href ={% url 'home:participants' %}>Участники</a>
                         {% endif %}
                         <a class = "nav-link" href ={% url 'home:user_images' %}>Изображения</a>

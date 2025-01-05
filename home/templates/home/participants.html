@@ -56,8 +56,8 @@
                 </th>
                 <th>
                     Награда</br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="reward"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-reward"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="award"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-award"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
                     Дата созд. </br>
@@ -111,7 +111,7 @@
                         <td>{{participant.organization}}</td>
                         <td>{{participant.category}}</td>
                         <td>{{participant.competency}}</td>
-                        <td>пока пусто</td>
+                        <td>{{participant.award}}</td>
                         <td>{{participant.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{participant.updated_date|date:'d.m.Y H:i'}}</td>
                         <td>{{participant.created_by}}</td>

@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Event, Category, Participant, Competency, UserImage
-from .models import PrintTemplate
+from .models import PrintTemplate, Award
 
-from .forms import EventForm, CategoryForm, ParticipantForm
+from .forms import EventForm, CategoryForm, ParticipantForm, AwardForm
 from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
 from . import makepdf
@@ -143,7 +143,6 @@ def categories(request):
     """ View, add, edit and delete categories in table.
         Filter for current user and selected event.
     """
-    form = CategoryForm()
     error = ""
     context = {}
     context['title'] = 'Категории'
@@ -153,20 +152,27 @@ def categories(request):
         created_by=context['current_user'],
         event_related=context['current_event']
         )
+    form = CategoryForm(current_user=context['current_user'])
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                form = CategoryForm(request.POST)
+                form = CategoryForm(request.POST,
+                                    current_user=context['current_user']
+                                    )
                 new_item = form.save(commit=False)
                 new_item.created_by = context['current_user']
                 new_item.event_related = context['current_event']
             else:
                 save_item = Category.objects.get(id=pk)
                 save_item.updated_by = context['current_user']
-                form = CategoryForm(request.POST, instance=save_item)
+                form = CategoryForm(
+                    request.POST,
+                    instance=save_item,
+                    current_user=context['current_user']
+                    )
             form.save()
-            form = CategoryForm()
+            form = CategoryForm(current_user=context['current_user'])
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Category.objects.get(id=pk)
@@ -174,7 +180,9 @@ def categories(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = Category.objects.get(id=pk)
-            form = CategoryForm(instance=edit_item)
+            form = CategoryForm(instance=edit_item,
+                                current_user=context['current_user']
+                                )
         elif 'sort' in request.POST:
             context['categories'] = context['categories'].order_by(
                 request.POST['sort']
@@ -216,7 +224,8 @@ def participants(request):
         )
     form = ParticipantForm(
         current_user=context['current_user'],
-        current_event=context['current_event']
+        current_event=context['current_event'],
+        current_competency=None
         )
     if request.method == 'POST':
         if 'save' in request.POST:
@@ -233,11 +242,13 @@ def participants(request):
             else:
                 save_item = Participant.objects.get(id=pk)
                 save_item.updated_by = context['current_user']
+                save_item_competency = save_item.competency
                 form = ParticipantForm(
                     request.POST,
                     instance=save_item,
                     current_user=context['current_user'],
-                    current_event=context['current_event']
+                    current_event=context['current_event'],
+                    current_competency=save_item_competency
                     )
             form.save()
             form = ParticipantForm(
@@ -251,10 +262,12 @@ def participants(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = Participant.objects.get(id=pk)
+            context['current_competency'] = edit_item.competency
             form = ParticipantForm(
                 instance=edit_item,
                 current_user=context['current_user'],
-                current_event=context['current_event']
+                current_event=context['current_event'],
+                current_competency=context['current_competency']
                 )
         elif 'sort' in request.POST:
             context['participants'] = context['participants'].order_by(
@@ -273,6 +286,8 @@ def participants(request):
     context['error'] = error
 
     return render(request, "home/participants.html", context)
+
+
 # ------------------------------------------------------------------------------
 @login_required(login_url="login")
 def participant(request, participant_id):
@@ -467,7 +482,7 @@ def print_templates(request):
                     case "event":
                         text = participant.event_related.print_title
                     case _:
-                        text = "просто произвольный текст потому что я еще ничего не придумал"
+                        text = "произвольный текст, я еще ничего не придумал"
 
                 text_data.append({"print_item": print_template.print_item,
                                   "start_x": print_template.start_x,
@@ -484,7 +499,6 @@ def print_templates(request):
             context['error'] = page_data
             mypdf = makepdf.make_pdf2(page_data, text_data)
         elif 'preview' in request.POST:
-            
             pk = request.POST.get('preview')
             print_item = context['print_templates'].get(id=pk)
             context['error'] = print_item.user_image_related.image
@@ -495,9 +509,74 @@ def print_templates(request):
                                      "Петров Иван Сидорович",
                                      print_item.start_x, print_item.start_y
                                      )
-            
+
         else:
             pass
     context['form'] = form
-   
+
     return render(request, "home/print_templates.html", context)
+
+
+# -------------------------------------------------------------------------------
+@login_required(login_url="login")
+def awards(request):
+    """ View, add, edit and delete awards in table.
+        Filter for current user and selected event.
+    """
+    error = ""
+    context = {}
+    context['title'] = 'Награды (дипломы)'
+    context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
+    context['awards'] = Award.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        )
+    form = AwardForm(current_user=context['current_user'],
+                     current_event=context['current_event']
+                     )
+    if request.method == 'POST':
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                form = AwardForm(request.POST,
+                                 current_user=context['current_user'],
+                                 current_event=context['current_event']
+                                 )
+                usr = form.save(commit=False)
+                usr.created_by = context['current_user']
+                usr.event_related = context['current_event']
+            else:
+                save_item = context['awards'].get(id=pk)
+                save_item.updated_by = context['current_user']
+                form = AwardForm(request.POST,
+                                 instance=save_item,
+                                 current_event=context['current_event'],
+                                 current_user=context['current_user']
+                                 )
+            form.save()
+            form = AwardForm(current_event=context['current_event'],
+                             current_user=context['current_user']
+                             )
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            delete_item = context['awards'].get(id=pk)
+            delete_item.delete()
+        elif 'edit' in request.POST:
+            pk = request.POST.get('edit')
+            edit_item = context['awards'].get(id=pk)
+            form = AwardForm(instance=edit_item,
+                             current_event=context['current_event'],
+                             current_user=context['current_user']
+                             )
+        elif 'sort' in request.POST:
+            context['awards'] = context['awards'] .order_by(
+                request.POST['sort']
+                )
+        else:
+            pass
+
+    context['form'] = form
+    context['error'] = error
+
+    return render(request, "home/awards.html", context)
