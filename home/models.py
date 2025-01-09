@@ -144,7 +144,10 @@ class Award(TimeStamp, EventRelated):
 
 # -----------------------------------------------------------------------------------
 class Participant(TimeStamp, EventRelated):
-    first_name = models.CharField("Фамилия", max_length=100)
+    first_name = models.CharField("Фамилия",
+                                  max_length=100,
+                                  help_text="До 100 символов",
+                                  )
     middle_name = models.CharField("Имя", max_length=100)
     last_name = models.CharField("Отчество", max_length=100)
     organization = models.CharField("Организация", max_length=100)

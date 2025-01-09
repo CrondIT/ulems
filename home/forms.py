@@ -70,7 +70,7 @@ class CategoryForm(ModelForm):
                     'placeholder': 'Сертификат'
                 })
             }
-      
+
     def __init__(self, *args, **kwargs):
         # Extract the user from the view
         user = kwargs.pop('current_user')
@@ -146,6 +146,7 @@ class ParticipantForm(ModelForm):
         if kwargs.pop('current_competency') is not None:
             award_competency = kwargs.pop('current_competency')
             flag = True
+
         super(ParticipantForm, self).__init__(*args, **kwargs)
         # Filter
         self.fields['category'].queryset = Category.objects.filter(
@@ -165,7 +166,7 @@ class ParticipantForm(ModelForm):
         else:
             self.fields['award'].queryset = Award.objects.filter(
                 event_related=event,
-                created_by=user,
+                created_by=user
             )
 
 

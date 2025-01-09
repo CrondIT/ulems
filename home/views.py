@@ -218,6 +218,7 @@ def participants(request):
     context['all_selected'] = False
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
+    context['current_competency'] = None
     context['participants'] = Participant.objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event']
@@ -225,7 +226,7 @@ def participants(request):
     form = ParticipantForm(
         current_user=context['current_user'],
         current_event=context['current_event'],
-        current_competency=None
+        current_competency=context['current_competency']
         )
     if request.method == 'POST':
         if 'save' in request.POST:
@@ -234,7 +235,8 @@ def participants(request):
                 form = ParticipantForm(
                     request.POST,
                     current_user=context['current_user'],
-                    current_event=context['current_event']
+                    current_event=context['current_event'],
+                    current_competency=context['current_competency']
                     )
                 new_item = form.save(commit=False)
                 new_item.created_by = context['current_user']
@@ -242,18 +244,19 @@ def participants(request):
             else:
                 save_item = Participant.objects.get(id=pk)
                 save_item.updated_by = context['current_user']
-                save_item_competency = save_item.competency
+                # context['current_competency'] = None
                 form = ParticipantForm(
                     request.POST,
                     instance=save_item,
                     current_user=context['current_user'],
                     current_event=context['current_event'],
-                    current_competency=save_item_competency
+                    current_competency=context['current_competency']
                     )
             form.save()
             form = ParticipantForm(
                 current_user=context['current_user'],
-                current_event=context['current_event']
+                current_event=context['current_event'],
+                current_competency=context['current_competency']
                 )
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
@@ -262,12 +265,13 @@ def participants(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = Participant.objects.get(id=pk)
-            context['current_competency'] = edit_item.competency
+            error = edit_item.competency
+            context['current_competency'] = Competency.objects.get(id=edit_item.competency.id)
             form = ParticipantForm(
                 instance=edit_item,
                 current_user=context['current_user'],
                 current_event=context['current_event'],
-                current_competency=context['current_competency']
+                current_competency=context['current_competency'],
                 )
         elif 'sort' in request.POST:
             context['participants'] = context['participants'].order_by(
@@ -278,7 +282,7 @@ def participants(request):
             context['all_selected'] = True
         elif 'deselect_all' in request.POST:
             error = "all selected pressed"
-            context['all_selected'] = False    
+            context['all_selected'] = False
         else:
             pass
 
