@@ -190,7 +190,14 @@ class Profile(TimeStamp):
         on_delete=models.SET_NULL,
         null=True
         )
-
+    sort_event = models.CharField(max_length=25,  default="created_date")
+    sort_category = models.CharField(max_length=25,  default="created_date")
+    sort_competency = models.CharField(max_length=25,  default="created_date")
+    sort_award = models.CharField(max_length=25,  default="created_date")
+    sort_participant = models.CharField(max_length=25,  default="created_date")
+    sort_image = models.CharField(max_length=25, default="created_date")
+    sort_template = models.CharField(max_length=25, default="created_date")
+  
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:

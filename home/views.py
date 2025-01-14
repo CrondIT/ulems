@@ -13,6 +13,38 @@ from . import makepdf
 
 
 # ----------------------------------------------------------------------------
+def sort_reverse(sort_str):
+    """ 
+        Remove - at the begin of the string if - exist 
+        or add - if it not exist
+    """
+    if sort_str[0] == '-':
+        new_str = sort_str[1:]
+    else:
+        new_str = '-' + sort_str
+    
+    return new_str
+
+
+# ----------------------------------------------------------------------------
+def is_sort_exist(sort_str, saved_str):
+    """ 
+        Return True, if saved in user profile sort string 
+        equal pressed sort value
+    """
+
+    is_sort_exist = False
+    if sort_str[0] == '-':
+        sort_str = sort_str[1:]
+    if saved_str[0] == '-':
+        saved_str = saved_str[1:]    
+    if sort_str == saved_str:
+        is_sort_exist = True
+
+    return is_sort_exist
+
+
+# ----------------------------------------------------------------------------
 @login_required(login_url="login")
 def index(request):
     """ View main (starter) page """
@@ -145,6 +177,7 @@ def categories(request):
     """
     error = ""
     context = {}
+    context['sort_button'] ='fa fa-sort'
     context['title'] = 'Категории'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
@@ -152,6 +185,11 @@ def categories(request):
         created_by=context['current_user'],
         event_related=context['current_event']
         )
+    context['sort'] = request.user.profile.sort_category
+    error = context['sort']
+    context['categories'] = context['categories'].order_by(
+                    context['sort']
+                    )
     form = CategoryForm(current_user=context['current_user'])
     if request.method == 'POST':
         if 'save' in request.POST:
@@ -184,9 +222,16 @@ def categories(request):
                                 current_user=context['current_user']
                                 )
         elif 'sort' in request.POST:
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_category = context['sort']
+            request.user.save()
             context['categories'] = context['categories'].order_by(
-                request.POST['sort']
-                )
+                    context['sort']
+                    )
         else:
             pass
 
@@ -211,8 +256,6 @@ def participants(request):
     """ View, add, edit and delete participants in table.
         Filter for current user and selected event.
     """
-
-    error = "s"
     context = {}
     context['title'] = 'Участники'
     context['all_selected'] = False
@@ -223,6 +266,11 @@ def participants(request):
         created_by=context['current_user'],
         event_related=context['current_event']
         )
+    context['sort'] = request.user.profile.sort_participant
+    error = context['sort']
+    context['participants'] = context['participants'].order_by(
+                    context['sort']
+                    )
     form = ParticipantForm(
         current_user=context['current_user'],
         current_event=context['current_event'],
@@ -274,8 +322,11 @@ def participants(request):
                 current_competency=context['current_competency'],
                 )
         elif 'sort' in request.POST:
+            context['sort'] = request.POST.get('sort')
+            request.user.profile.sort_participant = context['sort']
+            request.user.save()
             context['participants'] = context['participants'].order_by(
-                    request.POST['sort']
+                    context['sort']
                     )
         elif 'select_all' in request.POST:
             error = "all selected pressed"
@@ -310,6 +361,7 @@ def competencies(request):
     form = CompetencyForm()
     error = ""
     context = {}
+    context['sort_button'] ='fa fa-sort'
     context['title'] = 'Компетенции'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
@@ -317,6 +369,11 @@ def competencies(request):
         created_by=context['current_user'],
         event_related=context['current_event']
         )
+    context['sort'] = request.user.profile.sort_competency
+    error = context['sort']
+    context['competencies'] = context['competencies'].order_by(
+                    context['sort']
+                    )
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -340,9 +397,12 @@ def competencies(request):
             edit_item = context['competencies'].get(id=pk)   
             form = CompetencyForm(instance=edit_item)
         elif 'sort' in request.POST:
-            context['competencies'] = context['competencies'] .order_by(
-                request.POST['sort']
-                )
+            context['sort'] = request.POST.get('sort')
+            request.user.profile.sort_competency = context['sort']
+            request.user.save()
+            context['competencies'] = context['competencies'].order_by(
+                    context['sort']
+                    )
         else:
             pass
 
