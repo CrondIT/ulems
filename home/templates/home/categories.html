@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h4>Категории участников мероприятия: {{ current_event}}</h4>
+    <h4>Категории участников мероприятия: {{ current_event }}</h4>
 
     <table class = "table table-bordered table-light">
         <form method="POST" action="{% url 'home:categories' %}">
@@ -54,24 +54,24 @@
             {% endif %}   
 
             <tbody class="table-group-divider">
-            {% for category in categories %}
+            {% for item in model %}
                  <tr>
-                    {% if form.instance.id == category.id %}
+                    {% if form.instance.id == item.id %}
                         {% include 'home/category.html' %}
                     {% else %}
                         <td>{{forloop.counter}}</td>
-                        <td>{{category.title}}</td>
-                        <td>{{category.print_title|linebreaks}}</td>
-                        <td>{{category.badge}}</td>
-                        <td>{{category.certificate}}</td>
-                        <td>{{category.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{category.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{category.created_by}}</td>
-                        <td>{{category.updated_by}}</td>
-                        <td>{{category.event_related}}</td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.print_title|linebreaks}}</td>
+                        <td>{{item.badge}}</td>
+                        <td>{{item.certificate}}</td>
+                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.created_by}}</td>
+                        <td>{{item.updated_by}}</td>
+                        <td>{{item.event_related}}</td>
                         <td> 
-                            <button class="btn btn-outline-success" name="edit" value="{{ category.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger" name="delete" value="{{ category.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            <button class="btn btn-outline-success" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                            <button class="btn btn-outline-danger" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                         </td> 
                     {% endif %}
                 </tr>

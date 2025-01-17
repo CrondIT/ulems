@@ -77,11 +77,11 @@ class CategoryForm(ModelForm):
         super(CategoryForm, self).__init__(*args, **kwargs)
         # Filter
         self.fields['badge'].queryset = UserImage.objects.filter(
-            created_by=user
-        )
+                                        created_by=user
+                                        )
         self.fields['certificate'].queryset = UserImage.objects.filter(
-            created_by=user
-        )
+                                        created_by=user
+                                        )
 
 
 class UserImageForm(ModelForm):
