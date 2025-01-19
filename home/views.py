@@ -14,7 +14,7 @@ from . import makepdf
 
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
-    """ 
+    """
         Remove - at the begin of the string if - exist 
         or add - if it not exist
     """
@@ -22,13 +22,13 @@ def sort_reverse(sort_str):
         new_str = sort_str[1:]
     else:
         new_str = '-' + sort_str
-    
+
     return new_str
 
 
 # ----------------------------------------------------------------------------
 def is_sort_exist(sort_str, saved_str):
-    """ 
+    """
         Return True, if saved in user profile sort string 
         equal pressed sort value
     """
@@ -37,62 +37,11 @@ def is_sort_exist(sort_str, saved_str):
     if sort_str[0] == '-':
         sort_str = sort_str[1:]
     if saved_str[0] == '-':
-        saved_str = saved_str[1:]    
+        saved_str = saved_str[1:]
     if sort_str == saved_str:
         is_sort_exist = True
 
     return is_sort_exist
-
-
-# ----------------------------------------------------------------------------
-def post_process(request, data):
-    context={}
-    form = data['form']
-    if 'save' in request.POST:
-        pk = request.POST.get('save')
-        if not pk:
-            form = data['ClassForm'](request.POST,
-                                    current_user = data['current_user']
-                                    )
-            new_item = form.save(commit=False)
-            new_item.created_by = data['current_user']
-            new_item.event_related = data['current_event']
-        else:
-            save_item = data['model'].get(id=pk)
-            save_item.updated_by = data['current_user']
-            form = data['ClassForm'](
-                                    request.POST,
-                                    instance=save_item,
-                                    current_user=data['current_user']
-                                    )
-            form.save()
-            form = data['ClassForm'](current_user=data['current_user'])
-    elif 'delete' in request.POST:
-            pk = request.POST.get('delete')
-            delete_item = data['model'].get(id=pk)
-            delete_item.delete()
-    elif 'edit' in request.POST:
-            pk = request.POST.get('edit')
-            edit_item = data['model'].get(id=pk)
-            form = data['ClassForm'](instance=edit_item,
-                                    current_user=data['current_user']
-                                    )
-    elif 'sort' in request.POST:
-            sort_str = request.POST.get('sort')
-            if is_sort_exist(sort_str, data['sort']):
-                data['sort'] = sort_reverse(data['sort'])
-            else:
-                data['sort'] = sort_str
-            request.user.profile.sort_category = data['sort']
-            request.user.save()
-            data['model'] = data['model'].order_by(
-                                                    data['sort']
-                                                    )
-    else:
-        pass
-
-    
-    return form
 
 
 # ----------------------------------------------------------------------------
@@ -118,8 +67,7 @@ def events(request):
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['events'] = Event.objects.filter(
-        created_by=context['current_user']
-        )
+        created_by=context['current_user'])
     if request.method == "POST":
         if 'select' in request.POST:
             pk = request.POST.get("select")
@@ -139,8 +87,7 @@ def events(request):
             delete_item.delete()
         elif 'sort' in request.POST:
             context['events'] = context['events'].order_by(
-                request.POST['sort']
-                )
+                request.POST['sort'])
         else:
             pass
     context['error'] = error
@@ -169,8 +116,7 @@ def add_event(request):
     form = EventForm(
         request.POST,
         request.FILES,
-        current_user=context['current_user']
-        )
+        current_user=context['current_user'])
     if request.method == "POST":
         if form.is_valid():
             usr = form.save(commit=False)
@@ -195,15 +141,15 @@ def edit_event(request, event_id):
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     edit_item = Event.objects.get(id=event_id)
-    form = EventForm(instance=edit_item,
-                     current_user=context['current_user']
-                     )
+    form = EventForm(
+        instance=edit_item,
+        current_user=context['current_user'])
     if request.method == "POST":
-        form = EventForm(request.POST,
-                         request.FILES,
-                         instance=edit_item,
-                         current_user=context['current_user']
-                         )
+        form = EventForm(
+            request.POST,
+            request.FILES,
+            instance=edit_item,
+            current_user=context['current_user'])
         if form.is_valid():
             usr = form.save(commit=False)
             usr.updated_by = request.user
@@ -228,96 +174,62 @@ def categories(request):
     """
     error = ""
     context = {}
-    context['sort_button'] ='fa fa-sort'
+    context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Категории'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_category
     context['model'] = Category.objects.filter(
         created_by=context['current_user'],
-        event_related=context['current_event']
-        )
+        event_related=context['current_event'])
     context['model'] = context['model'].order_by(
-                    context['sort']
-                    )
+        context['sort'])
     context['ClassForm'] = CategoryForm
 
-    context['form'] = context['ClassForm'](current_user = context['current_user'])
+    context['form'] = context['ClassForm'](
+        current_user=context['current_user'])
     form = context['form']
-    if request.method == 'POST':
-        form = post_process(request, context)    
-
-    
-    context['form'] = form
-    context['error'] = error
-
-    return render(request, "home/categories.html", context)
-# ----------------------------------------------------------------------------
-@login_required(login_url="login")
-def categories_old(request):
-    """ View, add, edit and delete categories in table.
-        Filter for current user and selected event.
-    """
-    error = ""
-    context = {}
-    context['sort_button'] ='fa fa-sort'
-    context['title'] = 'Категории'
-    context['current_event'] = request.user.profile.current_event
-    context['current_user'] = request.user
-    context['sort'] = request.user.profile.sort_category
-    context['model'] = Category.objects.filter(
-        created_by=context['current_user'],
-        event_related=context['current_event']
-        )
-    context['model'] = context['model'].order_by(
-                    context['sort']
-                    )
-    context['ClassForm'] = CategoryForm
-
-    form = context['ClassForm'](current_user = context['current_user'])
-    if request.method == 'POST':
-        if 'save' in request.POST:
-            pk = request.POST.get('save')
-            if not pk:
-                form = context['ClassForm'](request.POST,
-                                 current_user = context['current_user']
-                                 )
-                new_item = form.save(commit=False)
-                new_item.created_by = context['current_user']
-                new_item.event_related = context['current_event']
-            else:
-                save_item = context['model'].get(id=pk)
-                save_item.updated_by = context['current_user']
-                form = context['ClassForm'](
-                    request.POST,
-                    instance=save_item,
-                    current_user=context['current_user']
-                    )
-            form.save()
-            form = context['ClassForm'](current_user=context['current_user'])
-        elif 'delete' in request.POST:
-            pk = request.POST.get('delete')
-            delete_item = context['model'].get(id=pk)
-            delete_item.delete()
-        elif 'edit' in request.POST:
-            pk = request.POST.get('edit')
-            edit_item = context['model'].get(id=pk)
-            form = context['ClassForm'](instance=edit_item,
-                                current_user=context['current_user']
-                                )
-        elif 'sort' in request.POST:
-            sort_str = request.POST.get('sort')
-            if is_sort_exist(sort_str, context['sort']):
-                context['sort'] = sort_reverse(context['sort'])
-            else:
-                context['sort'] = sort_str
-            request.user.profile.sort_category = context['sort']
-            request.user.save()
-            context['model'] = context['model'].order_by(
-                    context['sort']
-                    )
+    if 'save' in request.POST:
+        pk = request.POST.get('save')
+        if not pk:
+            form = context['ClassForm'](
+                request.POST,
+                current_user=context['current_user'])
+            new_item = form.save(commit=False)
+            new_item.created_by = context['current_user']
+            new_item.event_related = context['current_event']
         else:
-            pass
+            save_item = context['model'].get(id=pk)
+            save_item.updated_by = context['current_user']
+            form = context['ClassForm'](
+                request.POST,
+                instance=save_item,
+                current_user=context['current_user'])
+        form.save()
+        form = context['ClassForm'](
+            current_user=context['current_user'])
+    elif 'delete' in request.POST:
+        pk = request.POST.get('delete')
+        delete_item = context['model'].get(id=pk)
+        delete_item.delete()
+    elif 'edit' in request.POST:
+        pk = request.POST.get('edit')
+        edit_item = context['model'].get(id=pk)
+        form = context['ClassForm'](
+            instance=edit_item,
+            current_user=context['current_user'])
+    elif 'sort' in request.POST:
+        sort_str = request.POST.get('sort')
+        if is_sort_exist(sort_str, context['sort']):
+            context['sort'] = sort_reverse(context['sort'])
+        else:
+            context['sort'] = sort_str
+        request.user.profile.sort_category = context['sort']
+        request.user.save()
+        context['model'] = context['model'].order_by(
+            context['sort'])
+    else:
+        pass
 
     context['form'] = form
     context['error'] = error
@@ -348,18 +260,15 @@ def participants(request):
     context['current_competency'] = None
     context['participants'] = Participant.objects.filter(
         created_by=context['current_user'],
-        event_related=context['current_event']
-        )
+        event_related=context['current_event'])
     context['sort'] = request.user.profile.sort_participant
     error = context['sort']
     context['participants'] = context['participants'].order_by(
-                    context['sort']
-                    )
+                    context['sort'])
     form = ParticipantForm(
         current_user=context['current_user'],
         current_event=context['current_event'],
-        current_competency=context['current_competency']
-        )
+        current_competency=context['current_competency'])
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -368,8 +277,7 @@ def participants(request):
                     request.POST,
                     current_user=context['current_user'],
                     current_event=context['current_event'],
-                    current_competency=context['current_competency']
-                    )
+                    current_competency=context['current_competency'])
                 new_item = form.save(commit=False)
                 new_item.created_by = context['current_user']
                 new_item.event_related = context['current_event']
@@ -382,14 +290,12 @@ def participants(request):
                     instance=save_item,
                     current_user=context['current_user'],
                     current_event=context['current_event'],
-                    current_competency=context['current_competency']
-                    )
+                    current_competency=context['current_competency'])
             form.save()
             form = ParticipantForm(
                 current_user=context['current_user'],
                 current_event=context['current_event'],
-                current_competency=context['current_competency']
-                )
+                current_competency=context['current_competency'])
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = Participant.objects.get(id=pk)
@@ -398,20 +304,19 @@ def participants(request):
             pk = request.POST.get('edit')
             edit_item = Participant.objects.get(id=pk)
             error = edit_item.competency
-            context['current_competency'] = Competency.objects.get(id=edit_item.competency.id)
+            context['current_competency'] = Competency.objects.get(
+                id=edit_item.competency.id)
             form = ParticipantForm(
                 instance=edit_item,
                 current_user=context['current_user'],
                 current_event=context['current_event'],
-                current_competency=context['current_competency'],
-                )
+                current_competency=context['current_competency'])
         elif 'sort' in request.POST:
             context['sort'] = request.POST.get('sort')
             request.user.profile.sort_participant = context['sort']
             request.user.save()
             context['participants'] = context['participants'].order_by(
-                    context['sort']
-                    )
+                    context['sort'])
         elif 'select_all' in request.POST:
             error = "all selected pressed"
             context['all_selected'] = True
@@ -442,51 +347,52 @@ def competencies(request):
     """ View, add, edit and delete competencies in table.
         Filter for current user and selected event.
     """
-    form = CompetencyForm()
     error = ""
     context = {}
-    context['sort_button'] ='fa fa-sort'
+    context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Компетенции'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
-    context['competencies'] = Competency.objects.filter(
-        created_by=context['current_user'],
-        event_related=context['current_event']
-        )
     context['sort'] = request.user.profile.sort_competency
-    error = context['sort']
-    context['competencies'] = context['competencies'].order_by(
-                    context['sort']
-                    )
+    context['model'] = Competency.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event'])
+    context['model'] = context['model'].order_by(
+        context['sort'])
+    context['ClassForm'] = CompetencyForm
+    form = CompetencyForm()
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                form = CompetencyForm(request.POST)
+                form = context['ClassForm'](request.POST)
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
                 usr.event_related = context['current_event']
             else:
-                save_item = context['competencies'].get(id=pk)
+                save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
-                form = CompetencyForm(request.POST, instance=save_item)
+                form = context['ClassForm'](request.POST, instance=save_item)
             form.save()
-            form = CompetencyForm()
+            form = context['ClassForm']()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            delete_item = context['competencies'].get(id=pk)
+            delete_item = context['model'].get(id=pk)
             delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            edit_item = context['competencies'].get(id=pk)   
-            form = CompetencyForm(instance=edit_item)
+            edit_item = context['model'].get(id=pk)   
+            form = context['ClassForm'](instance=edit_item)
         elif 'sort' in request.POST:
-            context['sort'] = request.POST.get('sort')
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
             request.user.profile.sort_competency = context['sort']
             request.user.save()
-            context['competencies'] = context['competencies'].order_by(
-                    context['sort']
-                    )
+            context['model'] = context['model'].order_by(
+                context['sort'])
         else:
             pass
 
@@ -518,8 +424,7 @@ def user_images(request):
     context['current_user'] = request.user
     context['current_event'] = request.user.profile.current_event
     context['user_images'] = UserImage.objects.filter(
-        created_by=context['current_user']
-        )
+        created_by=context['current_user'])
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -533,8 +438,7 @@ def user_images(request):
                 form = UserImageForm(
                     request.POST,
                     request.FILES,
-                    instance=user_image
-                    )
+                    instance=user_image)
             form.save()
             form = UserImageForm()
         elif 'delete' in request.POST:
@@ -579,12 +483,10 @@ def print_templates(request):
     context['user_image_id'] = context['user_image'].id
     context['print_templates'] = PrintTemplate.objects.filter(
         created_by=context['current_user'],
-        user_image_related=context['user_image']
-        )
+        user_image_related=context['user_image'])
     context['participants'] = Participant.objects.filter(
         created_by=context['current_user'],
-        event_related=context['current_event']
-        )
+        event_related=context['current_event'])
     if request.method == "POST":
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -609,8 +511,7 @@ def print_templates(request):
             form = PrintTemplateForm(instance=edit_item)
         elif 'sort' in request.POST:
             context['print_templates'] = context['print_templates'].order_by(
-                request.POST['sort']
-                )
+                request.POST['sort'])
         elif 'preview_all' in request.POST:
             page_data = {}
             text_data = []
@@ -650,13 +551,13 @@ def print_templates(request):
             pk = request.POST.get('preview')
             print_item = context['print_templates'].get(id=pk)
             context['error'] = print_item.user_image_related.image
-            mypdf = makepdf.make_pdf(context['user_image'].width,
-                                     context['user_image'].height,
-                                     print_item.font_size,
-                                     print_item.user_image_related.image,
-                                     "Петров Иван Сидорович",
-                                     print_item.start_x, print_item.start_y
-                                     )
+            mypdf = makepdf.make_pdf(
+                context['user_image'].width,
+                context['user_image'].height,
+                print_item.font_size,
+                print_item.user_image_related.image,
+                "Петров Иван Сидорович",
+                print_item.start_x, print_item.start_y)
 
         else:
             pass
@@ -673,54 +574,64 @@ def awards(request):
     """
     error = ""
     context = {}
+    context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Награды (дипломы)'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
-    context['awards'] = Award.objects.filter(
+    context['sort'] = request.user.profile.sort_award
+    context['model'] = Award.objects.filter(
         created_by=context['current_user'],
-        event_related=context['current_event']
-        )
-    form = AwardForm(current_user=context['current_user'],
-                     current_event=context['current_event']
-                     )
+        event_related=context['current_event'])
+    context['model'] = context['model'].order_by(
+        context['sort'])
+    context['ClassForm'] = AwardForm
+    form = context['ClassForm'](
+        current_user=context['current_user'],
+        current_event=context['current_event'])
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                form = AwardForm(request.POST,
-                                 current_user=context['current_user'],
-                                 current_event=context['current_event']
-                                 )
+                form = context['ClassForm'](
+                    request.POST,
+                    current_user=context['current_user'],
+                    current_event=context['current_event'])
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
                 usr.event_related = context['current_event']
             else:
-                save_item = context['awards'].get(id=pk)
+                save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
-                form = AwardForm(request.POST,
-                                 instance=save_item,
-                                 current_event=context['current_event'],
-                                 current_user=context['current_user']
-                                 )
+                form = context['ClassForm'](
+                    request.POST,
+                    instance=save_item,
+                    current_event=context['current_event'],
+                    current_user=context['current_user'])
             form.save()
-            form = AwardForm(current_event=context['current_event'],
-                             current_user=context['current_user']
-                             )
+            form = context['ClassForm'](
+                current_event=context['current_event'],
+                current_user=context['current_user'])
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            delete_item = context['awards'].get(id=pk)
+            delete_item = context['model'].get(id=pk)
             delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            edit_item = context['awards'].get(id=pk)
-            form = AwardForm(instance=edit_item,
-                             current_event=context['current_event'],
-                             current_user=context['current_user']
-                             )
+            edit_item = context['model'].get(id=pk)
+            form = context['ClassForm'](
+                instance=edit_item,
+                current_event=context['current_event'],
+                current_user=context['current_user'])
         elif 'sort' in request.POST:
-            context['awards'] = context['awards'] .order_by(
-                request.POST['sort']
-                )
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_award = context['sort']
+            request.user.save()
+            context['model'] = context['model'].order_by(
+                context['sort'])
         else:
             pass
 
