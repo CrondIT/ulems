@@ -142,9 +142,9 @@ class ParticipantForm(ModelForm):
         # Extract the user from the view
         user = kwargs.pop('current_user')
         event = kwargs.pop('current_event')
+        award_competency = kwargs.pop('current_competency')
         flag = False
-        if kwargs.pop('current_competency') is not None:
-            award_competency = kwargs.pop('current_competency')
+        if award_competency is not None:
             flag = True
 
         super(ParticipantForm, self).__init__(*args, **kwargs)
