@@ -1,25 +1,25 @@
 {% extends "home/layout.html" %}
 
 {% block body %}
-    <h1>Просмотр мероприятия {{even.id}}</h1>
+    <h1>Просмотр мероприятия {{item.id}}</h1>
     <div class="container-fluid" style="max-width: 800px; margin: auto;">
     <span>{{ error }}</span>
     <ul>
-         <li>{{event.title}}</li>
-         <li>{{event.print_title|linebreaks}}</li>
-         <li>{{event.description|linebreaks}}</li>
-         <li>с {{event.from_date}} по {{event.to_date}}</li>
-         <li>Дата создания {{event.created_date|date:'d.m.Y H:i'}}</li>
-         <li>Дата изменения {{event.updated_date|date:'d.m.Y H:i'}}</li>
-         <li>Создал {{event.created_by}}</li>
-         <li>Изменил {{event.updated_by}}</li>
+         <li>{{item.title}}</li>
+         <li>{{item.print_title|linebreaks}}</li>
+         <li>{{item.description|linebreaks}}</li>
+         <li>с {{item.from_date}} по {{item.to_date}}</li>
+         <li>Дата создания {{item.created_date|date:'d.m.Y H:i'}}</li>
+         <li>Дата изменения {{item.updated_date|date:'d.m.Y H:i'}}</li>
+         <li>Создал {{item.created_by}}</li>
+         <li>Изменил {{item.updated_by}}</li>
     
         
     </ul>
 
    
     <h1>Фото 2 </h1>
-    <img src="{{event.image.image.url}}" width="320pt"  alt="Cover"> <br>
+    <img src="{{item.image.image.url}}" width="320pt"  alt="Cover"> <br>
     <p> </p><br>
     <form action="{% url 'home:events' %}">
         <button class="btn btn-outline-success btn-lg">Отмена</button>

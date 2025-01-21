@@ -1,13 +1,13 @@
 {% extends "home/layout.html" %}
 {% block body %}
-    <h1>Редактировать мероприятие {{even.id}}</h1>
+    <h1>Редактировать мероприятие {{item.id}}</h1>
    
     
         <form class="mb-2" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container-fluid" style="max-width: 800px; margin: auto;">
                 {{form.as_table}} </br>
-                <img src="{{event.image.image.url}}" width="320pt"  alt="Cover"> <br>
+                <img src="{{item.image.image.url}}" width="320pt"  alt="Cover"> <br>
                 <span>{{ errors }}</span><br>
 
                 <button class="btn btn-outline-success btn-lg" name="save" type="submit">Сохранить</button>

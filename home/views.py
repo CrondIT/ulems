@@ -63,15 +63,17 @@ def events(request):
     """
     error = ""
     context = {}
+    context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Мероприятия'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
-    context['events'] = Event.objects.filter(
+    context['sort'] = request.user.profile.sort_event
+    context['model'] = Event.objects.filter(
         created_by=context['current_user'])
     if request.method == "POST":
         if 'select' in request.POST:
             pk = request.POST.get("select")
-            select_item = context['events'].get(id=pk)
+            select_item = context['model'].get(id=pk)
             request.user.profile.current_event = select_item
             context['current_event'] = request.user.profile.current_event
             request.user.save()
@@ -83,11 +85,18 @@ def events(request):
             return redirect('home:edit_event', pk)
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            delete_item = Event.objects.get(id=pk)
+            delete_item = context['model'].get(id=pk)
             delete_item.delete()
         elif 'sort' in request.POST:
-            context['events'] = context['events'].order_by(
-                request.POST['sort'])
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_event = context['sort']
+            request.user.save()
+            context['model'] = context['model'].order_by(
+                context['sort'])
         else:
             pass
     context['error'] = error
@@ -101,7 +110,7 @@ def view_event(request, event_id):
     context = {}
     context['current_event'] = request.user.profile.current_event
     select_item = Event.objects.get(pk=event_id)
-    context['event'] = select_item
+    context['item'] = select_item
     return render(request, "home/event/view_event.html", context)
 
 
@@ -161,7 +170,7 @@ def edit_event(request, event_id):
 
     context['form'] = form
     context['errors'] = errors
-    context['event'] = edit_item
+    context['item'] = edit_item
 
     return render(request, "home/event/edit_event.html", context)
 
