@@ -432,48 +432,59 @@ def user_images(request):
     """ View, add, edit and delete user images in table.
         Filter for event and current user.
     """
-    form = UserImageForm()
     error = ""
     context = {}
+    context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Изображения'
-    context['current_user'] = request.user
     context['current_event'] = request.user.profile.current_event
-    context['user_images'] = UserImage.objects.filter(
+    context['current_user'] = request.user
+    context['sort'] = request.user.profile.sort_image
+    context['model'] = UserImage.objects.filter(
         created_by=context['current_user'])
+    context['ClassForm'] = UserImageForm
+    form = context['ClassForm']()
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                form = UserImageForm(request.POST, request.FILES)
+                form = context['ClassForm'](
+                    request.POST,
+                    request.FILES)
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
             else:
-                user_image = context['user_images'].get(id=pk)
+                user_image = context['model'].get(id=pk)
                 user_image.updated_by = context['current_user']
-                form = UserImageForm(
+                form = context['ClassForm'](
                     request.POST,
                     request.FILES,
                     instance=user_image)
             form.save()
-            form = UserImageForm()
+            form = context['ClassForm']()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            user_image = context['user_images'].get(id=pk)
+            user_image = context['model'].get(id=pk)
             user_image.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            user_image = context['user_images'].get(id=pk)
-            form = UserImageForm(instance=user_image)
+            user_image = context['model'].get(id=pk)
+            form = context['ClassForm'](instance=user_image)
         elif 'edit_print_templates' in request.POST:
             pk = request.POST.get('edit_print_templates')
-            user_image = context['user_images'].get(id=pk)
+            user_image = context['model'].get(id=pk)
             request.user.profile.current_image = user_image
             request.user.save()
             return redirect('home:print_templates')
         elif 'sort' in request.POST:
-            context['user_images'] = context['user_images'].order_by(
-                request.POST['sort']
-                )
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_image = context['sort']
+            request.user.save()
+            context['model'] = context['model'].order_by(
+                context['sort'])
         else:
             pass
 

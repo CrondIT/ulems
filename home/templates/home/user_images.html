@@ -11,46 +11,33 @@
                 <th>№</th>
                 <th>Изображение</th>
                 <th>
-                    Наименование </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="title"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-title"><i class='fa fa-long-arrow-down'></i></button>
+                    Наименование
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Имя файла
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="image"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Ширина
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="width"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Высота
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="height"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Дата создания
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Дата изменения
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Создатель
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Изменил
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Имя файла </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="image"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-image"><i class='fa fa-long-arrow-down'></i></button>
+                    Примечания
                 </th>
-                <th>
-                    Ширина </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="width"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-width"><i class='fa fa-long-arrow-down'></i></button>
-                </th>
-                <th>
-                    Высота </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="height"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-height"><i class='fa fa-long-arrow-down'></i></button>
-                </th>
-                <th>
-                    Дата создания </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="created_date"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-created_date"><i class='fa fa-long-arrow-down'></i></button>
-                </th>
-                <th>
-                    Дата изменения </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="updated_date"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-updated_date"><i class='fa fa-long-arrow-down'></i></button>
-                </th>
-                <th>
-                    Создатель </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="created_by"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-created_by"><i class='fa fa-long-arrow-down'></i></button>
-                </th>
-                <th>
-                    Изменил </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="updated_by"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-updated_by"><i class='fa fa-long-arrow-down'></i></button>
-                </th>
-                <th>Примечания</th>
             </tr>
 
             {% if not form.instance.id %}
@@ -60,26 +47,26 @@
             {% endif %}   
 
           
-            {% for user_image in user_images %}
+            {% for item in model %}
                 
                 <tr>
-                    {% if form.instance.id == user_image.id %}
+                    {% if form.instance.id == item.id %}
                         {% include 'home/user_image.html' %}
                     {% else %}    
                         <td>{{forloop.counter}}</td>
-                        <td><a href="{{user_image.image.url}}"><img src="{{user_image.image.url}}" width="100pt"  alt="User Image"></a></td>
-                        <td>{{user_image.title}}</td>
-                        <td>{{user_image.image}}</td>
-                        <td>{{user_image.width}}</td>
-                        <td>{{user_image.height}}</td>
-                        <td>{{user_image.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{user_image.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{user_image.created_by}}</td>
-                        <td>{{user_image.updated_by}}</td>
+                        <td><a href="{{item.image.url}}"><img src="{{item.image.url}}" width="100pt"  alt="User Image"></a></td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.image}}</td>
+                        <td>{{item.width}}</td>
+                        <td>{{item.height}}</td>
+                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.created_by}}</td>
+                        <td>{{item.updated_by}}</td>
                         <td> 
-                            <button class="btn btn-outline-success" name="edit" value="{{ user_image.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-success" name="edit_print_templates" value="{{ user_image.id }}" formnovalidate title="Редактировать печатную форму"><i class='fa fa-file-o'></i></button>
-                            <button class="btn btn-outline-danger" name="delete" value="{{ user_image.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            <button class="btn btn-outline-success" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                            <button class="btn btn-outline-success" name="edit_print_templates" value="{{ item.id }}" formnovalidate title="Редактировать печатную форму"><i class='fa fa-file-o'></i></button>
+                            <button class="btn btn-outline-danger" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                         </td> 
                     {% endif %}
                 </tr>
