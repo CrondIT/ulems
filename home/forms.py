@@ -4,13 +4,15 @@ from .models import Profile, UserImage, PrintTemplate, Award
 
 from django.forms import ModelForm, TextInput, DateInput
 from django.forms import Textarea, Select, NumberInput
+from django.forms import CheckboxInput
 
 
 class EventForm(ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'print_title', 'description',
-                  'from_date', 'to_date', 'image']
+            'team_registration', 'from_date',
+            'to_date', 'image']
         widgets = {
             "title": TextInput(attrs={
                 'class': 'form-control',
@@ -24,6 +26,9 @@ class EventForm(ModelForm):
             "description": Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Описание'
+            }),
+            "team_registration": CheckboxInput(attrs={
+                'placeholder': 'Можно регистрировать команды'
             }),
             "from_date": DateInput(format='%Y-%m-%d', attrs={
                 'class': 'form-control',
