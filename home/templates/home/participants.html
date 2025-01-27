@@ -8,122 +8,122 @@
         
         <form method="POST" action="{% url 'home:participants' %}">
             {% csrf_token %} 
-        <div class="accordion" id="accordionFlushExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                    Импорт
-                  </button>
-                </h2>
-                <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        Контент разместить
+            <div class="accordion" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Импорт/Экспорт
+                    </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <button class="btn btn-outline-success btn-sm" name="export" value="export" >Export</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <head>       
-            <tr>
-                <th>№</th>
-                <th> Фамилия
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="first_name" ><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Имя
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="middle_name"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Отчество
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="last_name"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Организация
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="organization"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Категория
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="category"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Компетенция
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="competency"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Награда
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="award"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата созд. 
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата изм. 
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Создал 
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Изменил 
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Мероприятие 
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Примечания 
-                    <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
-                    <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="Выделить все"><i class='fa fa-square-o'></i></button>
-                </th>
-            </tr>
-        </head>
-        
-            {% if not form.instance.id %}
+            <head>       
                 <tr>
-                    {% include 'home/participant.html' %}
+                    <th>№</th>
+                    <th> Фамилия
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="first_name" ><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Имя
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="middle_name"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Отчество
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="last_name"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Организация
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="organization"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Категория
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="category"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Компетенция
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="competency"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Награда
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="award"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата созд. 
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата изм. 
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Создал 
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Изменил 
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Мероприятие 
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Примечания 
+                        <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
+                        <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="Выделить все"><i class='fa fa-square-o'></i></button>
+                    </th>
                 </tr>
-            {% endif %}   
-
-        <tbody class="table-group-divider">  
-            {% for item in model %}
-                <tr>
-                    {% if form.instance.id == item.id %}
-                        {% include 'home/participant.html' %}
-                    {% else %}
-                        <td>{{forloop.counter}}</td>
-                        <td>{{item.first_name}}</td>
-                        <td>{{item.middle_name}}</td>
-                        <td>{{item.last_name}}</td>
-                        <td>{{item.organization}}</td>
-                        <td>{{item.category}}</td>
-                        <td>{{item.competency}}</td>
-                        <td>{{item.award}}</td>
-                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.created_by}}</td>
-                        <td>{{item.updated_by}}</td>
-                        <td>{{item.event_related}}</td>
-                        <td> 
-                            {% if all_selected %}
-                                <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" checked>
-                            {% else %}    
-                                <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" unchecked>
-                            {% endif %}    
-                            <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                        </td> 
-                    {% endif %}
-                </tr>
+            </head>
             
-                {% empty %}    
-                    Нет участников
-            {% endfor %}
-        </form>
-        <tbody>   
-    </table>
-    {{ error }}
-</div>
+                {% if not form.instance.id %}
+                    <tr>
+                        {% include 'home/participant.html' %}
+                    </tr>
+                {% endif %}   
+
+            <tbody class="table-group-divider">  
+                {% for item in model %}
+                    <tr>
+                        {% if form.instance.id == item.id %}
+                            {% include 'home/participant.html' %}
+                        {% else %}
+                            <td>{{forloop.counter}}</td>
+                            <td>{{item.first_name}}</td>
+                            <td>{{item.middle_name}}</td>
+                            <td>{{item.last_name}}</td>
+                            <td>{{item.organization}}</td>
+                            <td>{{item.category}}</td>
+                            <td>{{item.competency}}</td>
+                            <td>{{item.award}}</td>
+                            <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                            <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                            <td>{{item.created_by}}</td>
+                            <td>{{item.updated_by}}</td>
+                            <td>{{item.event_related}}</td>
+                            <td> 
+                                {% if all_selected %}
+                                    <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" checked>
+                                {% else %}    
+                                    <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" unchecked>
+                                {% endif %}    
+                                <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                                <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            </td> 
+                        {% endif %}
+                    </tr>
+                
+                    {% empty %}    
+                        Нет участников
+                {% endfor %}
+            </form>
+            <tbody>   
+        </table>
+        {{ error }}
+    </div>
 
 {% endblock %}

@@ -1,10 +1,16 @@
 import csv
 
-def export(filename, data):
+
+def exportcsv(filename, data):
     """ export data to csv file
 
     Args:
         filename (string): path and name of the csv file
         data (dictionary): data to export
     """
-    pass
+    with open(filename, 'w') as csvfile:
+        writer = csv.DictWriter(csvfile)
+        for item in data:
+            writer.writerow(item)
+
+    return "Export to csv done"

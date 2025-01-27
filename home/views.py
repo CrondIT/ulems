@@ -9,7 +9,7 @@ from .models import PrintTemplate, Award
 from .forms import EventForm, CategoryForm, ParticipantForm, AwardForm
 from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
-from . import makepdf
+from . import makepdf, import_export
 
 
 # ----------------------------------------------------------------------------
@@ -338,6 +338,8 @@ def participants(request):
         elif 'deselect_all' in request.POST:
             error = "all selected pressed"
             context['all_selected'] = False
+        elif 'export' in request.POST:
+            error = import_export.exportcsv("participants.csv", context['model'])
         else:
             pass
 
