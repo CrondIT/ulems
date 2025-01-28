@@ -339,7 +339,8 @@ def participants(request):
             error = "all selected pressed"
             context['all_selected'] = False
         elif 'export' in request.POST:
-            error = import_export.exportcsv("participants.csv", context['model'])
+            data = context['model'].__dict__
+            error = import_export.exportcsv("participants.csv", data)
         else:
             pass
 
