@@ -356,7 +356,9 @@ def participants(request):
                     'updated_by': item.updated_by,
                     'event_related': item.event_related
                 })
-            # error = import_export.exportcsv("participants.csv", data)
+            error = import_export.exportcsv("participants.csv", data)
+        elif 'accordion' in request.POST:
+            error = "press accordion"
         else:
             pass
 

@@ -8,20 +8,7 @@
         
         <form method="POST" action="{% url 'home:participants' %}">
             {% csrf_token %} 
-            <div class="accordion" id="accordionFlushExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                        Импорт/Экспорт
-                    </button>
-                    </h2>
-                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
-                            <button class="btn btn-outline-success btn-sm" name="export" value="export" >Export</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <button class="btn btn-outline-success btn-sm" name="export" formnovalidate>Export</button>                    
             <head>       
                 <tr>
                     <th>№</th>
@@ -76,6 +63,7 @@
                         Примечания 
                         <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
                         <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="Выделить все"><i class='fa fa-square-o'></i></button>
+                      
                     </th>
                 </tr>
             </head>
