@@ -269,7 +269,8 @@ def participants(request):
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_participant
     context['current_competency'] = None
-    context['model'] = Participant.objects.filter(
+    context['database'] = Participant
+    context['model'] = context['database'].objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event'])
     error = context['sort']
@@ -339,8 +340,23 @@ def participants(request):
             error = "all selected pressed"
             context['all_selected'] = False
         elif 'export' in request.POST:
-            data = context['model'].__dict__
-            error = import_export.exportcsv("participants.csv", data)
+            data = {}
+            for item in context['model']:
+                data.update({
+                    'first_name': item.first_name,
+                    'middle_name': item.middle_name,
+                    'last_name': item.last_name,
+                    'organization': item.organization,
+                    'category': item.category,
+                    'competency': item.competency,
+                    'award': item.award,
+                    'created_date': item.created_date,
+                    'updated_date': item.updated_date,
+                    'created_by': item.created_by,
+                    'updated_by': item.updated_by,
+                    'event_related': item.event_related
+                })
+            # error = import_export.exportcsv("participants.csv", data)
         else:
             pass
 

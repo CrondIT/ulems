@@ -8,6 +8,7 @@ def exportcsv(filename, data):
         filename (string): path and name of the csv file
         data (dictionary): data to export
     """
+    
     with open(filename, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, data.keys())
     
