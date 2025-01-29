@@ -15,5 +15,4 @@ def exportcsv(filename, data):
         for item in data:
             writer.writerow(item)
     
-
     return "Export to csv done"

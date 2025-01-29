@@ -11,6 +11,8 @@ from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
 from . import makepdf, import_export
 
+import csv
+
 
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
@@ -356,9 +358,25 @@ def participants(request):
                     'updated_by': item.updated_by,
                     'event_related': item.event_related
                 })
-            error = import_export.exportcsv("participants.csv", data)
-        elif 'accordion' in request.POST:
-            error = "press accordion"
+            with open("participants.csv", 'w') as csvfile:
+                writer = csv.DictWriter(
+                    csvfile,
+                    fieldnames=[
+                        'first_name',
+                        'middle_name',
+                        'last_name',
+                        'organization',
+                        'category',
+                        'competency',
+                        'award',
+                        'created_date',
+                        'updated_date',
+                        'created_by',
+                        'updated_by',
+                        'event_related'
+                    ])
+
+            # error = import_export.exportcsv("participants.csv", data)
         else:
             pass
 
