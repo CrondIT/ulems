@@ -8,7 +8,9 @@
         
         <form method="POST" action="{% url 'home:participants' %}">
             {% csrf_token %} 
-            <button class="btn btn-outline-success btn-sm" name="export" formnovalidate>Export</button>                    
+            <button class="btn btn-outline-success btn-sm" name="export" formnovalidate>Export</button> 
+            <input type="file" name="file">
+            <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate>Import</button> 
             <head>       
                 <tr>
                     <th>№</th>

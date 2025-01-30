@@ -343,22 +343,8 @@ def participants(request):
             context['all_selected'] = False
         elif 'export' in request.POST:
             data = {}
-            for item in context['model']:
-                data.update({
-                    'first_name': item.first_name,
-                    'middle_name': item.middle_name,
-                    'last_name': item.last_name,
-                    'organization': item.organization,
-                    'category': item.category,
-                    'competency': item.competency,
-                    'award': item.award,
-                    'created_date': item.created_date,
-                    'updated_date': item.updated_date,
-                    'created_by': item.created_by,
-                    'updated_by': item.updated_by,
-                    'event_related': item.event_related
-                })
-            with open("participants.csv", 'w') as csvfile:
+
+            with open("participants.csv", 'w', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(
                     csvfile,
                     fieldnames=[
@@ -375,8 +361,31 @@ def participants(request):
                         'updated_by',
                         'event_related'
                     ])
-
-            # error = import_export.exportcsv("participants.csv", data)
+                writer.writeheader()
+                for item in context['model']:
+                    data = {
+                        'first_name': item.first_name,
+                        'middle_name': item.middle_name,
+                        'last_name': item.last_name,
+                        'organization': item.organization,
+                        'category': item.category,
+                        'competency': item.competency,
+                        'award': item.award,
+                        'created_date': item.created_date,
+                        'updated_date': item.updated_date,
+                        'created_by': item.created_by,
+                        'updated_by': item.updated_by,
+                        'event_related': item.event_related
+                    }
+                    writer.writerow(data)
+        elif 'import' in request.POST:
+            file = request.POST.get('file')
+            with open(file, 'r', encoding='utf-8') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    pass
+                    
+            pass
         else:
             pass
 
@@ -606,7 +615,7 @@ def print_templates(request):
                                   "font_size": print_template.font_size,
                                   "text": text
                                   })
-            
+
             page_data['page_width'] = context['user_image'].width
             page_data['page_height'] = context['user_image'].height
             page_data['image'] = img
