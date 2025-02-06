@@ -379,11 +379,21 @@ def participants(request):
                     }
                     writer.writerow(data)
         elif 'import' in request.POST:
+            import_participants = []
             file = request.POST.get('file')
             with open(file, 'r', encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
-                    pass
+                    import_participants.append({
+                        'first_name': row['first_name'],
+                        'middle_name': row['middle_name'],
+                        'last_name': row['last_name'],
+                        'organization': row['organization'],
+                        'category': row['category'],
+                        'competency': row['competency'],
+                        'award': row['award'],
+                        'event_related': row['event_related']
+                    })
                     
             pass
         else:
