@@ -6,7 +6,7 @@
     <div class = "table-responsive">
     <table class = "table table-bordered table-light table-sm align-bottom">
         
-        <form method="POST" action="{% url 'home:participants' %}">
+        <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
             {% csrf_token %} 
             <button class="btn btn-outline-success btn-sm" name="export" formnovalidate>Export</button> 
             <input type="file" name="file">

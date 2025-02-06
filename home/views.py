@@ -9,7 +9,9 @@ from .models import PrintTemplate, Award
 from .forms import EventForm, CategoryForm, ParticipantForm, AwardForm
 from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
 
-from . import makepdf, import_export
+from . import makepdf
+
+from django.core.files.storage import FileSystemStorage
 
 import csv
 
@@ -380,8 +382,12 @@ def participants(request):
                     writer.writerow(data)
         elif 'import' in request.POST:
             import_participants = []
-            file = request.POST.get('file')
-            with open(file, 'r', encoding='utf-8') as csvfile:
+            # file = request.POST.get('file')
+            file = request.FILES['file']
+            fs = FileSystemStorage()
+            filename = fs.save(file.name, file)
+
+            with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     import_participants.append({
@@ -394,8 +400,16 @@ def participants(request):
                         'award': row['award'],
                         'event_related': row['event_related']
                     })
-                    
-            pass
+            for item in import_participants:
+                Participant.objects.create(
+                     first_name=item['first_name'],
+                     middle_name=item['middle_name'],
+                     last_name=item['last_name'],
+                     organization=item['organization'],
+                     created_by=context['current_user'],
+                     event_related=context['current_event']
+                )
+
         else:
             pass
 
