@@ -52,7 +52,8 @@ class Event(TimeStamp):
     description = models.TextField('Описание')
     from_date = models.DateField('Дата начала')
     to_date = models.DateField('Дата окончания')
-    team_registration = models.BooleanField('Регистрация команды', default=True)
+    team_registration = models.BooleanField('Регистрация команды',
+                                            default=True)
     image = models.ForeignKey(UserImage,
                               on_delete=models.CASCADE,
                               related_name="event_cover",

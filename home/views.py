@@ -319,9 +319,9 @@ def participants(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = context['model'].get(id=pk)
-            error = edit_item.competency
-            context['current_competency'] = Competency.objects.get(
-                id=edit_item.competency.id)
+            if context['current_competency'] is not None:
+                context['current_competency'] = Competency.objects.get(
+                    id=edit_item.competency.id)
             form = context['ClassForm'](
                 instance=edit_item,
                 current_user=context['current_user'],
@@ -382,33 +382,36 @@ def participants(request):
                     writer.writerow(data)
         elif 'import' in request.POST:
             import_participants = []
-            # file = request.POST.get('file')
-            file = request.FILES['file']
-            fs = FileSystemStorage()
-            filename = fs.save(file.name, file)
+            if 'file' in request.FILES:
+                file = request.FILES['file']
+                fs = FileSystemStorage()
+                filename = fs.save(
+                    'user_{0}/{1}'.format(
+                        context['current_user'].id, file.name),
+                    file
+                                    )
 
-            with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
-                reader = csv.DictReader(csvfile)
-                for row in reader:
-                    import_participants.append({
-                        'first_name': row['first_name'],
-                        'middle_name': row['middle_name'],
-                        'last_name': row['last_name'],
-                        'organization': row['organization'],
-                        'category': row['category'],
-                        'competency': row['competency'],
-                        'award': row['award'],
-                        'event_related': row['event_related']
-                    })
-            for item in import_participants:
-                Participant.objects.create(
-                     first_name=item['first_name'],
-                     middle_name=item['middle_name'],
-                     last_name=item['last_name'],
-                     organization=item['organization'],
-                     created_by=context['current_user'],
-                     event_related=context['current_event']
-                )
+                with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        import_participants.append({
+                            'first_name': row['first_name'],
+                            'middle_name': row['middle_name'],
+                            'last_name': row['last_name'],
+                            'organization': row['organization'],
+                            'category': row['category'],
+                            'competency': row['competency'],
+                            'award': row['award']
+                             })
+                for item in import_participants:
+                    Participant.objects.create(
+                        first_name=item['first_name'],
+                        middle_name=item['middle_name'],
+                        last_name=item['last_name'],
+                        organization=item['organization'],
+                        created_by=context['current_user'],
+                        event_related=context['current_event']
+                    )
 
         else:
             pass
