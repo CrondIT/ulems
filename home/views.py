@@ -390,9 +390,9 @@ def participants(request):
                         context['current_user'].id, file.name),
                     file
                                     )
-
                 with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
                     reader = csv.DictReader(csvfile)
+                    # upload data to import_participants
                     for row in reader:
                         import_participants.append({
                             'first_name': row['first_name'],
@@ -403,14 +403,45 @@ def participants(request):
                             'competency': row['competency'],
                             'award': row['award']
                              })
+                # wtite data to database participant, category and competency
+                # create new records in  category and competency
                 for item in import_participants:
+                    if not Category.objects.filter(
+                            title=item['category'],
+                            created_by=context['current_user'],
+                            event_related=context['current_event']).exists():
+                        Category.objects.create(
+                            title=item['category'],
+                            print_title=item['category'],
+                            created_by=context['current_user'],
+                            event_related=context['current_event']
+                        )
+                    if not Competency.objects.filter(
+                            title=item['competency'],
+                            created_by=context['current_user'],
+                            event_related=context['current_event']).exists():
+                        Competency.objects.create(
+                            title=item['competency'],
+                            print_title=item['competency'],
+                            created_by=context['current_user'],
+                            event_related=context['current_event']
+                        )
+
                     Participant.objects.create(
                         first_name=item['first_name'],
                         middle_name=item['middle_name'],
                         last_name=item['last_name'],
                         organization=item['organization'],
                         created_by=context['current_user'],
-                        event_related=context['current_event']
+                        event_related=context['current_event'],
+                        category=Category.objects.get(
+                            title=item['category'],
+                            created_by=context['current_user'],
+                            event_related=context['current_event']),
+                        competency=Competency.objects.get(
+                            title=item['competency'],
+                            created_by=context['current_user'],
+                            event_related=context['current_event'])
                     )
 
         else:
