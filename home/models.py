@@ -181,7 +181,8 @@ class Participant(TimeStamp, EventRelated):
 
 # -----------------------------------------------------------------------------------
 class Profile(TimeStamp):
-    user = models.OneToOneField(User,
+    user = models.OneToOneField(
+        User,
         on_delete=models.CASCADE,
         null=True
         )
