@@ -653,17 +653,17 @@ def print_templates(request):
                 img = print_template.user_image_related.image
                 match print_template.print_item:
                     case "fio":
-                        text = f" {participant.first_name}  {
+                        print_text = f" {participant.first_name}  {
                                    participant.middle_name} {
                                    participant.last_name}"
                     case "category":
-                        text = participant.category.print_title
+                        print_text = participant.category.print_title
                     case "competency":
-                        text = participant.competency.print_title
+                        print_text = participant.competency.print_title
                     case "event":
-                        text = participant.event_related.print_title
+                        print_text = participant.event_related.print_title
                     case _:
-                        text = "произвольный текст, я еще ничего не придумал"
+                        print_text = "произвольный текст, я еще ничего не придумал"
 
                 text_data.append({"print_item": print_template.print_item,
                                   "start_x": print_template.start_x,
@@ -671,7 +671,7 @@ def print_templates(request):
                                   "delta_x": print_template.delta_x,
                                   "font_color": print_template.font_color,
                                   "font_size": print_template.font_size,
-                                  "text": text
+                                  "text": print_text
                                   })
 
             page_data['page_width'] = context['user_image'].width

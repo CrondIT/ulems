@@ -202,6 +202,7 @@ class PrintTemplateForm(ModelForm):
     class Meta:
         model = PrintTemplate
         fields = ['print_item',
+                  'print_text',
                   'start_x',
                   'start_y',
                   'delta_x',
@@ -212,6 +213,10 @@ class PrintTemplateForm(ModelForm):
                 "print_item": Select(attrs={
                     'class': 'form-control',
                     'placeholder': 'Поле печати'
+                }),
+                "print_text": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Текст для печати'
                 }),
                 "start_x": NumberInput(attrs={
                     'class': 'form-control',

@@ -230,6 +230,7 @@ class PrintTemplate(TimeStamp):
         ('text', 'Текст участника'),
         ('custom_text', 'Произвольный техт')
         ])
+    print_text = models.TextField('Текст для печати')
     start_x = models.PositiveSmallIntegerField()
     start_y = models.PositiveSmallIntegerField()
     delta_x = models.PositiveSmallIntegerField()

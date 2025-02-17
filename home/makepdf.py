@@ -3,7 +3,6 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.units import mm
 from reportlab.lib.colors import white
 
-
 import textwrap as textwrap
 
 

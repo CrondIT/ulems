@@ -28,6 +28,11 @@
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-print_item"><i class='fa fa-long-arrow-down'></i></button>
                 </th>
                 <th>
+                    Текст для печати </br>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="print_text"><i class='fa fa-long-arrow-up'></i></button>
+                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-print_text"><i class='fa fa-long-arrow-down'></i></button>
+                </th>
+                <th>
                     Начальная Х, мм </br>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="start_x"><i class='fa fa-long-arrow-up'></i></button>
                     <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-start_x"><i class='fa fa-long-arrow-down'></i></button>
@@ -69,6 +74,7 @@
                             {% else %}    
                                 <td>{{forloop.counter}}</td>
                                 <td>{{pt.get_print_item_display}}</td>
+                                <td>{{pt.print_text}}</td>
                                 <td>{{pt.start_x}}</td>
                                 <td>{{pt.start_y}}</td>
                                 <td>{{pt.delta_x}}</td>
