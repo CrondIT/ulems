@@ -231,12 +231,11 @@ class PrintTemplate(TimeStamp):
         ('text', 'Текст участника'),
         ('custom_text', 'Произвольный техт')
         ])
-    print_text = models.TextField('Текст для печати')
     start_x = models.PositiveSmallIntegerField()
     start_y = models.PositiveSmallIntegerField()
-    delta_x = models.PositiveSmallIntegerField()
     font_color = models.CharField(max_length=25, null=True)
     font_size = models.PositiveSmallIntegerField()
+    font_leading = models.PositiveSmallIntegerField(default=12)
     user_image_related = models.ForeignKey(
         UserImage, related_name='%(app_label)s_%(class)s_user_image_related',
         blank=True, on_delete=models.CASCADE, null=True

@@ -202,23 +202,18 @@ class PrintTemplateForm(ModelForm):
     class Meta:
         model = PrintTemplate
         fields = ['print_item',
-                  'print_text',
                   'start_x',
                   'start_y',
-                  'delta_x',
                   'font_color',
-                  'font_size'
+                  'font_size',
+                  'font_leading'
                   ]
         widgets = {
                 "print_item": Select(attrs={
                     'class': 'form-control',
                     'placeholder': 'Поле печати'
                 }),
-                "print_text": TextInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Текст для печати'
-                }),
-                "start_x": NumberInput(attrs={
+                    "start_x": NumberInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Начальная позиция по Х'
                 }),
@@ -226,11 +221,7 @@ class PrintTemplateForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Начальная позиция по Y'
                 }),
-                "delta_x": NumberInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Дельта X'
-                }),
-                "font_color": TextInput(attrs={
+                    "font_color": TextInput(attrs={
                     'type': 'color',
                     'class': 'form-control',
                     'placeholder': 'Цвет шрифта'
@@ -238,6 +229,10 @@ class PrintTemplateForm(ModelForm):
                 "font_size": NumberInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Размер шрифта'
+                }),
+                "font_leading": NumberInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Межстрочный интервал'
                 })
             }
 

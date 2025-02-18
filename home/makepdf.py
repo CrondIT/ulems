@@ -76,7 +76,7 @@ def make_pdf2(page_data, text_data):
 
         text = canva.beginText(td['start_x'] * mm, td['start_y'] * mm)
         text.setFont("Arial", td['font_size'])
-        text.setLeading(td['delta_x'])
+        text.setLeading(td['font_leading'])
         text.textLines(td['text'])
         canva.drawText(text)
 

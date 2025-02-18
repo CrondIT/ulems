@@ -668,9 +668,9 @@ def print_templates(request):
                 text_data.append({"print_item": print_template.print_item,
                                   "start_x": print_template.start_x,
                                   "start_y": print_template.start_y,
-                                  "delta_x": print_template.delta_x,
                                   "font_color": print_template.font_color,
                                   "font_size": print_template.font_size,
+                                  "font_leading": print_template.font_leading,
                                   "text": print_text
                                   })
 
