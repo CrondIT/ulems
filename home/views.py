@@ -640,6 +640,7 @@ def print_templates(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = context['print_templates'].get(id=pk)
+            context['id'] = pk
             form = PrintTemplateForm(instance=edit_item)
         elif 'sort' in request.POST:
             context['print_templates'] = context['print_templates'].order_by(

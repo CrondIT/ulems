@@ -18,7 +18,8 @@
             </select>
             <button class="btn btn-outline-success" name="preview_all" value="val" formnovalidate title="Предварительный просмотр"><i class='fa fa-file-pdf-o'></i></button>
         </div>   
-           
+        
+        <div>
         <table class = "table table-bordered table-light">
             <tr>
                 <th>№</th>
@@ -55,18 +56,12 @@
                 <th>Примечания</th>
             </tr>
         
-                    {% if not form.instance.id %}
-                        <tr>
-                            {% include 'home/print_template.html' %}
-                        </tr>
-                    {% endif %}   
+                   
         
                   
                     {% for pt in print_templates %}
                         <tr>
-                            {% if form.instance.id == pt.id %}
-                                {% include 'home/print_template.html' %}
-                            {% else %}    
+                           
                                 <td>{{forloop.counter}}</td>
                                 <td>{{pt.get_print_item_display}}</td>
                                 <td>{{pt.start_x}}</td>
@@ -79,7 +74,7 @@
                                     <button class="btn btn-outline-danger" name="delete" value="{{ pt.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                                     <button class="btn btn-outline-success" name="preview" value="{{ pt.id }}" formnovalidate title="Предварительный просмотр"><i class='fa fa-file-pdf-o'></i></button>
                                 </td> 
-                            {% endif %}
+                           
                         </tr>
                     
                         {% empty %}    
@@ -87,6 +82,15 @@
                     {% endfor %}
                
         </table>
+        </div>
+        <div class="col-md-3 ml-auto">
+            {% if not form.instance.id %}
+                 {% include 'home/print_template.html' %}
+            {% elif form.instance.id %}
+                {% include 'home/print_template.html' %}
+            {% endif %}   
+        
+        </div>
     </div>
 </form>
 {% endblock %}

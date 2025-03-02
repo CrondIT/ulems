@@ -209,31 +209,31 @@ class PrintTemplateForm(ModelForm):
                   'font_leading'
                   ]
         widgets = {
-                "print_item": Select(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Поле печати'
-                }),
+                    "print_item": Select(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Поле печати'
+                    }),
                     "start_x": NumberInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Начальная позиция по Х'
-                }),
-                "start_y": NumberInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Начальная позиция по Y'
-                }),
+                     'class': 'form-control',
+                     'placeholder': 'Начало по Х'
+                    }),
+                    "start_y": NumberInput(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Начало по Y'
+                    }),
                     "font_color": TextInput(attrs={
-                    'type': 'color',
-                    'class': 'form-control',
-                    'placeholder': 'Цвет шрифта'
-                }),
-                "font_size": NumberInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Размер шрифта'
-                }),
-                "font_leading": NumberInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Межстрочный интервал'
-                })
+                     'type': 'color',
+                     'class': 'form-control',
+                     'placeholder': 'Цвет шрифта'
+                    }),
+                    "font_size": NumberInput(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Размер шрифта'
+                    }),
+                    "font_leading": NumberInput(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Межстрочный интервал'
+                    })
             }
 
 

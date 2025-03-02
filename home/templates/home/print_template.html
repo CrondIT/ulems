@@ -1,8 +1,30 @@
-   <td></td>
-   <td>{{ form.print_item }}</td>
-   <td>{{ form.start_x }}</td>
-   <td>{{ form.start_y }}</td>
-   <td>{{ form.font_color }}</td>
-   <td>{{ form.font_size }}</td>
-   <td>{{ form.font_leading }}</td>
-   <td><button class="btn btn-outline-success" name="save" value="{{ pt.id }}" title="Сохранить текущую строку"><i class='fa fa-save'></i></button></td>
+<h4>
+{% if not form.instance.id %}
+   Создать
+{% else %}
+   Редактировать
+{% endif %}
+</h4>
+<table class = "table table-bordered table-light">
+   <tr>
+      <td>Поле печати</td><td>{{ form.print_item }}</td>
+   </tr>
+   <tr>
+      <td>Начальная Х, мм </td><td>{{ form.start_x }}</td>
+   </tr>
+   <tr>
+      <td>Начальная Y, мм </td><td>{{ form.start_y }}</td>
+   </tr>
+   <tr>
+      <td>Цвет шрифта </td><td>{{ form.font_color }}</td>
+   </tr>
+   <tr>
+      <td>Размер шрифта </td><td>{{ form.font_size }}</td>
+   </tr>
+   <tr>
+      <td>Межстрочный интервал </td><td>{{ form.font_leading }}</td>
+   </tr>
+</table>
+<br>
+<button class="btn btn-outline-success" name="save" value="{{ id }}" title="Сохранить"><i class='fa fa-save'></i></button>
+   
