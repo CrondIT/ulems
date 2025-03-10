@@ -606,6 +606,7 @@ def print_templates(request):
     """ Edit template with user image. """
     form = PrintTemplateForm()
     context = {}
+    context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Настройка печати'
     context['current_user'] = request.user
     context['user_image'] = request.user.profile.current_image
@@ -613,9 +614,12 @@ def print_templates(request):
     context['image_height'] = context['user_image'].image.height
     context['current_event'] = request.user.profile.current_event
     context['user_image_id'] = context['user_image'].id
-    context['print_templates'] = PrintTemplate.objects.filter(
+    context['sort'] = request.user.profile.sort_template
+    context['model'] = PrintTemplate.objects.filter(
         created_by=context['current_user'],
         user_image_related=context['user_image'])
+    context['model'] = context['model'].order_by(
+        context['sort'])
     context['participants'] = Participant.objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event'])
@@ -628,29 +632,36 @@ def print_templates(request):
                 usr.created_by = context['current_user']
                 usr.user_image_related = context['user_image']
             else:
-                save_item = context['print_templates'].get(id=pk)
+                save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = PrintTemplateForm(request.POST, instance=save_item)
             form.save()
             form = PrintTemplateForm()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            delete_item = context['print_templates'].get(id=pk)
+            delete_item = context['model'].get(id=pk)
             delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            edit_item = context['print_templates'].get(id=pk)
+            edit_item = context['model'].get(id=pk)
             context['id'] = pk
             form = PrintTemplateForm(instance=edit_item)
         elif 'sort' in request.POST:
-            context['print_templates'] = context['print_templates'].order_by(
-                request.POST['sort'])
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_participant = context['sort']
+            request.user.save()
+            context['model'] = context['model'].order_by(
+                context['sort'])
         elif 'preview_all' in request.POST:
             page_data = {}
             text_data = []
             pk = request.POST.get('selected')
             participant = context['participants'].get(id=pk)
-            for print_template in context['print_templates']:
+            for print_template in context['model']:
                 img = print_template.user_image_related.image
                 match print_template.print_item:
                     case "fio":
@@ -682,7 +693,7 @@ def print_templates(request):
             mypdf = makepdf.make_pdf2(page_data, text_data)
         elif 'preview' in request.POST:
             pk = request.POST.get('preview')
-            print_item = context['print_templates'].get(id=pk)
+            print_item = context['model'].get(id=pk)
             context['error'] = print_item.user_image_related.image
             mypdf = makepdf.make_pdf(
                 context['user_image'].width,

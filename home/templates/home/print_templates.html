@@ -25,41 +25,32 @@
                 <th>№</th>
                 <th>
                     Поле для печати </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="print_item"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-print_item"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
                     Начальная Х, мм </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="start_x"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-start_x"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_x"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
                     Начальная Y, мм </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="start_y"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-start_x"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_y"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
                     Цвет шрифта </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="delta_y"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-delta_y"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="delta_y"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
                     Размер шрифта </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="font_size"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-font_size"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_size"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
                     Межстрочный интервал </br>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="font_leading"><i class='fa fa-long-arrow-up'></i></button>
-                    <button class="btn btn-outline-info btn-sm" name="sort" formnovalidate value="-font_leading"><i class='fa fa-long-arrow-down'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_leading"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>Примечания</th>
             </tr>
         
-                   
-        
-                  
-                    {% for pt in print_templates %}
+                    {% for pt in model %}
                         <tr>
                            
                                 <td>{{forloop.counter}}</td>
@@ -83,7 +74,7 @@
                
         </table>
         </div>
-        <div class="col-md-3 ml-auto">
+        <div class="col-md-3 ml-auto" style="border:1px solid #000000; padding:3px">
             {% if not form.instance.id %}
                  {% include 'home/print_template.html' %}
             {% elif form.instance.id %}
