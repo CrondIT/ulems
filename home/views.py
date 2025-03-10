@@ -690,7 +690,7 @@ def print_templates(request):
             page_data['page_height'] = context['user_image'].height
             page_data['image'] = img
             context['error'] = page_data
-            mypdf = makepdf.make_pdf2(page_data, text_data)
+            mypdf = makepdf.make_pdf3(page_data, text_data)
         elif 'preview' in request.POST:
             pk = request.POST.get('preview')
             print_item = context['model'].get(id=pk)
