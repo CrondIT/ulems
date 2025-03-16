@@ -25,14 +25,19 @@
                 <th>№</th>
                 <th>
                     Поле для печати </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item"><i class='{{ sort_button }}'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item" title="Сортировать по текущемк полю. Повторное нажатие сортирует в обратном порядке."><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Начальная Х, мм </br>
+                    Х, мм 
+                    
+                        <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние слева от края документа до начала текста, в миллиметрах (координата Х)" style="color: blue"></i>
+                    </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_x"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Начальная Y, мм </br>
+                    Y, мм 
+                    <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние снизу от края документа до верхней части текста, в миллиметрах (координата Y)" style="color: blue"></i>
+                    </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_y"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
@@ -44,7 +49,9 @@
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_size"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Межстрочный интервал </br>
+                    Интервал
+                    <i class="fa fa-info-circle" aria-hidden="false" title="Межстрочный интервал" style="color: blue"></i>
+                    </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_leading"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>Примечания</th>
@@ -74,7 +81,7 @@
                
         </table>
         </div>
-        <div class="col-md-3 ml-auto" style="border:1px solid #000000; padding:3px">
+        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
             {% if not form.instance.id %}
                  {% include 'home/print_template.html' %}
             {% elif form.instance.id %}

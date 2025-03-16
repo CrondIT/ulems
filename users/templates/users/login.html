@@ -7,7 +7,7 @@
             {{ message }}
         </div>
     {% endif %}
-    <div class="container-fluid col-sm-2 border border-3, position-absolute top-50 start-50 translate-middle">
+    <div class="container-fluid col-sm-3 border border-3, position-absolute top-50 start-50 translate-middle" style="padding:10px">
         <form action="{% url 'login' %}" method="post" class="text-center">
             {% csrf_token %}
             Имя пользователя: </br>

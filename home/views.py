@@ -19,7 +19,7 @@ import csv
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
     """
-        Remove - at the begin of the string if - exist 
+        Remove - at the begin of the string if - exist
         or add - if it not exist
     """
     if sort_str[0] == '-':
@@ -33,7 +33,7 @@ def sort_reverse(sort_str):
 # ----------------------------------------------------------------------------
 def is_sort_exist(sort_str, saved_str):
     """
-        Return True, if saved in user profile sort string 
+        Return True, if saved in user profile sort string
         equal pressed sort value
     """
 
@@ -46,6 +46,27 @@ def is_sort_exist(sort_str, saved_str):
         is_sort_exist = True
 
     return is_sort_exist
+
+
+# ----------------------------------------------------------------------------
+def check_textblock_xy(
+        page_width, page_height, start_x, start_y, delta_x, delta_y):
+    """
+        Remove - at the begin of the string if - exist
+        or add - if it not exist
+    """
+    errors = {}
+
+    if start_x > page_width:
+        errors['X'] = 'Начало текстового блока по X за пределами страницы.'
+    if start_y > page_height:
+        errors['Y'] = 'Начало текстового блока по Y за пределами страницы.'
+    if (start_x + delta_x) > page_width:
+        errors['Ширина'] = 'Слишком большая ширина текстового блока.'
+    if (start_y + delta_y) > page_height:
+        errors['Высота'] = 'Слишком большая высота текстового блока.'
+
+    return errors
 
 
 # ----------------------------------------------------------------------------
@@ -635,6 +656,14 @@ def print_templates(request):
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = PrintTemplateForm(request.POST, instance=save_item)
+            context['errors'] = check_textblock_xy(
+                context['user_image'].width,
+                context['user_image'].height,
+                save_item.start_x,
+                save_item.start_y,
+                save_item.delta_x,
+                save_item.delta_x
+                )
             form.save()
             form = PrintTemplateForm()
         elif 'delete' in request.POST:
@@ -677,14 +706,18 @@ def print_templates(request):
                     case _:
                         print_text = "произвольный текст, я еще ничего не придумал"
 
-                text_data.append({"print_item": print_template.print_item,
-                                  "start_x": print_template.start_x,
-                                  "start_y": print_template.start_y,
-                                  "font_color": print_template.font_color,
-                                  "font_size": print_template.font_size,
-                                  "font_leading": print_template.font_leading,
-                                  "text": print_text
-                                  })
+                text_data.append({
+                    "print_item": print_template.print_item,
+                    "start_x": print_template.start_x,
+                    "start_y": print_template.start_y,
+                    "delta_x": print_template.delta_x,
+                    "delta_y": print_template.delta_y,
+                    "font_color": print_template.font_color,
+                    "font_size": print_template.font_size,
+                    "font_leading": print_template.font_leading,
+                    "font_alignment": print_template.font_alignment,
+                    "text": print_text
+                                })
 
             page_data['page_width'] = context['user_image'].width
             page_data['page_height'] = context['user_image'].height

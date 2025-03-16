@@ -10,10 +10,16 @@
       <td>Поле печати</td><td>{{ form.print_item }}</td>
    </tr>
    <tr>
-      <td>Начальная Х, мм </td><td>{{ form.start_x }}</td>
+      <td>Х, мм </td><td>{{ form.start_x }}</td>
    </tr>
    <tr>
-      <td>Начальная Y, мм </td><td>{{ form.start_y }}</td>
+      <td>Y, мм </td><td>{{ form.start_y }}</td>
+   </tr>
+   <tr>
+      <td>Ширина текстового блока, мм </td><td>{{ form.delta_x }}</td>
+   </tr>
+   <tr>
+      <td>Высота текстового блока, мм </td><td>{{ form.delta_y }}</td>
    </tr>
    <tr>
       <td>Цвет шрифта </td><td>{{ form.font_color }}</td>
@@ -24,7 +30,14 @@
    <tr>
       <td>Межстрочный интервал </td><td>{{ form.font_leading }}</td>
    </tr>
+   <tr>
+      <td>Выравнивание текстового блока </td><td>{{ form.font_alignment }}</td>
+   </tr>
 </table>
 <br>
 <button class="btn btn-outline-success" name="save" value="{{ id }}" title="Сохранить"><i class='fa fa-save'></i>  Сохранить</button>
+{% if errors is not NULL %}
+    <div class="alert alert-danger">{{ errors }}</div>
+{% endif %}
+
    

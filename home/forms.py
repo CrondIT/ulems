@@ -204,8 +204,11 @@ class PrintTemplateForm(ModelForm):
         fields = ['print_item',
                   'start_x',
                   'start_y',
+                  'delta_x',
+                  'delta_y',
                   'font_color',
                   'font_size',
+                  'font_alignment',
                   'font_leading'
                   ]
         widgets = {
@@ -221,6 +224,14 @@ class PrintTemplateForm(ModelForm):
                      'class': 'form-control',
                      'placeholder': 'Начало по Y'
                     }),
+                    "delta_x": NumberInput(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Высота текстового блока'
+                    }),
+                    "delta_y": NumberInput(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Ширина текстового блока'
+                    }),
                     "font_color": TextInput(attrs={
                      'type': 'color',
                      'class': 'form-control',
@@ -233,6 +244,10 @@ class PrintTemplateForm(ModelForm):
                     "font_leading": NumberInput(attrs={
                      'class': 'form-control',
                      'placeholder': 'Межстрочный интервал'
+                    }),
+                    "font_alignment": Select(attrs={
+                     'class': 'form-control',
+                     'placeholder': 'Выравнивание текстового блока'
                     })
             }
 

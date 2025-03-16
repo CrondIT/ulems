@@ -84,11 +84,11 @@ def make_pdf3(page_data, text_data):
             fontSize=td['font_size'],
             leading=td['font_leading'],
             textColor=td['font_color'],
-            alignment=1,
+            alignment=td['font_alignment'],
+            justifyLastLine=1
             )
-
         current_paragraph = Paragraph(td['text'], current_style)
-
+        # check delta_x and delta_y
         current_frame = Frame(td['start_x'] * mm,
                               td['start_y'] * mm,
                               page_width-(td['start_x'] * mm),

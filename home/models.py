@@ -233,8 +233,16 @@ class PrintTemplate(TimeStamp):
         ])
     start_x = models.PositiveSmallIntegerField()
     start_y = models.PositiveSmallIntegerField()
+    delta_x = models.PositiveSmallIntegerField(default=100)
+    delta_y = models.PositiveSmallIntegerField(default=100)
     font_color = models.CharField(max_length=25, null=True)
     font_size = models.PositiveSmallIntegerField()
+    font_alignment = models.PositiveSmallIntegerField(default=0, choices=[
+        (0, 'Лево'),
+        (1, 'По центр'),
+        (2, 'Право'),
+        (4, 'По ширине')
+        ])
     font_leading = models.PositiveSmallIntegerField(default=12)
     user_image_related = models.ForeignKey(
         UserImage, related_name='%(app_label)s_%(class)s_user_image_related',
