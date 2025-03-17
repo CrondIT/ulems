@@ -85,9 +85,13 @@ def make_pdf3(page_data, text_data):
             leading=td['font_leading'],
             textColor=td['font_color'],
             alignment=td['font_alignment'],
-            justifyLastLine=1
+            justifyLastLine=1,
+            wordWrap=True
             )
-        current_paragraph = Paragraph(td['text'], current_style)
+        current_paragraph = Paragraph(
+            str(td['text']).replace('\n','<br />\n'),
+            current_style
+            )
        
         current_frame = Frame(td['start_x'] * mm,
                               td['start_y'] * mm,

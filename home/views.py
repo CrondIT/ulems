@@ -656,14 +656,14 @@ def print_templates(request):
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = PrintTemplateForm(request.POST, instance=save_item)
-            context['errors'] = check_textblock_xy(
-                context['user_image'].width,
-                context['user_image'].height,
-                save_item.start_x,
-                save_item.start_y,
-                save_item.delta_x,
-                save_item.delta_x
-                )
+                context['errors'] = check_textblock_xy(
+                    context['user_image'].width,
+                    context['user_image'].height,
+                    save_item.start_x,
+                    save_item.start_y,
+                    save_item.delta_x,
+                    save_item.delta_x
+                    )
             form.save()
             form = PrintTemplateForm()
         elif 'delete' in request.POST:
@@ -724,18 +724,7 @@ def print_templates(request):
             page_data['image'] = img
             context['error'] = page_data
             mypdf = makepdf.make_pdf3(page_data, text_data)
-        elif 'preview' in request.POST:
-            pk = request.POST.get('preview')
-            print_item = context['model'].get(id=pk)
-            context['error'] = print_item.user_image_related.image
-            mypdf = makepdf.make_pdf(
-                context['user_image'].width,
-                context['user_image'].height,
-                print_item.font_size,
-                print_item.user_image_related.image,
-                "Петров Иван Сидорович",
-                print_item.start_x, print_item.start_y)
-
+        
         else:
             pass
     context['form'] = form
