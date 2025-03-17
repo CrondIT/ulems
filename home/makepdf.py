@@ -88,11 +88,11 @@ def make_pdf3(page_data, text_data):
             justifyLastLine=1
             )
         current_paragraph = Paragraph(td['text'], current_style)
-        # check delta_x and delta_y
+       
         current_frame = Frame(td['start_x'] * mm,
                               td['start_y'] * mm,
-                              page_width-(td['start_x'] * mm),
-                              page_height-(td['start_y'] * mm),
+                              td['delta_x'] * mm,
+                              td['delta_y'] * mm,
                               showBoundary=0)
         current_frame.addFromList([current_paragraph], canva)
 

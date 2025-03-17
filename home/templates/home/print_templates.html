@@ -19,37 +19,37 @@
             <button class="btn btn-outline-success" name="preview_all" value="val" formnovalidate title="Предварительный просмотр"><i class='fa fa-file-pdf-o'></i></button>
         </div>   
         
-        <div>
+        <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+           <h4> Текстовые блоки </h4>
         <table class = "table table-bordered table-light">
             <tr>
                 <th>№</th>
                 <th>
-                    Поле для печати </br>
+                    Поле печати </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item" title="Сортировать по текущемк полю. Повторное нажатие сортирует в обратном порядке."><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Х, мм 
-                    
-                        <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние слева от края документа до начала текста, в миллиметрах (координата Х)" style="color: blue"></i>
+                    Х<sub>0</sub> 
+                    <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние слева от края документа до начала текста, в миллиметрах (координата Х)" style="color: blue"></i>
                     </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_x"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Y, мм 
+                    Y<sub>0</sub> 
                     <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние снизу от края документа до верхней части текста, в миллиметрах (координата Y)" style="color: blue"></i>
                     </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_y"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Цвет шрифта </br>
+                    Цвет</br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="delta_y"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Размер шрифта </br>
+                    Размер</br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_size"><i class='{{ sort_button }}'></i></button>
                 </th>
                 <th>
-                    Интервал
+                    Инт.
                     <i class="fa fa-info-circle" aria-hidden="false" title="Межстрочный интервал" style="color: blue"></i>
                     </br>
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_leading"><i class='{{ sort_button }}'></i></button>
