@@ -10,9 +10,15 @@ from django.forms import CheckboxInput
 class EventForm(ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'print_title', 'description',
-            'team_registration', 'from_date',
-            'to_date', 'image']
+        fields = [
+            'title',
+            'print_title',
+            'description',
+            'team_registration',
+            'from_date',
+            'to_date',
+            'image'
+            ]
         widgets = {
             "title": TextInput(attrs={
                 'class': 'form-control',

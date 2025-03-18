@@ -8,9 +8,10 @@
         
         <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
             {% csrf_token %} 
-            <button class="btn btn-outline-success btn-sm" name="export" formnovalidate>Export</button> 
-            <input type="file" name="file">
-            <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate>Import</button> 
+             Импорт из csv файла: 
+            <input type="file" name="file" class="btn btn-outline-success btn-sm">
+            <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button> 
+            <button class="btn btn-outline-success btn-sm" name="export" formnovalidate style="margin:7px">Экспорт в csv</button> 
             <head>       
                 <tr>
                     <th>№</th>
