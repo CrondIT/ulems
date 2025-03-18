@@ -1,14 +1,14 @@
 {% extends "home/layout.html" %}
 {% block body %}
-    <h1>Редактировать печатную форму {{user_image.title}}</h1>
+    <h1>Редактировать печатную форму "{{user_image.title}}"</h1>
    {{ error }}
 
 <form method="POST"  action="{% url 'home:print_templates' %}">
     {% csrf_token %} 
 
     <div style="display: flex;">
-        <div>
-            <img src="{{user_image.image.url}}" width="360pt"  alt="Cover"> <br>
+        <div class="col-md-2 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+            <img src="{{user_image.image.url}}" style="width: 100%" alt="Cover"> <br>
             Image {{image_width}} x {{image_height}} <br>
             <select class="form-select" aria-label="Select participant" name="selected">
                 {% for participant in participants %}
