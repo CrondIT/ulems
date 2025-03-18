@@ -523,7 +523,7 @@ def competencies(request):
             delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            edit_item = context['model'].get(id=pk)   
+            edit_item = context['model'].get(id=pk)
             form = context['ClassForm'](instance=edit_item)
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
@@ -535,6 +535,34 @@ def competencies(request):
             request.user.save()
             context['model'] = context['model'].order_by(
                 context['sort'])
+        elif 'import' in request.POST:
+            import_competencies = []
+            if 'file' in request.FILES:
+                file = request.FILES['file']
+                fs = FileSystemStorage()
+                filename = fs.save(
+                    'user_{0}/{1}'.format(
+                        context['current_user'].id, file.name),
+                    file
+                                    )
+                with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    # upload data to import_participants
+                    for row in reader:
+                        import_competencies.append({
+                            'title': row['title'],
+                            'print_title': row['print_title']
+                            })
+                # wtite data to database participant, category and competency
+                # create new records in  category and competency
+                for item in import_competencies:
+                    Competency.objects.create(
+                        title=item['title'],
+                        print_title=item['print_title'],
+                        created_by=context['current_user'],
+                        event_related=context['current_event']
+                        )
+
         else:
             pass
 
@@ -704,7 +732,8 @@ def print_templates(request):
                     case "event":
                         print_text = participant.event_related.print_title
                     case _:
-                        print_text = "произвольный текст, я еще ничего не придумал"
+                        print_text = "произвольный текст," \
+                            "я еще ничего не придумал"
 
                 text_data.append({
                     "print_item": print_template.print_item,
@@ -723,8 +752,9 @@ def print_templates(request):
             page_data['page_height'] = context['user_image'].height
             page_data['image'] = img
             context['error'] = page_data
-            mypdf = makepdf.make_pdf3(page_data, text_data)
-        
+            makepdf.make_pdf3(page_data, text_data)
+        elif 'cancel' in request.POST:
+            pass
         else:
             pass
     context['form'] = form
