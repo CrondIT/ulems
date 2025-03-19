@@ -95,8 +95,28 @@ def events(request):
     context['sort'] = request.user.profile.sort_event
     context['model'] = Event.objects.filter(
         created_by=context['current_user'])
+    context['ClassForm'] = EventForm
+    form = context['ClassForm'](
+        current_user=context['current_user'])
     if request.method == "POST":
-        if 'select' in request.POST:
+        if 'save' in request.POST:
+            pk = request.POST.get("save")
+            if not pk:
+                form = context['ClassForm'](
+                    request.POST,
+                    request.FILES)
+                usr = form.save(commit=False)
+                usr.created_by = context['current_user']
+            else:
+                save_item = context['model'].get(id=pk)
+                save_item.updated_by = context['current_user']
+                form = context["ClassForm"](
+                    request.POST,
+                    request.FILES,
+                    instance=save_item)
+            form.save()
+            form = context['ClassForm']()
+        elif 'select' in request.POST:
             pk = request.POST.get("select")
             select_item = context['model'].get(id=pk)
             request.user.profile.current_event = select_item
@@ -107,7 +127,11 @@ def events(request):
             return redirect('home:view_event', pk)
         elif 'edit' in request.POST:
             pk = request.POST.get("edit")
-            return redirect('home:edit_event', pk)
+            edit_item = context['model'].get(id=pk)
+            context['id'] = pk
+            form = context['ClassForm'](
+                current_user=context['current_user'],
+                instance=edit_item)
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)
@@ -125,6 +149,7 @@ def events(request):
         else:
             pass
     context['error'] = error
+    context['form'] = form
     return render(request, "home/events.html", context)
 
 

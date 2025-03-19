@@ -5,29 +5,7 @@
        Редактировать мероприятие
     {% endif %}
     </h4>
-    <table class = "table table-bordered table-light">
-       <tr>
-          <td>Наименование </td><td>{{ form.title }}</td>
-       </tr>
-       <tr>
-          <td>Наименование для печати </td><td>{{ form.print_title }}</td>
-       </tr>
-       <tr>
-          <td>Описание </td><td>{{ form.description }}</td>
-       </tr>
-       <tr>
-          <td>Можно регистрировать команды </td><td>{{ form.team_registration }}</td>
-       </tr>
-       <tr>
-          <td>Дата начала </td><td>{{ form.from_date }}</td>
-       </tr>
-       <tr>
-          <td>Дата окончания </td><td>{{ form.to_date }}</td>
-       </tr>
-       <tr>
-          <td>Изображение </td><td>{{ form.image }}</td>
-       </tr>
-    </table>
+      {{ form }}
     <br>
     {% if not form.instance.id %}
        <button class="btn btn-outline-success" name="save" value="{{ id }}" title="Сохранить"><i class='fa fa-save'></i>  Сохранить</button>

@@ -26,14 +26,16 @@ class EventForm(ModelForm):
             }),
             "print_title": Textarea(attrs={
                 'class': 'form-control',
-                'rows': 4,
+                'rows': 3,
                 'placeholder': 'Наименование для печати'
             }),
             "description": Textarea(attrs={
                 'class': 'form-control',
+                'rows': 4,
                 'placeholder': 'Описание'
             }),
             "team_registration": CheckboxInput(attrs={
+                'class': 'form-check-input',
                 'placeholder': 'Можно регистрировать команды'
             }),
             "from_date": DateInput(format='%Y-%m-%d', attrs={
@@ -45,8 +47,22 @@ class EventForm(ModelForm):
                 'class': 'form-control',
                 'type': 'date',
                 'placeholder': 'Дата окончания'
-            })
+            }),
+            "image": Select(attrs={
+                'class': 'form-select',
+                'placeholder': 'Изображение'
+                })
         }
+        labels = {
+            "title": "Наименование мероприятия",
+            "print_title": "Наименование для печати",
+            "description": "Описание мероприятия",
+            "team_registration": "Можно регистрировать команды",
+            "from_date": "Дата начала",
+            "to_date": "Дата окончания",
+            "image": "Изображение"
+        }
+
 
     def __init__(self, *args, **kwargs):
         # Extract the user from the view

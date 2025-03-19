@@ -1,18 +1,18 @@
 {% extends "home/layout.html" %}
-
 {% block title %}Мероприятия{% endblock %}
 {% block body %}
-    <span>{{ error }}</span>
     <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
     <td> <a href="{% url 'home:add_event' %}">Добавить мероприятие</a></td>
     <form method="POST" action="{% url 'home:events' %}">
         {% csrf_token %} 
-        <table class = "table table-bordered table-light">
-            <head>    
-                <tr>
+        <div style="display: flex;">
+            <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+            <table class = "table table-bordered table-light">
+                <head>    
+                    <tr>
                     <th>Наименование
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
-                </th>    
+                    </th>    
                     <th>Наименование для печати
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_title"><i class='{{ sort_button }}'></i></button>
                     </th>
@@ -31,44 +31,44 @@
                     <th>Создал
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
                     </th>
-                    <th>Изменил</th>
+                    <th>Изменил
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
                     <th>Примечания</th>
-                </tr>
-            </head>
-            <tbody class="table-group-divider"> 
-                {% for item in model %}
-                    <tr>
-                        <td>{{item.title}}</td>
-                        <td>{{item.print_title|linebreaks}}</td>
-                        <td>{{item.from_date}}</td>
-                        <td>{{item.to_date}}</td>
-                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.created_by}}</td>
-                        <td>{{item.updated_by}}</td>
-                        <td> 
-                            <p>
-                                <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
-                                <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
-                                <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие"><i class='fa fa-pencil'></i></button>
-                                <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                            </p>    
-                        </td>
-                      </tr>
-                {% empty %}   
-                    Нет мероприятий
-                {% endfor %}
-               
-            </tbody>
-        </table>
-        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            {% if not form.instance.id %}
-                 {% include 'home/event.html' %}
-            {% elif form.instance.id %}
+                    </tr>
+                </head>
+                <tbody class="table-group-divider"> 
+                    {% for item in model %}
+                        <tr>
+                            <td>{{item.title}}</td>
+                            <td>{{item.print_title|linebreaks}}</td>
+                            <td>{{item.from_date}}</td>
+                            <td>{{item.to_date}}</td>
+                            <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                            <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                            <td>{{item.created_by}}</td>
+                            <td>{{item.updated_by}}</td>
+                            <td> 
+                                <p>
+                                    <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
+                                    <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
+                                    <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие"><i class='fa fa-pencil'></i></button>
+                                    <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                                </p>    
+                            </td>
+                        </tr>
+                    {% empty %}   
+                        Нет мероприятий
+                    {% endfor %}
+                
+                </tbody>
+            </table>
+            </div>
+            <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+            
                 {% include 'home/event.html' %}
-            {% endif %}   
-        
+            
+            </div>
         </div>
     </form> 
 {% endblock %}
