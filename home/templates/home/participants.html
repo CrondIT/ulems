@@ -7,11 +7,11 @@
     <table class = "table table-bordered table-light table-sm align-bottom">
         
         <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
-            {% csrf_token %} 
-             Импорт из csv файла: 
-            <input type="file" name="file" class="btn btn-outline-success btn-sm">
-            <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button> 
-            <button class="btn btn-outline-success btn-sm" name="export" formnovalidate style="margin:7px">Экспорт в csv</button> 
+            {% csrf_token %}
+                Импорт из csv файла: 
+                <input type="file" name="file" class="btn btn-outline-success btn-sm">
+                <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button> 
+                <button class="btn btn-outline-success btn-sm" name="export" formnovalidate style="margin:7px">Экспорт в csv</button> 
             <head>       
                 <tr>
                     <th>№</th>
