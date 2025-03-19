@@ -90,7 +90,11 @@
                             <td>{{item.organization}}</td>
                             <td>{{item.category}}</td>
                             <td>{{item.competency}}</td>
-                            <td>{{item.award}}</td>
+                            <td>
+                                <button name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" class="btn btn-outline-success btn-sm">
+                                {{item.award}}
+                                </button>
+                            </td>
                             <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                             <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
                             <td>{{item.created_by}}</td>
