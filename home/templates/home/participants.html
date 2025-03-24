@@ -80,7 +80,8 @@
 
             <tbody class="table-group-divider">  
                 {% for item in model %}
-                    <tr id="row_{{ item.id }}">
+                    <tr>
+                        <a href="#row_{{ item.id }}">
                         {% if form.instance.id == item.id %}
                             {% include 'home/participant.html' %}
                         {% else %}
@@ -92,11 +93,9 @@
                             <td>{{item.category}}</td>
                             <td>{{item.competency}}</td>
                             <td>
-                                <a href="#row_{{ item.id }}">
                                 <button name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" class="btn btn-outline-success btn-sm">
                                 {{item.award}}
                                 </button>
-                                </a>
                             </td>
                             <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                             <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
@@ -113,6 +112,7 @@
                                 <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                             </td> 
                         {% endif %}
+                        </a>
                     </tr>
                 
                     {% empty %}    
