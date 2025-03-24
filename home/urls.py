@@ -10,7 +10,7 @@ urlpatterns = [
     path("event/", views.add_event, name="add_event"),
     path("categories", views.categories, name="categories"),
     path("category/<int:category_id>", views.category, name="category"),
-    path("participants", views.participants, name="participants"),
+    path("participants/", views.participants, name="participants"),
     path("participant/<int:participant_id>",
          views.participant,
          name="participant"

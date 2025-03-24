@@ -80,8 +80,8 @@
 
             <tbody class="table-group-divider">  
                 {% for item in model %}
-                    <tr>
-                        <a href="#row_{{ item.id }}">
+                    <tr id="row_{{ item.id }}">
+                       
                         {% if form.instance.id == item.id %}
                             {% include 'home/participant.html' %}
                         {% else %}
@@ -108,11 +108,13 @@
                                 {% else %}    
                                     <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" unchecked>
                                 {% endif %}    
+                                <a href="#row_{{ item.id }}">
                                 <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                                </a>
                                 <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                             </td> 
                         {% endif %}
-                        </a>
+                       
                     </tr>
                 
                     {% empty %}    
