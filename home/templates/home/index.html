@@ -3,5 +3,9 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<h1>Главная страница</h1>
+    <h1>Главная страница</h1>
+    {{ current_event }} c {{ current_event.from_date }} по  {{ current_event.to_date }} </br>
+    Категорий {{ categories_count }}</br>
+    Компетенций {{ competencies_count }}</br>
+    Участников {{ participants_count }}</br>
 {% endblock %}

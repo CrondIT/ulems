@@ -75,6 +75,19 @@ def index(request):
     """ View main (starter) page """
     context = {}
     context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
+    context['categories_count'] = Category.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).count()
+    context['competencies_count'] = Competency.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).count()
+    context['participants_count'] = Participant.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).count()
     return render(request, "home/index.html", context)
 
 
@@ -373,6 +386,7 @@ def participants(request):
                 current_user=context['current_user'],
                 current_event=context['current_event'],
                 current_competency=context['current_competency'])
+            return redirect('home:participants', anchor='row_' + pk)
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
@@ -391,7 +405,6 @@ def participants(request):
             context['all_selected'] = False
         elif 'export' in request.POST:
             data = {}
-
             with open("participants.csv", 'w', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(
                     csvfile,

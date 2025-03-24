@@ -1,6 +1,7 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
+   
     <h4>Участники мероприятия: {{ current_event }} Пользователь: {{current_user}}</h4>
    
     <div class = "table-responsive">
@@ -79,7 +80,7 @@
 
             <tbody class="table-group-divider">  
                 {% for item in model %}
-                    <tr>
+                    <tr id="row_{{ item.id }}">
                         {% if form.instance.id == item.id %}
                             {% include 'home/participant.html' %}
                         {% else %}
@@ -91,9 +92,11 @@
                             <td>{{item.category}}</td>
                             <td>{{item.competency}}</td>
                             <td>
+                                <a href="#row_{{ item.id }}">
                                 <button name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" class="btn btn-outline-success btn-sm">
                                 {{item.award}}
                                 </button>
+                                </a>
                             </td>
                             <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                             <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>

@@ -21,12 +21,7 @@ urlpatterns = [
          name="competency"
          ),
     path("user_images", views.user_images, name="user_images"),
-    # path("user_image/<int:user_image_id>/edit",
-    #     views.user_images, name="user_image"
-    #     ),
-    #vpath("print_templates_table", views.print_templates, name="print_templates_table"),
-    
     path("print_templates", views.print_templates,  name="print_templates"),
     path("awards", views.awards, name="awards"),
-   
+
 ]
