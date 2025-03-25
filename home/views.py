@@ -387,11 +387,8 @@ def participants(request):
                 current_event=context['current_event'],
                 current_competency=context['current_competency'])
             context['anchor'] = 'row_' + pk
-            context['form'] = form
-            return redirect(
-                'home:participants',
-                '#row_' + pk
-                )
+            # context['form'] = form
+            # return redirect('home:participants', 'row_59')
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
