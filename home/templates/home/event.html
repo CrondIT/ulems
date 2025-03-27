@@ -1,5 +1,6 @@
 <h4>
-    {% if not form.instance.id %}
+   {{ current_user }}
+   {% if not form.instance.id %}
        Создать мероприятие
     {% else %}
        Редактировать мероприятие

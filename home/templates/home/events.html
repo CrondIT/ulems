@@ -3,8 +3,40 @@
 {% block body %}
     <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
     <td> <a href="{% url 'home:add_event' %}">Добавить мероприятие</a></td>
+   
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" name="add_modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal {{ current_user }}
+    </button>
+
+    https://www.iditect.com/program-example/django-how-to-use-modal-as-a-form-to-update-an-object.html?ysclid=m8r96311r3174545494
+
+  
     <form method="POST" action="{% url 'home:events' %}">
         {% csrf_token %} 
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title {{ current_user }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            {% include 'home/event.html' %}
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-outline-success" name="save" value="{{ id }}" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
         <div style="display: flex;">
             <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
             <table class = "table table-bordered table-light">
@@ -66,8 +98,7 @@
             </div>
             <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
             
-                {% include 'home/event.html' %}
-            
+                            
             </div>
         </div>
     </form> 
