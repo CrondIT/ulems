@@ -72,19 +72,15 @@
                 </tr>
             </head>
             
-                {% if not form.instance.id %}
+                
                     <tr>
-                        {% include 'home/participant.html' %}
+                        {% include 'home/participant.html' %}    
                     </tr>
-                {% endif %}   
-
+            
             <tbody class="table-group-divider">  
                 {% for item in model %}
                     <tr id="row_{{ item.id }}">
-                       
-                        {% if form.instance.id == item.id %}
-                            {% include 'home/participant.html' %}
-                        {% else %}
+
                             <td>{{forloop.counter}}</td>
                             <td>{{item.first_name}}</td>
                             <td>{{item.middle_name}}</td>
@@ -113,8 +109,6 @@
                                 </a>
                                 <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                             </td> 
-                        {% endif %}
-                       
                     </tr>
                 
                     {% empty %}    

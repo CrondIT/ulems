@@ -555,8 +555,11 @@ def competencies(request):
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = context['ClassForm'](request.POST, instance=save_item)
-            form.save()
-            form = context['ClassForm']()
+            if form.is_valid():
+                form.save()
+                form = context['ClassForm']()
+            else:
+                error = "Форма заполнена неверно!"
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)

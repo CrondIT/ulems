@@ -63,7 +63,6 @@ class EventForm(ModelForm):
             "image": "Изображение"
         }
 
-
     def __init__(self, *args, **kwargs):
         # Extract the user from the view
         user = kwargs.pop('current_user')
@@ -208,7 +207,7 @@ class CompetencyForm(ModelForm):
                 }),
                 "print_title": Textarea(attrs={
                     'class': 'form-control',
-                    'rows': 4,
+                    'rows': 3,
                     'placeholder': 'Наименование для печати'
                 })
             }
