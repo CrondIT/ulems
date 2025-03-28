@@ -15,6 +15,8 @@ from django.core.files.storage import FileSystemStorage
 
 import csv
 
+from django.db.models import Count
+
 
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
@@ -88,6 +90,14 @@ def index(request):
         created_by=context['current_user'],
         event_related=context['current_event']
         ).count()
+    context['competencies_by_participants'] = Competency.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).annotate(count=Count('participants'))
+    context['categories_by_participants'] = Category.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).annotate(count=Count('participants'))
     return render(request, "home/index.html", context)
 
 
@@ -387,8 +397,6 @@ def participants(request):
                 current_event=context['current_event'],
                 current_competency=context['current_competency'])
             context['anchor'] = 'row_' + pk
-            # context['form'] = form
-            # return redirect('home:participants', 'row_59')
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):

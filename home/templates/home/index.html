@@ -5,7 +5,54 @@
 {% block body %}
     <h1>Главная страница</h1>
     {{ current_event }} c {{ current_event.from_date }} по  {{ current_event.to_date }} </br>
-    Категорий {{ categories_count }}</br>
-    Компетенций {{ competencies_count }}</br>
-    Участников {{ participants_count }}</br>
+    <div style="display: flex;">
+
+        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+            Категорий {{ categories_count }}</br>
+            Компетенций {{ competencies_count }}</br>
+            Участников {{ participants_count }}</br>
+        </div>
+
+        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+            <table class = "table table-bordered table-light">
+                <head>
+                    <tr>
+                        <th>№</th>
+                        <th> Наименование</th>
+                        <th> Кол-во участников</th>
+                    </tr>
+                </head>
+                <tbody class="table-group-divider">  
+                    {% for catbp in categories_by_participants %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{ catbp }} </td>
+                        <td>{{ catbp.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+            <table class = "table table-bordered table-light">
+                <head>
+                    <tr>
+                        <th>№</th>
+                        <th> Наименование</th>
+                        <th> Кол-во участников</th>
+                    </tr>
+                </head>
+                <tbody class="table-group-divider">  
+                    {% for cbp in competencies_by_participants %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{ cbp }} </td>
+                        <td>{{ cbp.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
