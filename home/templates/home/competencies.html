@@ -8,66 +8,64 @@
 {% endif%}
     <h4>Компетенции (номинации) мероприятия: {{ current_event}}</h4>
 
-    <table class = "table table-bordered table-light">
+    <table class = "table table-hover table-bordered table-light">
         <form method="POST" action="{% url 'home:competencies' %}" enctype="multipart/form-data">
             {% csrf_token %} 
             Импорт из csv файла: <input type="file" name="file" class="btn btn-outline-success btn-sm">
             <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button>   
-            <tr>
-                <th>№</th>
-                <th>
-                    Наименование
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>Наименование для печати</th>
-                <th>
-                    Дата создания
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата изменения
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Создатель
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Изменил
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>Примечания</th>
-            </tr>
-
-            {% if not form.instance.id %}
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>
+                        Наименование
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>Наименование для печати</th>
+                    <th>
+                        Дата создания
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата изменения
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Создатель
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Изменил
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>Примечания</th>
+                </tr>
                 <tr>
                     {% include 'home/competency.html' %}
                 </tr>
-            {% endif %}   
-
-          
-            {% for item in model %}
-                <tr>
-                    {% if form.instance.id == item.id %}
-                        {% include 'home/competency.html' %}
-                    {% elif item.event_related == current_event %}
-                        <td>{{forloop.counter}}</td>
-                        <td>{{item.title}}</td>
-                        <td>{{item.print_title|linebreaks}}</td>
-                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.created_by}}</td>
-                        <td>{{item.updated_by}}</td>
-                        <td> 
-                            <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                        </td> 
-                    {% endif %}
-                </tr>
-            
+           </thead>
+           <tbody class="table-group-divider">
+                {% for item in model %}
+                    <tr>
+                        {% if form.instance.id == item.id %}
+                            {% include 'home/competency.html' %}
+                        {% elif item.event_related == current_event %}
+                            <td>{{forloop.counter}}</td>
+                            <td>{{item.title}}</td>
+                            <td>{{item.print_title|linebreaks}}</td>
+                            <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                            <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                            <td>{{item.created_by}}</td>
+                            <td>{{item.updated_by}}</td>
+                            <td> 
+                                <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                                <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            </td> 
+                        {% endif %}
+                    </tr>
                 {% empty %}    
                     Нет компетенций (номинаций)
-            {% endfor %}
+                {% endfor %}
+            </tbody>
         </form>
     </table>
 {% endblock %}

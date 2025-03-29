@@ -4,8 +4,8 @@
    
     <h4>Участники мероприятия: {{ current_event }} Пользователь: {{current_user}} {{ anchor }}</h4>
    
-    <div class = "table-responsive">
-    <table class = "table table-bordered table-light table-sm align-bottom">
+    <div>
+    <table class = "table table-hover table-bordered table-light table-sm align-bottom">
         
         <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
             {% csrf_token %}
@@ -13,7 +13,7 @@
                 <input type="file" name="file" class="btn btn-outline-success btn-sm">
                 <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button> 
                 <button class="btn btn-outline-success btn-sm" name="export" formnovalidate style="margin:7px">Экспорт в csv</button> 
-            <head>       
+            <thead>       
                 <tr>
                     <th>№</th>
                     <th> Фамилия
@@ -70,13 +70,10 @@
                       
                     </th>
                 </tr>
-            </head>
-            
-                
-                    <tr>
-                        {% include 'home/participant.html' %}    
-                    </tr>
-            
+                <tr>
+                    {% include 'home/participant.html' %}    
+                </tr>
+            </thead>
             <tbody class="table-group-divider">  
                 {% for item in model %}
                     <tr id="row_{{ item.id }}">

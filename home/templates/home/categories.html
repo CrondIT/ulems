@@ -3,83 +3,101 @@
 {% block body %}
     <h4>Категории участников мероприятия: {{ current_event }}</h4>
 
-    <table class = "table table-bordered table-light">
+    <table class = "table table-hover table-bordered table-light">
         <form method="POST" action="{% url 'home:categories' %}">
             {% csrf_token %} 
-               
-            <tr>
-                <th>№</th>
-                <th>
-                    Наименование
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Наименование для печати
-                </th>
-                <th>
-                    Бэдж
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="badge"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Сертификат
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="certificate"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата создания
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата изменения
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Создатель
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Изменил
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Мероприятие
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="event_related"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>Примечания</th>
-            </tr>
-
-            {% if not form.instance.id %}
+            <!-- Modal -->
+            <thead>   
                 <tr>
-                    {% include 'home/category.html' %}
+                    <th>№</th>
+                    <th>
+                        Наименование
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Наименование для печати
+                    </th>
+                    <th>
+                        Бэдж
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="badge"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Сертификат
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="certificate"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата создания
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата изменения
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Создатель
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Изменил
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Мероприятие
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="event_related"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>Примечания</th>
                 </tr>
-            {% endif %}   
-
+                <tr>
+                {% include 'home/category.html' %}
+                </tr>
+            </thead>
             <tbody class="table-group-divider">
             {% for item in model %}
-                 <tr>
-                    {% if form.instance.id == item.id %}
-                        {% include 'home/category.html' %}
-                    {% else %}
-                        <td>{{forloop.counter}}</td>
-                        <td>{{item.title}}</td>
-                        <td>{{item.print_title|linebreaks}}</td>
-                        <td>{{item.badge}}</td>
-                        <td>{{item.certificate}}</td>
-                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.created_by}}</td>
-                        <td>{{item.updated_by}}</td>
-                        <td>{{item.event_related}}</td>
-                        <td> 
-                            <button class="btn btn-outline-success" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                        </td> 
-                    {% endif %}
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление строки</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Вы уверены, что хотите удалить эту строку: {{item.title}} ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                <button type="submit" class="btn btn-danger" formnovalidate name="delete" value="{{ item.id }}">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+                              
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.print_title|linebreaks}}</td>
+                    <td>{{item.badge}}</td>
+                    <td>{{item.certificate}}</td>
+                    <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{item.created_by}}</td>
+                    <td>{{item.updated_by}}</td>
+                    <td>{{item.event_related}}</td>
+                    <td> 
+                        <button type="button" class="btn btn-outline-success" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" ><i class='fa fa-pencil'></i></button>
+                        <button  type="button" class="btn btn-outline-danger" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
+                    </td> 
                 </tr>
             
                 {% empty %}    
                     Нет категорий
+
+       
             {% endfor %}
+
         </form>
         <tbody> 
     </table>
+
 {% endblock %}

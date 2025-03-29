@@ -11,62 +11,62 @@
         {% csrf_token %} 
         <div style="display: flex;">
             <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            <table class = "table table-bordered table-light">
-                <head>    
-                    <tr>
-                    <th>Наименование
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
-                    </th>    
-                    <th>Наименование </br> для печати
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_title"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Дата </br> начала
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="from_date"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Дата </br> окончания
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="to_date"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Дата </br> создания
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Дата </br> изменения
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Создал
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Изменил
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>Примечания</th>
-                    </tr>
-                </head>
-                <tbody class="table-group-divider"> 
-                    {% for item in model %}
+                <table class = "table table-hover table-bordered table-light">
+                    <thead>    
                         <tr>
-                            <td>{{item.title}}</td>
-                            <td>{{item.print_title|linebreaks}}</td>
-                            <td>{{item.from_date}}</td>
-                            <td>{{item.to_date}}</td>
-                            <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                            <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                            <td>{{item.created_by}}</td>
-                            <td>{{item.updated_by}}</td>
-                            <td> 
-                                <p>
-                                    <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
-                                    <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
-                                    <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие"><i class='fa fa-pencil'></i></button>
-                                    <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                                </p>    
-                            </td>
+                        <th>Наименование
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                        </th>    
+                        <th>Наименование </br> для печати
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_title"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Дата </br> начала
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="from_date"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Дата </br> окончания
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="to_date"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Дата </br> создания
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Дата </br> изменения
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Создал
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Изменил
+                            <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                        </th>
+                        <th>Примечания</th>
                         </tr>
-                    {% empty %}   
-                        Нет мероприятий
-                    {% endfor %}
-                
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="table-group-divider"> 
+                        {% for item in model %}
+                            <tr>
+                                <td>{{item.title}}</td>
+                                <td>{{item.print_title|linebreaks}}</td>
+                                <td>{{item.from_date}}</td>
+                                <td>{{item.to_date}}</td>
+                                <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                                <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                                <td>{{item.created_by}}</td>
+                                <td>{{item.updated_by}}</td>
+                                <td> 
+                                    <p>
+                                        <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
+                                        <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
+                                        <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие"><i class='fa fa-pencil'></i></button>
+                                        <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                                    </p>    
+                                </td>
+                            </tr>
+                        {% empty %}   
+                            Нет мероприятий
+                        {% endfor %}
+                    
+                    </tbody>
+                </table>
             </div>
             <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
                 {% include 'home/event.html' %}                            
