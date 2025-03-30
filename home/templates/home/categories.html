@@ -53,26 +53,28 @@
             </thead>
             <tbody class="table-group-divider">
             {% for item in model %}
-
                 <!-- Modal -->
                 <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление строки</h5>
+                                <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Вы уверены, что хотите удалить эту строку: {{item.title}} ?
+                                {% for ibp in items_by_participants %}
+                                    {% if ibp.id == item.id %}
+                                        Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ ibp.count }}. </br>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                                 <button type="submit" class="btn btn-danger" formnovalidate name="delete" value="{{ item.id }}">Удалить</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                             </div>
                         </div>
                     </div>
                 </div>   
-                              
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{item.title}}</td>
@@ -85,17 +87,13 @@
                     <td>{{item.updated_by}}</td>
                     <td>{{item.event_related}}</td>
                     <td> 
-                        <button type="button" class="btn btn-outline-success" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" ><i class='fa fa-pencil'></i></button>
-                        <button  type="button" class="btn btn-outline-danger" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" ><i class='fa fa-pencil'></i></button>
+                        <button  type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
                     </td> 
                 </tr>
-            
                 {% empty %}    
                     Нет категорий
-
-       
             {% endfor %}
-
         </form>
         <tbody> 
     </table>

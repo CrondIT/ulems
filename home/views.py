@@ -271,6 +271,9 @@ def categories(request):
     context['form'] = context['ClassForm'](
         current_user=context['current_user'])
     form = context['form']
+    context['items_by_participants'] = context['model'].annotate(
+        count=Count('participants')
+        )
     if 'save' in request.POST:
         pk = request.POST.get('save')
         if not pk:
