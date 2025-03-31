@@ -68,7 +68,11 @@
                 </table>
             </div>
             <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-                {% include 'home/event.html' %}                            
+            {% if not form.instance.id %}
+                {% include 'home/event.html' %}
+            {% elif form.instance.id %}
+               {% include 'home/event.html' %}
+            {% endif %}                             
             </div>
         </div>
     </form> 

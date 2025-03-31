@@ -117,18 +117,20 @@ def events(request):
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_event
     context['model'] = Event.objects.filter(
-        created_by=context['current_user'])
+        created_by=context['current_user']
+        )
     context['ClassForm'] = EventForm
     form = context['ClassForm'](
-        current_user=context['current_user'])
+        current_user=context['current_user']
+        )
     if request.method == "POST":
         if 'save' in request.POST:
             pk = request.POST.get("save")
             if not pk:
                 form = context['ClassForm'](
                     request.POST,
-                    request.FILES,
-                    current_user=context['current_user'])
+                    request.FILES
+                    )
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
             else:
@@ -137,8 +139,8 @@ def events(request):
                 form = context["ClassForm"](
                     request.POST,
                     request.FILES,
-                    current_user=context['current_user'],
-                    instance=save_item)
+                    instance=save_item
+                    )
             form.save()
             form = context['ClassForm']()
         elif 'select' in request.POST:
