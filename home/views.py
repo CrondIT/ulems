@@ -127,7 +127,8 @@ def events(request):
             if not pk:
                 form = context['ClassForm'](
                     request.POST,
-                    request.FILES)
+                    request.FILES,
+                    current_user=context['current_user'])
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
             else:
@@ -136,6 +137,7 @@ def events(request):
                 form = context["ClassForm"](
                     request.POST,
                     request.FILES,
+                    current_user=context['current_user'],
                     instance=save_item)
             form.save()
             form = context['ClassForm']()
@@ -265,15 +267,14 @@ def categories(request):
         created_by=context['current_user'],
         event_related=context['current_event'])
     context['model'] = context['model'].order_by(
-        context['sort'])
+        context['sort']).annotate(
+        count=Count('participants')
+        )
     context['ClassForm'] = CategoryForm
 
     context['form'] = context['ClassForm'](
         current_user=context['current_user'])
     form = context['form']
-    context['items_by_participants'] = context['model'].annotate(
-        count=Count('participants')
-        )
     if 'save' in request.POST:
         pk = request.POST.get('save')
         if not pk:
@@ -551,7 +552,9 @@ def competencies(request):
         created_by=context['current_user'],
         event_related=context['current_event'])
     context['model'] = context['model'].order_by(
-        context['sort'])
+        context['sort']).annotate(
+        count=Count('participants')
+        )
     context['ClassForm'] = CompetencyForm
     form = CompetencyForm()
     if request.method == 'POST':
