@@ -43,6 +43,24 @@
                     </thead>
                     <tbody class="table-group-divider"> 
                         {% for item in model %}
+                           <!-- Modal -->
+                            <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }}. </br>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger" formnovalidate name="delete" value="{{ item.id }}">Удалить</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
                             <tr>
                                 <td>{{item.title}}</td>
                                 <td>{{item.print_title|linebreaks}}</td>
@@ -57,7 +75,7 @@
                                         <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
                                         <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
                                         <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие"><i class='fa fa-pencil'></i></button>
-                                        <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку" data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
                                     </p>    
                                 </td>
                             </tr>
@@ -68,11 +86,7 @@
                 </table>
             </div>
             <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            {% if not form.instance.id %}
                 {% include 'home/event.html' %}
-            {% elif form.instance.id %}
-               {% include 'home/event.html' %}
-            {% endif %}                             
             </div>
         </div>
     </form> 

@@ -116,8 +116,9 @@ def events(request):
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_event
-    context['model'] = Event.objects.filter(
-        created_by=context['current_user']
+    context['model'] = (Event.objects.filter(
+        created_by=context['current_user']).annotate(
+            count=Count('home_participant_event_related'))
         )
     context['ClassForm'] = EventForm
     form = context['ClassForm'](
@@ -129,7 +130,8 @@ def events(request):
             if not pk:
                 form = context['ClassForm'](
                     request.POST,
-                    request.FILES
+                    request.FILES,
+                    current_user=context['current_user']
                     )
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
@@ -139,10 +141,11 @@ def events(request):
                 form = context["ClassForm"](
                     request.POST,
                     request.FILES,
-                    instance=save_item
+                    instance=save_item,
+                    current_user=context['current_user']
                     )
             form.save()
-            form = context['ClassForm']()
+            form = context['ClassForm'](current_user=context['current_user'])
         elif 'select' in request.POST:
             pk = request.POST.get("select")
             select_item = context['model'].get(id=pk)
