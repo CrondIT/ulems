@@ -1,13 +1,16 @@
 {% extends "home/layout.html" %}
 {% block title %}Мероприятия{% endblock %}
 {% block body %}
-    <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
-    <td> <a href="{% url 'home:add_event' %}">Добавить мероприятие</a></td>
-      
-    https://www.iditect.com/program-example/django-how-to-use-modal-as-a-form-to-update-an-object.html?ysclid=m8r96311r3174545494
-
-  
-    <form method="POST" action="{% url 'home:events' %}">
+    {% if current_event is NONE%}
+        <h4>Выберите мероприятие,
+            для этого нажмите на кнопку 
+            <button class="btn btn-outline-success btn-sm"><i class='fa fa-check'></i></button>
+            у нужного мероприятия
+        </h4>
+    {% else %}
+        <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
+    {% endif %}
+      <form method="POST" action="{% url 'home:events' %}">
         {% csrf_token %} 
         <div style="display: flex;">
             <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
@@ -48,11 +51,11 @@
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
+                                            <h5 class="modal-title text-center" id="deleteModalLabel{{ item.id }}">Удаление мероприятия: "{{ item.title }}"</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }}. </br>
+                                            Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }} и все данные из таблиц "Категории", "Компетенции", "Награды".</br>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-danger" formnovalidate name="delete" value="{{ item.id }}">Удалить</button>

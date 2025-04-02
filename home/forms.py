@@ -84,7 +84,7 @@ class CategoryForm(ModelForm):
                 }),
                 "print_title": Textarea(attrs={
                     'class': 'form-control',
-                    'rows': 4,
+                    'rows': 3,
                     'placeholder': 'Наименование для печати'
                 }),
                 "badge": Select(attrs={

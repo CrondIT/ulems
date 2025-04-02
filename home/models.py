@@ -123,17 +123,19 @@ class Competency(TimeStamp, EventRelated):
 class Award(TimeStamp, EventRelated):
     title = models.CharField("Награда", max_length=100)
     competency = models.ForeignKey(
-        Competency, on_delete=models.SET_NULL,
+        Competency,
+        on_delete=models.SET_NULL,
         related_name="award_competency",
         null=True,
         blank=True
         )
-    award = models.ForeignKey(UserImage,
-                              on_delete=models.SET_NULL,
-                              related_name="award_image",
-                              null=True,
-                              blank=True
-                              )
+    award = models.ForeignKey(
+        UserImage,
+        on_delete=models.SET_NULL,
+        related_name="award_image",
+        null=True,
+        blank=True
+        )
 
     def __str__(self):
         return f"{self.title} в {

@@ -3,73 +3,85 @@
 {% block body %}
     <h4>Награды (дипломы) компетенций: {{ current_event}}</h4>
 
-    <table class = "table table-bordered table-light">
+    <table class = "table table-hover table-bordered table-light">
         <form method="POST" action="{% url 'home:awards' %}">
             {% csrf_token %} 
-               
-            <tr>
-                <th>№</th>
-                <th>
-                    Наименование </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Компетенция </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="competency"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Награда </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="award"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата создания </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Дата изменения </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Создатель </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Изменил </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Мероприятие </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="event_related"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>Примечания</th>
-            </tr>
-
-            {% if not form.instance.id %}
+            <thead>   
+                <tr>
+                    <th>№</th>
+                    <th>
+                        Наименование </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Компетенция </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="competency"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Награда </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="award"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата создания </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Дата изменения </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Создатель </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Изменил </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Мероприятие </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="event_related"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>Примечания</th>
+                </tr>
                 <tr>
                     {% include 'home/award.html' %}
                 </tr>
-            {% endif %}   
+            </thead>
 
             <tbody class="table-group-divider">
             {% for item in model %}
+               <!-- Modal -->
+                <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Внимание! Данные будут безвозвратно удалены. </br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger" formnovalidate name="delete" value="{{ item.id }}">Удалить</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
                  <tr>
-                    {% if form.instance.id == item.id %}
-                        {% include 'home/award.html' %}
-                    {% else %}
-                        <td>{{forloop.counter}}</td>
-                        <td>{{item.title}}</td>
-                        <td>{{item.competency}}</td>
-                        <td>{{item.item}}</td>
-                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                        <td>{{item.created_by}}</td>
-                        <td>{{item.updated_by}}</td>
-                        <td>{{item.event_related}}</td>
-                        <td> 
-                            <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                            <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                        </td> 
-                    {% endif %}
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.competency}}</td>
+                    <td>{{item.award}}</td>
+                    <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{item.created_by}}</td>
+                    <td>{{item.updated_by}}</td>
+                    <td>{{item.event_related}}</td>
+                    <td> 
+                        <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
+                    </td> 
                 </tr>
             {% endfor %}
         </form>

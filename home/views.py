@@ -306,6 +306,7 @@ def categories(request):
     elif 'edit' in request.POST:
         pk = request.POST.get('edit')
         edit_item = context['model'].get(id=pk)
+        context['id'] = pk
         form = context['ClassForm'](
             instance=edit_item,
             current_user=context['current_user'])
@@ -586,6 +587,7 @@ def competencies(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = context['model'].get(id=pk)
+            context['id'] = pk
             form = context['ClassForm'](instance=edit_item)
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
@@ -876,6 +878,7 @@ def awards(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = context['model'].get(id=pk)
+            context['id'] = pk
             form = context['ClassForm'](
                 instance=edit_item,
                 current_event=context['current_event'],
