@@ -2,8 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
-# class for record's created time and updated time
+
+def validate_font(value):
+    if not value.name.endswith('.ttf') and not value.name.endswith('.otf'):
+        raise ValidationError(u'Недопустимый формат файла')
 
 
 # -----------------------------------------------------------------------------------
@@ -42,6 +46,23 @@ class UserImage(TimeStamp):
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
+
+
+# -----------------------------------------------------------------------------------
+class UserFont(TimeStamp):
+    title = models.CharField('Название', max_length=200)
+    font = models.FileField(
+        upload_to=user_directory_path,
+        null=True,
+        validators=[validate_font]
+        )
+
+    def __str__(self):
+        return str(self.title)
+
+    class Meta:
+        verbose_name = 'Шрифт'
+        verbose_name_plural = 'Шрифты'
 
 
 # -----------------------------------------------------------------------------------
