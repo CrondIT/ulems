@@ -1,6 +1,6 @@
 from .models import Event, Category, Participant, Competency
 from .models import Profile, UserImage, PrintTemplate, Award
-
+from .models import UserFont
 
 from django.forms import ModelForm, TextInput, DateInput
 from django.forms import Textarea, Select, NumberInput
@@ -127,6 +127,16 @@ class UserImageForm(ModelForm):
                     'placeholder': 'Высота, мм'})
             }
 
+class UserFontForm(ModelForm):
+    class Meta:
+        model = UserFont
+        fields = ['title', 'font']
+        widgets = {
+                "title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование'
+                })
+            }
 
 class ParticipantForm(ModelForm):
     class Meta:
