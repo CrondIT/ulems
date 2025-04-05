@@ -226,7 +226,8 @@ class Profile(TimeStamp):
     sort_participant = models.CharField(max_length=25,  default="created_date")
     sort_image = models.CharField(max_length=25, default="created_date")
     sort_template = models.CharField(max_length=25, default="created_date")
-  
+    sort_font = models.CharField(max_length=25, default="created_date")
+
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:

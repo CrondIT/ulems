@@ -4,7 +4,7 @@
     <h4>Шрифты пользователя: {{current_user}}</h4>
 
     <table class = "table table-bordered table-light">
-        <form method="post" enctype="multipart/form-data" action="{% url 'home:user_images' %}">
+        <form method="post" enctype="multipart/form-data" action="{% url 'home:user_fonts' %}">
             {% csrf_token %} 
               <tr>
                 <th>№</th>
@@ -32,7 +32,7 @@
                 </th>
             </tr>
             <tr>
-                {% include 'home/user_image.html' %}
+                {% include 'home/user_font.html' %}
             </tr>
             {% for item in model %}
             <tr>
@@ -48,9 +48,7 @@
                     <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
                 </td> 
             </tr>
-            {% empty %}    
-                Нет шрифтов пользователя
-            {% endfor %}
+            {% endfor %} 
         </form>
     </table>
 {% endblock %}

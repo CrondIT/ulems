@@ -26,15 +26,15 @@
                             <a class = "nav-link" href ={% url 'home:awards' %}>Награды</a>
                             <a class = "nav-link" href ={% url 'home:participants' %}>Участники</a>
                         {% endif %}
-                        <a class = "nav-link" href ={% url 'home:user_images' %}>Изображения</a>
-                                                
-                          <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class='fa fa-user-o'></i>
                             </a>
                             <ul class="dropdown-menu">
                               <li><a class="dropdown-item" href='#'>Профиль</a></li>
                               <li><a class="dropdown-item" href="#">Пользователи</a></li>
+                              <li><a class="dropdown-item" href ={% url 'home:user_images' %}>Изображения</a></li>
+                              <li><a class="dropdown-item" href ={% url 'home:user_fonts' %}>Шрифты</a></li>
                               <li><hr class="dropdown-divider"></li>
                               <li><a class="dropdown-item" href={% url 'logout' %}>Выйти</a></li>
                             </ul>

@@ -4,10 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Event, Category, Participant, Competency, UserImage
-from .models import PrintTemplate, Award
+from .models import PrintTemplate, Award, UserFont
 
 from .forms import EventForm, CategoryForm, ParticipantForm, AwardForm
 from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
+from .forms import UserFontForm
 
 from . import makepdf
 
@@ -711,6 +712,69 @@ def user_images(request):
     context['error'] = error
 
     return render(request, "home/user_images.html", context)
+
+
+# ------------------------------------------------------------------------------
+@login_required(login_url="login")
+def user_fonts(request):
+    """ View, add, edit and delete user fonts in table.
+        Filter for event and current user.
+    """
+    error = ""
+    context = {}
+    context['sort_button'] = 'fa fa-sort'
+    context['title'] = 'Шрифты'
+    context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
+    context['sort'] = request.user.profile.sort_image
+    context['model'] = UserFont.objects.filter(
+        created_by=context['current_user'])
+    context['ClassForm'] = UserFontForm
+    form = context['ClassForm']()
+    if request.method == 'POST':
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                form = context['ClassForm'](
+                    request.POST,
+                    request.FILES)
+                new_item = form.save(commit=False)
+                new_item.created_by = context['current_user']
+            else:
+                save_item = context['model'].get(id=pk)
+                save_item.updated_by = context['current_user']
+                form = context['ClassForm'](
+                    request.POST,
+                    request.FILES,
+                    instance=save_item)
+            form.save()
+            form = context['ClassForm']()
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            delete_item = context['model'].get(id=pk)
+            delete_item.delete()
+        elif 'edit' in request.POST:
+            pk = request.POST.get('edit')
+            edit_item = context['model'].get(id=pk)
+            form = context['ClassForm'](
+                instance=edit_item)
+        elif 'sort' in request.POST:
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_font = context['sort']
+            request.user.save()
+            context['model'] = context['model'].order_by(
+                context['sort'])
+        else:
+            pass
+
+    context['form'] = form
+    context['error'] = error
+
+    return render(request, "home/user_fonts.html", context)
 
 
 # ----------------------------------------------------------------------------
