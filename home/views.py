@@ -738,8 +738,14 @@ def user_fonts(request):
                 form = context['ClassForm'](
                     request.POST,
                     request.FILES)
-                new_item = form.save(commit=False)
-                new_item.created_by = context['current_user']
+                if form.is_valid():
+                    new_item = form.save(commit=False)
+                    new_item.created_by = context['current_user']
+                    form.save()
+                    form = context['ClassForm']()
+                    error = "Файл успешно загружен!"
+                else:
+                    error = form.errors.as_text()
             else:
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
@@ -747,11 +753,12 @@ def user_fonts(request):
                     request.POST,
                     request.FILES,
                     instance=save_item)
-            if form.is_valid():
-                form.save()
-                form = context['ClassForm']()
-            else:
-                error = form.error
+                if form.is_valid():
+                    form.save()
+                    form = context['ClassForm']()
+                    error = "Файл успешно загружен!"
+                else:
+                    error = form.errors.as_data()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)
@@ -759,6 +766,7 @@ def user_fonts(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = context['model'].get(id=pk)
+            context['id'] = pk
             form = context['ClassForm'](
                 instance=edit_item)
         elif 'sort' in request.POST:

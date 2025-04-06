@@ -144,10 +144,14 @@ class UserFontForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Наименование'
                 })
-            }
-        validators = {
-            'font': [validate_font]
         }
+
+    def clean_font(self):
+        font = self.cleaned_data['font']
+        if not font.name.endswith('.ttf') and not font.name.endswith('.otf'):
+            raise ValidationError(u'Недопустимый формат файла')
+
+        return font
 
 
 class ParticipantForm(ModelForm):
