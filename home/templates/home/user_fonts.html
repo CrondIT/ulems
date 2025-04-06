@@ -2,6 +2,11 @@
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
     <h4>Шрифты пользователя: {{current_user}}</h4>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif%}
 
     <table class = "table table-bordered table-light">
         <form method="post" enctype="multipart/form-data" action="{% url 'home:user_fonts' %}">

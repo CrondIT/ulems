@@ -53,8 +53,7 @@ class UserFont(TimeStamp):
     title = models.CharField('Название', max_length=200)
     font = models.FileField(
         upload_to=user_directory_path,
-        null=True,
-        validators=[validate_font]
+        null=True
         )
 
     def __str__(self):
@@ -101,7 +100,7 @@ class EventRelated(models.Model):
     class Meta:
         abstract = True
 
-    
+
 # -----------------------------------------------------------------------------------
 class Category(TimeStamp, EventRelated):
     title = models.CharField("Категория участника", max_length=100)

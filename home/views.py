@@ -656,7 +656,7 @@ def user_images(request):
     context = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Изображения'
-    context['current_event'] = request.user.profile.current_event
+    # context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_image
     context['model'] = UserImage.objects.filter(
@@ -724,9 +724,9 @@ def user_fonts(request):
     context = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Шрифты'
-    context['current_event'] = request.user.profile.current_event
+    # context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
-    context['sort'] = request.user.profile.sort_image
+    context['sort'] = request.user.profile.sort_font
     context['model'] = UserFont.objects.filter(
         created_by=context['current_user'])
     context['ClassForm'] = UserFontForm
@@ -747,8 +747,11 @@ def user_fonts(request):
                     request.POST,
                     request.FILES,
                     instance=save_item)
-            form.save()
-            form = context['ClassForm']()
+            if form.is_valid():
+                form.save()
+                form = context['ClassForm']()
+            else:
+                error = form.error
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)

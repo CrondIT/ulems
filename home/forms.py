@@ -6,6 +6,13 @@ from django.forms import ModelForm, TextInput, DateInput
 from django.forms import Textarea, Select, NumberInput
 from django.forms import CheckboxInput
 
+from django.core.exceptions import ValidationError
+
+
+def validate_font(value):
+    if not value.name.endswith('.ttf') and not value.name.endswith('.otf'):
+        raise ValidationError(u'Недопустимый формат файла')
+
 
 class EventForm(ModelForm):
     class Meta:
@@ -127,6 +134,7 @@ class UserImageForm(ModelForm):
                     'placeholder': 'Высота, мм'})
             }
 
+
 class UserFontForm(ModelForm):
     class Meta:
         model = UserFont
@@ -137,6 +145,10 @@ class UserFontForm(ModelForm):
                     'placeholder': 'Наименование'
                 })
             }
+        validators = {
+            'font': [validate_font]
+        }
+
 
 class ParticipantForm(ModelForm):
     class Meta:
