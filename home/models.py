@@ -2,12 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.exceptions import ValidationError
 
 
-def validate_font(value):
-    if not value.name.endswith('.ttf') and not value.name.endswith('.otf'):
-        raise ValidationError(u'Недопустимый формат файла')
+def validate_font():
+    pass
 
 
 # -----------------------------------------------------------------------------------
@@ -258,18 +256,29 @@ class PrintTemplate(TimeStamp):
     start_y = models.PositiveSmallIntegerField()
     delta_x = models.PositiveSmallIntegerField(default=100)
     delta_y = models.PositiveSmallIntegerField(default=100)
+    user_font = models.ForeignKey(
+        UserFont, on_delete=models.SET_NULL,
+        related_name="print_template_font",
+        null=True,
+        blank=True
+    )
     font_color = models.CharField(max_length=25, null=True)
     font_size = models.PositiveSmallIntegerField()
-    font_alignment = models.PositiveSmallIntegerField(default=0, choices=[
-        (0, 'Лево'),
-        (1, 'По центр'),
-        (2, 'Право'),
-        (4, 'По ширине')
+    font_alignment = models.PositiveSmallIntegerField(
+        default=0,
+        choices=[
+            (0, 'Лево'),
+            (1, 'По центр'),
+            (2, 'Право'),
+            (4, 'По ширине')
         ])
     font_leading = models.PositiveSmallIntegerField(default=12)
     user_image_related = models.ForeignKey(
-        UserImage, related_name='%(app_label)s_%(class)s_user_image_related',
-        blank=True, on_delete=models.CASCADE, null=True
+        UserImage,
+        related_name='%(app_label)s_%(class)s_user_image_related',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
         )
 
     def __str__(self):

@@ -7,8 +7,7 @@
             {{ error }}
         </div>
     {% endif%}
-    Error: {{ error }}
-    <table class = "table table-bordered table-light">
+     <table class = "table table-bordered table-light">
         <form method="post" enctype="multipart/form-data" action="{% url 'home:user_fonts' %}">
             {% csrf_token %} 
               <tr>

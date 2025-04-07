@@ -743,7 +743,6 @@ def user_fonts(request):
                     new_item.created_by = context['current_user']
                     form.save()
                     form = context['ClassForm']()
-                    error = "Файл успешно загружен!"
                 else:
                     error = form.errors.as_text()
             else:
@@ -756,7 +755,6 @@ def user_fonts(request):
                 if form.is_valid():
                     form.save()
                     form = context['ClassForm']()
-                    error = "Файл успешно загружен!"
                 else:
                     error = form.errors.as_data()
         elif 'delete' in request.POST:
