@@ -64,20 +64,26 @@ class UserFont(TimeStamp):
 
 # -----------------------------------------------------------------------------------
 class Event(TimeStamp):
-    title = models.CharField('Название', max_length=200,
-                             default='Новое мероприятие')
+    title = models.CharField(
+        'Название',
+        max_length=200,
+        default='Новое мероприятие'
+        )
     print_title = models.TextField('Название для печати')
     description = models.TextField('Описание')
     from_date = models.DateField('Дата начала')
     to_date = models.DateField('Дата окончания')
-    team_registration = models.BooleanField('Регистрация команды',
-                                            default=True)
-    image = models.ForeignKey(UserImage,
-                              on_delete=models.CASCADE,
-                              related_name="event_cover",
-                              null=True,
-                              blank=True
-                              )
+    team_registration = models.BooleanField(
+        'Регистрация команды',
+        default=True
+        )
+    image = models.ForeignKey(
+        UserImage,
+        on_delete=models.CASCADE,
+        related_name="event_cover",
+        null=True,
+        blank=True
+        )
 
     def __str__(self):
         return self.title
@@ -244,14 +250,26 @@ class Profile(TimeStamp):
 
 # -----------------------------------------------------------------------------------
 class PrintTemplate(TimeStamp):
-    print_item = models.CharField(max_length=25, choices=[
-        ('event', 'Мероприятие'),
-        ('category', 'Категория'),
-        ('competency', 'Компетенция (номинация)'),
-        ('fio', 'Фамилия Имя Отчество'),
-        ('text', 'Текст участника'),
-        ('custom_text', 'Произвольный техт')
+    before_print_text = models.TextField(
+        'Текст до',
+        null=True,
+        blank=True
+        )
+    print_item = models.CharField(
+        max_length=25,
+        choices=[
+            ('event', 'Мероприятие'),
+            ('category', 'Категория'),
+            ('competency', 'Компетенция (номинация)'),
+            ('fio', 'Фамилия Имя Отчество'),
+            ('text', 'Текст участника'),
+            ('custom_text', 'Произвольный техт')
         ])
+    after_print_text = models.TextField(
+        'Текст после',
+        null=True,
+        blank=True
+        )
     start_x = models.PositiveSmallIntegerField()
     start_y = models.PositiveSmallIntegerField()
     delta_x = models.PositiveSmallIntegerField(default=100)
@@ -261,7 +279,7 @@ class PrintTemplate(TimeStamp):
         related_name="print_template_font",
         null=True,
         blank=True
-    )
+        )
     font_color = models.CharField(max_length=25, null=True)
     font_size = models.PositiveSmallIntegerField()
     font_alignment = models.PositiveSmallIntegerField(

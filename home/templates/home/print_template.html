@@ -7,7 +7,13 @@
 </h4>
 <table class = "table table-bordered table-light">
    <tr>
+      <td>Текст до</td><td>{{ form.before_print_text }}</td>
+   </tr>
+   <tr>
       <td>Поле печати</td><td>{{ form.print_item }}</td>
+   </tr>
+   <tr>
+      <td>Текст после</td><td>{{ form.after_print_text }}</td>
    </tr>
    <tr>
       <td>Х, мм </td><td>{{ form.start_x }}</td>
@@ -20,6 +26,9 @@
    </tr>
    <tr>
       <td>Высота текстового блока, мм </td><td>{{ form.delta_y }}</td>
+   </tr>
+   <tr>
+      <td>Шрифт</td><td>{{ form.user_font }}</td>
    </tr>
    <tr>
       <td>Цвет шрифта </td><td>{{ form.font_color }}</td>

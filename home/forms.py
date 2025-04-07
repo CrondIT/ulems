@@ -248,54 +248,72 @@ class ProfileForm(ModelForm):
 class PrintTemplateForm(ModelForm):
     class Meta:
         model = PrintTemplate
-        fields = ['print_item',
-                  'start_x',
-                  'start_y',
-                  'delta_x',
-                  'delta_y',
-                  'font_color',
-                  'font_size',
-                  'font_alignment',
-                  'font_leading'
-                  ]
+        fields = [
+            'before_print_text',
+            'print_item',
+            'after_print_text',
+            'start_x',
+            'start_y',
+            'delta_x',
+            'delta_y',
+            'user_font',
+            'font_color',
+            'font_size',
+            'font_alignment',
+            'font_leading'
+            ]
         widgets = {
-                    "print_item": Select(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Поле печати'
-                    }),
-                    "start_x": NumberInput(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Начало по Х'
-                    }),
-                    "start_y": NumberInput(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Начало по Y'
-                    }),
-                    "delta_x": NumberInput(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Высота текстового блока'
-                    }),
-                    "delta_y": NumberInput(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Ширина текстового блока'
-                    }),
-                    "font_color": TextInput(attrs={
-                     'type': 'color',
-                     'class': 'form-control',
-                     'placeholder': 'Цвет шрифта'
-                    }),
-                    "font_size": NumberInput(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Размер шрифта'
-                    }),
-                    "font_leading": NumberInput(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Межстрочный интервал'
-                    }),
-                    "font_alignment": Select(attrs={
-                     'class': 'form-control',
-                     'placeholder': 'Выравнивание текстового блока'
-                    })
+            "before_print_text": Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Наименование для печати'
+            }),
+            "print_item": Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Поле печати'
+            }),
+            "after_print_text": Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Наименование для печати'
+            }),
+            "start_x": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Начало по Х'
+             }),
+            "start_y": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Начало по Y'
+            }),
+            "delta_x": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Высота текстового блока'
+            }),
+            "delta_y": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ширина текстового блока'
+            }),
+            "user_font": Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Шрифт'
+            }),
+            "font_color": TextInput(attrs={
+                'type': 'color',
+                'class': 'form-control',
+                'placeholder': 'Цвет шрифта'
+            }),
+            "font_size": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Размер шрифта'
+            }),
+            "font_leading": NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Межстрочный интервал'
+            }),
+            "font_alignment": Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Выравнивание текстового блока'
+            })
             }
 
 
