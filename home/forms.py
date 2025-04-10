@@ -266,7 +266,7 @@ class PrintTemplateForm(ModelForm):
             "before_print_text": Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,
-                'placeholder': 'Наименование для печати'
+                'placeholder': 'Фиксированный текст до поля печати'
             }),
             "print_item": Select(attrs={
                 'class': 'form-control',
@@ -275,7 +275,7 @@ class PrintTemplateForm(ModelForm):
             "after_print_text": Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,
-                'placeholder': 'Наименование для печати'
+                'placeholder': 'Фиксированный текс после поля печати'
             }),
             "start_x": NumberInput(attrs={
                 'class': 'form-control',

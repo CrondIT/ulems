@@ -871,7 +871,16 @@ def print_templates(request):
                     case _:
                         print_text = "произвольный текст," \
                             "я еще ничего не придумал"
-
+                text = print_text
+                if print_template.before_print_text is not None:
+                    text = print_template.before_print_text + text
+                if print_template.after_print_text is not None:
+                    text = text + " " + print_template.after_print_text
+                if print_template.user_font is not None:
+                    user_font_file_path = print_template.user_font.font
+                else:
+                    user_font_file_path = "ARIAL.TTF"
+               
                 text_data.append({
                     "print_item": print_template.print_item,
                     "start_x": print_template.start_x,
@@ -882,14 +891,16 @@ def print_templates(request):
                     "font_size": print_template.font_size,
                     "font_leading": print_template.font_leading,
                     "font_alignment": print_template.font_alignment,
-                    "text": print_text
+                    "text": text,
+                    'user_font_file_path': user_font_file_path
                                 })
 
             page_data['page_width'] = context['user_image'].width
             page_data['page_height'] = context['user_image'].height
             page_data['image'] = img
+            page_data['font'] = user_font_file_path
             context['error'] = page_data
-            makepdf.make_pdf3(page_data, text_data)
+            makepdf.make_pdf(page_data, text_data)
         elif 'cancel' in request.POST:
             pass
         else:
