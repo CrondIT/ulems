@@ -45,7 +45,9 @@ def make_pdf(page_data, text_data):
             textColor=td['font_color'],
             alignment=td['font_alignment'],
             justifyLastLine=1,
-            wordWrap=True
+            wordWrap=True,
+            borderColor=(0, 0, 250),
+            borderWidth=0.5
         )
 
         current_paragraph = Paragraph(
@@ -53,9 +55,12 @@ def make_pdf(page_data, text_data):
             current_style
         )
 
+        if td['delta_y'] > td['start_y']:
+            td['delta_y'] = td['start_y']
+
         current_frame = Frame(
             td['start_x'] * mm,
-            td['start_y'] * mm,
+            (td['start_y'] - td['delta_y']) * mm,
             td['delta_x'] * mm,
             td['delta_y'] * mm,
             showBoundary=0

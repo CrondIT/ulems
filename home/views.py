@@ -724,7 +724,6 @@ def user_fonts(request):
     context = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Шрифты'
-    # context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_font
     context['model'] = UserFont.objects.filter(
@@ -880,7 +879,7 @@ def print_templates(request):
                     user_font_file_path = print_template.user_font.font
                 else:
                     user_font_file_path = "ARIAL.TTF"
-               
+
                 text_data.append({
                     "print_item": print_template.print_item,
                     "start_x": print_template.start_x,
