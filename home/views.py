@@ -18,6 +18,9 @@ import csv
 
 from django.db.models import Count
 
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import mm
+
 
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
@@ -426,9 +429,71 @@ def participants(request):
             context['all_selected'] = False
         elif 'print_certificate' in request.POST:
             # define page size and canva
+            page_width = 210 * mm
+            page_height = 297 * mm
+            page_size = (page_width, page_height)
+            canva = canvas.Canvas("helloworld.pdf", page_size)
             for participant in context['model']:
-                print_template = participant.category.certificate.print_template
-                pass
+                user_image = participant.category.certificate
+                print_templates = PrintTemplate.objects.filter(
+                    user_image_related=user_image
+                    )
+                page_data = {}
+                text_data = []
+                for print_template in print_templates:
+                   # img = print_template.user_image_related.image
+                    match print_template.print_item:
+                        case "fio":
+                            print_text = f" {participant.first_name}  {
+                                            participant.middle_name} {
+                                            participant.last_name}"
+                        case "category":
+                            print_text = participant.category.print_title
+                        case "competency":
+                            print_text = participant.competency.print_title
+                        case "event":
+                            print_text = participant.event_related.print_title
+                        case "organization":
+                            print_text = participant.organization
+                        case "job_title":
+                            print_text = participant.job_title
+                        case "text":
+                            print_text = participant.text
+                        case _:
+                            print_text = "произвольный текст," \
+                                        "я еще ничего не придумал"
+                    text = print_text
+                    if print_template.before_print_text is not None:
+                        text = print_template.before_print_text + text
+                    if print_template.after_print_text is not None:
+                        text = text + " " + print_template.after_print_text
+                    if print_template.user_font is not None:
+                        user_font_file_path = print_template.user_font.font
+                    else:
+                        user_font_file_path = "ARIAL.TTF"
+
+                    text_data.append({
+                        "start_x": print_template.start_x,
+                        "start_y": print_template.start_y,
+                        "delta_x": print_template.delta_x,
+                        "delta_y": print_template.delta_y,
+                        "font_color": print_template.font_color,
+                        "font_size": print_template.font_size,
+                        "font_leading": print_template.font_leading,
+                        "font_alignment": print_template.font_alignment,
+                        "text": text,
+                        "user_font_file_path": user_font_file_path
+                        })
+
+                page_data['page_width'] = user_image.width
+                page_data['page_height'] = user_image.height
+                page_data['image'] = user_image.image
+                context['error'] = page_data
+                
+                canva = makepdf.make_pdf2(page_data, text_data, canva)
+                
+            canva.save()
+
         elif 'export' in request.POST:
             data = {}
             with open("participants.csv", 'w', encoding='utf-8') as csvfile:
@@ -880,6 +945,12 @@ def print_templates(request):
                         print_text = participant.competency.print_title
                     case "event":
                         print_text = participant.event_related.print_title
+                    case "organization":
+                        print_text = participant.organization    
+                    case "job_title":
+                        print_text = participant.job_title
+                    case "text":
+                        print_text = participant.text
                     case _:
                         print_text = "произвольный текст," \
                                         "я еще ничего не придумал"

@@ -285,6 +285,8 @@ class PrintTemplate(TimeStamp):
             ('category', 'Категория'),
             ('competency', 'Компетенция (номинация)'),
             ('fio', 'Фамилия Имя Отчество'),
+            ('organization', 'Организация'),
+            ('job_title', 'Должность'),
             ('text', 'Текст участника'),
             ('custom_text', 'Произвольный техт')
         ])

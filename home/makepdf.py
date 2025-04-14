@@ -71,12 +71,9 @@ def make_pdf(page_data, text_data):
     canva.save()
 
 
-def make_pdf2(page_data, text_data):
+def make_pdf2(page_data, text_data, canva):
     page_width = page_data['page_width'] * mm
     page_height = page_data['page_height'] * mm
-    page_size = (page_width, page_height)
-    canva = canvas.Canvas("helloworld.pdf", page_size)
-
     # Загрузка фонового изображения
     image = page_data['image']
     img = ImageReader(image)
@@ -104,9 +101,7 @@ def make_pdf2(page_data, text_data):
             textColor=td['font_color'],
             alignment=td['font_alignment'],
             justifyLastLine=1,
-            wordWrap=True,
-            borderColor=(0, 0, 250),
-            borderWidth=0.5
+            wordWrap=True
         )
 
         current_paragraph = Paragraph(
@@ -125,6 +120,5 @@ def make_pdf2(page_data, text_data):
             showBoundary=0
         )
         current_frame.addFromList([current_paragraph], canva)
-
     canva.showPage()
     return canva
