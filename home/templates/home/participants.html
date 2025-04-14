@@ -13,6 +13,7 @@
                 <input type="file" name="file" class="btn btn-outline-success btn-sm">
                 <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button> 
                 <button class="btn btn-outline-success btn-sm" name="export" formnovalidate style="margin:7px">Экспорт в csv</button> 
+                <button class="btn btn-outline-success btn-sm" name="print_certificate" formnovalidate style="margin:7px">Печать сертификат</button> 
             <thead>       
                 <tr>
                     <th>№</th>
@@ -30,6 +31,14 @@
                     <th>
                         Организация
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="organization"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Должность
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="job_title"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Доклад
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="text"><i class='{{ sort_button }}'></i></button>
                     </th>
                     <th>
                         Категория
@@ -83,6 +92,8 @@
                             <td>{{item.middle_name}}</td>
                             <td>{{item.last_name}}</td>
                             <td>{{item.organization}}</td>
+                            <td>{{item.job_title}}</td>
+                            <td>{{item.job_text}}</td>
                             <td>{{item.category}}</td>
                             <td>{{item.competency}}</td>
                             <td>

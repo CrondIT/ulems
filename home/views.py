@@ -424,6 +424,11 @@ def participants(request):
         elif 'deselect_all' in request.POST:
             error = "all selected pressed"
             context['all_selected'] = False
+        elif 'print_certificate' in request.POST:
+            # define page size and canva
+            for participant in context['model']:
+                print_template = participant.category.certificate.print_template
+                pass
         elif 'export' in request.POST:
             data = {}
             with open("participants.csv", 'w', encoding='utf-8') as csvfile:
@@ -434,6 +439,8 @@ def participants(request):
                         'middle_name',
                         'last_name',
                         'organization',
+                        'job_title',
+                        'text',
                         'category',
                         'competency',
                         'award',
@@ -450,6 +457,8 @@ def participants(request):
                         'middle_name': item.middle_name,
                         'last_name': item.last_name,
                         'organization': item.organization,
+                        'job_title': item.job_title,
+                        'text': item.text,
                         'category': item.category,
                         'competency': item.competency,
                         'award': item.award,
@@ -479,6 +488,8 @@ def participants(request):
                             'middle_name': row['middle_name'],
                             'last_name': row['last_name'],
                             'organization': row['organization'],
+                            'job_title': row['job_title'],
+                            'text': row['text'],
                             'category': row['category'],
                             'competency': row['competency'],
                             'award': row['award']
@@ -512,6 +523,8 @@ def participants(request):
                         middle_name=item['middle_name'],
                         last_name=item['last_name'],
                         organization=item['organization'],
+                        job_title=item['job_title'],
+                        text=item['text'],
                         created_by=context['current_user'],
                         event_related=context['current_event'],
                         category=Category.objects.get(
@@ -859,8 +872,8 @@ def print_templates(request):
                 match print_template.print_item:
                     case "fio":
                         print_text = f" {participant.first_name}  {
-                                   participant.middle_name} {
-                                   participant.last_name}"
+                                            participant.middle_name} {
+                                            participant.last_name}"
                     case "category":
                         print_text = participant.category.print_title
                     case "competency":
@@ -869,7 +882,7 @@ def print_templates(request):
                         print_text = participant.event_related.print_title
                     case _:
                         print_text = "произвольный текст," \
-                            "я еще ничего не придумал"
+                                        "я еще ничего не придумал"
                 text = print_text
                 if print_template.before_print_text is not None:
                     text = print_template.before_print_text + text
@@ -891,15 +904,17 @@ def print_templates(request):
                     "font_leading": print_template.font_leading,
                     "font_alignment": print_template.font_alignment,
                     "text": text,
-                    'user_font_file_path': user_font_file_path
-                                })
+                    "user_font_file_path": user_font_file_path
+                    })
 
             page_data['page_width'] = context['user_image'].width
             page_data['page_height'] = context['user_image'].height
             page_data['image'] = img
             page_data['font'] = user_font_file_path
             context['error'] = page_data
+
             makepdf.make_pdf(page_data, text_data)
+
         elif 'cancel' in request.POST:
             pass
         else:

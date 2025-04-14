@@ -172,13 +172,36 @@ class Award(TimeStamp, EventRelated):
 
 # -----------------------------------------------------------------------------------
 class Participant(TimeStamp, EventRelated):
-    first_name = models.CharField("Фамилия",
-                                  max_length=100,
-                                  help_text="До 100 символов",
-                                  )
+    first_name = models.CharField(
+        "Фамилия",
+        max_length=100,
+        help_text="До 100 символов",
+        )
     middle_name = models.CharField("Имя", max_length=100)
-    last_name = models.CharField("Отчество", max_length=100)
-    organization = models.CharField("Организация", max_length=100)
+    last_name = models.CharField(
+        "Отчество",
+        max_length=100,
+        null=True,
+        blank=True
+        )
+    organization = models.CharField(
+        "Организация",
+        null=True,
+        blank=True,
+        max_length=200
+        )
+    job_title = models.CharField(
+        "Должность",
+        max_length=200,
+        null=True,
+        blank=True
+        )
+    text = models.CharField(
+        "Тема доклада",
+        max_length=250,
+        null=True,
+        blank=True
+        )
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,
         related_name="participants",

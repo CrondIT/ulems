@@ -158,7 +158,7 @@ class ParticipantForm(ModelForm):
     class Meta:
         model = Participant
         fields = ['first_name', 'middle_name', 'last_name', 'organization',
-                  'category', 'competency', 'award']
+                  'job_title', 'text', 'category', 'competency', 'award']
         widgets = {
                 "first_name": TextInput(attrs={
                     'class': 'form-control',
@@ -175,6 +175,14 @@ class ParticipantForm(ModelForm):
                 "organization": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Организация'
+                }),
+                "job_title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Должность'
+                }),
+                "text": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Доклад'
                 }),
                 "category": Select(attrs={
                     'class': 'form-control',
