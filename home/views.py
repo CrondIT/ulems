@@ -56,7 +56,8 @@ def is_sort_exist(sort_str, saved_str):
 
 # ----------------------------------------------------------------------------
 def check_textblock_xy(
-        page_width, page_height, start_x, start_y, delta_x, delta_y):
+        page_width, page_height, start_x, start_y, delta_x, delta_y
+        ):
     """
         Remove - at the begin of the string if - exist
         or add - if it not exist
@@ -123,7 +124,7 @@ def events(request):
     context['model'] = (Event.objects.filter(
         created_by=context['current_user']).annotate(
             count=Count('home_participant_event_related'))
-        )
+        ).order_by(context['sort'])
     context['ClassForm'] = EventForm
     form = context['ClassForm'](
         current_user=context['current_user']

@@ -63,7 +63,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>   
+                            </div> 
+                              <!-- Modal -->
+                            <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ item.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-center" id="editModalLabel{{ item.id }}">Удаление мероприятия: "{{ item.title }}"</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            
+                                                {% include 'home/event.html' %}
+                                        
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger" formnovalidate name="save" value="{{ item.id }}">Удалить</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>     
                             <tr>
                                 <td>{{item.title}}</td>
                                 <td>{{item.print_title|linebreaks}}</td>
@@ -77,7 +97,7 @@
                                     <p>
                                         <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
                                         <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
-                                        <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие"><i class='fa fa-pencil'></i></button>
+                                        <button type="button" class="btn btn-outline-success btn-sm" name="edt" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие" data-bs-toggle="modal" data-bs-target="#editModal{{ item.id }}"> Edit </button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку" data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
                                     </p>    
                                 </td>
@@ -88,9 +108,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-                {% include 'home/event.html' %}
-            </div>
+           
+           
         </div>
     </form> 
 {% endblock %}
