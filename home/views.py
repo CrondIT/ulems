@@ -402,6 +402,7 @@ def participants(request):
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
             edit_item = context['model'].get(id=pk)
+            context['id'] = pk
             if context['current_competency'] is not None:
                 context['current_competency'] = Competency.objects.get(
                     id=edit_item.competency.id)
@@ -441,7 +442,6 @@ def participants(request):
                 page_data = {}
                 text_data = []
                 for print_template in print_templates:
-                   # img = print_template.user_image_related.image
                     match print_template.print_item:
                         case "fio":
                             print_text = f" {participant.first_name}  {
@@ -489,11 +489,8 @@ def participants(request):
                 page_data['page_height'] = user_image.height
                 page_data['image'] = user_image.image
                 context['error'] = page_data
-                
                 canva = makepdf.make_pdf2(page_data, text_data, canva)
-                
             canva.save()
-
         elif 'export' in request.POST:
             data = {}
             with open("participants.csv", 'w', encoding='utf-8') as csvfile:
@@ -946,7 +943,7 @@ def print_templates(request):
                     case "event":
                         print_text = participant.event_related.print_title
                     case "organization":
-                        print_text = participant.organization    
+                        print_text = participant.organization
                     case "job_title":
                         print_text = participant.job_title
                     case "text":
