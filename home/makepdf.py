@@ -45,9 +45,7 @@ def make_pdf(page_data, text_data):
             textColor=td['font_color'],
             alignment=td['font_alignment'],
             justifyLastLine=1,
-            wordWrap=True,
-            borderColor=(0, 0, 250),
-            borderWidth=0.5
+            wordWrap=True
         )
 
         current_paragraph = Paragraph(
