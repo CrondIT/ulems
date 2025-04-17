@@ -69,10 +69,6 @@
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
                     </th>
                     <th>
-                        Мероприятие 
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
                         Примечания 
                         <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
                         <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="Отменить выделение"><i class='fa fa-square-o'></i></button>
@@ -105,7 +101,6 @@
                             <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
                             <td>{{item.created_by}}</td>
                             <td>{{item.updated_by}}</td>
-                            <td>{{item.event_related}}</td>
                             <td> 
                                 {% if all_selected %}
                                     <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" checked>

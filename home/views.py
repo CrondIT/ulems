@@ -116,6 +116,7 @@ def events(request):
     """
     error = ""
     context = {}
+    context['form'] = EventForm(current_user=request.user)
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Мероприятия'
     context['current_event'] = request.user.profile.current_event
