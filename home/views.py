@@ -142,6 +142,7 @@ def events(request):
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
             else:
+                context['id'] = pk
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
                 form = context["ClassForm"](
@@ -150,8 +151,12 @@ def events(request):
                     instance=save_item,
                     current_user=context['current_user']
                     )
-            form.save()
-            form = context['ClassForm'](current_user=context['current_user'])
+            if form.is_valid():
+                form.save()
+                form = context['ClassForm'](
+                    current_user=context['current_user']
+                    )
+                return redirect('home:events')
         elif 'select' in request.POST:
             pk = request.POST.get("select")
             select_item = context['model'].get(id=pk)

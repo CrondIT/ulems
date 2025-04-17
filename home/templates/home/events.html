@@ -16,7 +16,7 @@
         <i class="fa fa-plus"></i> Добавить
     </button>
 
-      <form method="POST" action="{% url 'home:events' %}">
+    <form method="POST" action="{% url 'home:events' %}">
         {% csrf_token %} 
         <div style="display: flex;">
             <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
@@ -53,7 +53,7 @@
                     <tbody class="table-group-divider"> 
                         {% for item in model %}
                           
-                        <!-- Modal -->
+                            <!-- Modal -->
                             <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -72,29 +72,26 @@
                                 </div>
                             </div> 
                             
-                            <!-- Modal -->
+                            <!-- Модальное окно редактирования -->
                             <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title text-center" >Редактировать: "{{ item.title }}"</h5>
+                                            <h5 class="modal-title">Редактировать {{ item.title }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form method="POST" action="{% url 'home:events' %}">
-                                            {% csrf_token %}
-                                            <div class="modal-body">
-                                            
-                                                {{ form.as_p }}
                                         
-                                            </div>    
+                                            <div class="modal-body">
+                                                {{ form }}
+                                            </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary" formnovalidate name="save" value="{{ item.id }}">Сохранить</button>
+                                                <button type="submit" class="btn btn-primary" name="save" value="{{ item.id }}">Сохранить</button>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                                             </div>
-                                        </form>
+                                        
                                     </div>
                                 </div>
-                            </div>     
+                            </div>
                             <tr>
                                 <td>{{item.title}}</td>
                                 <td>{{item.print_title|linebreaks}}</td>
@@ -111,23 +108,47 @@
                                             data-bs-toggle="modal" 
                                             data-bs-target="#editModal{{ item.id }}"
                                             title="Редактировать">
-                                        <i class="fa fa-edit"></i>
+                                            <i class="fa fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-outline-success btn-sm" name="info"  value="{{ item.id }}" formnovalidate title="Подробнее"><i class='fa fa-info'></i></button>
-                                        <button class="btn btn-outline-success btn-sm" name="select" value="{{ item.id }}" formnovalidate title="Выбрать это мероприятие"><i class='fa fa-check'></i></button>
-                                        <button type="button" class="btn btn-outline-success btn-sm" name="edt" value="{{ item.id }}" formnovalidate title="Редактировать это мероприятие" data-bs-toggle="modal" data-bs-target="#editModal{{ item.id }}"> Edit </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку" data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
+                                        <button
+                                            class="btn btn-outline-success btn-sm"
+                                            name="info"
+                                            value="{{ item.id }}"
+                                            formnovalidate
+                                            title="Подробнее">
+                                            <i class='fa fa-info'></i>
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm"
+                                            name="select" value="{{ item.id }}"
+                                            formnovalidate
+                                            title="Выбрать это мероприятие">
+                                            <i class='fa fa-check'></i>
+                                        </button>
+                                        <button type="button"
+                                            class="btn btn-outline-success btn-sm"
+                                            name="edt" value="{{ item.id }}"
+                                            formnovalidate
+                                            title="Редактировать это мероприятие"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editModal{{ item.id }}">
+                                            Edit
+                                         </button>
+                                        <button type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                            name="del"
+                                            value="{{ item.id }}"
+                                            formnovalidate title="Удалить текущую строку"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal{{ item.id }}">
+                                            Del
+                                        </button>
                                     </p>    
                                 </td>
                             </tr>
-                        {% empty %}   
-                            Нет мероприятий
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-           
-           
         </div>
     </form> 
 
