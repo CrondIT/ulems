@@ -21,6 +21,14 @@ from django.db.models import Count
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
 
+from django.template.defaulttags import register
+
+
+# ----------------------------------------------------------------------------
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
 
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
@@ -116,20 +124,31 @@ def events(request):
     """
     error = ""
     context = {}
-    context['form'] = EventForm(current_user=request.user)
+    context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Мероприятия'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_event
-    context['model'] = (Event.objects.filter(
-        created_by=context['current_user']).annotate(
-            count=Count('home_participant_event_related'))
-        ).order_by(context['sort'])
+    context['model'] = Event.objects.filter(
+        created_by=context['current_user'])
+    context['model'] = context['model'].order_by(
+        context['sort']).annotate(
+        count=Count('home_participant_event_related')
+        )
     context['ClassForm'] = EventForm
-    form = context['ClassForm'](
+    context['form'] = context['ClassForm'](
         current_user=context['current_user']
         )
+    form = context['form']
+
+    # Генерация форм для каждого объекта
+    for item in context['model']:
+        context['edit_forms'][item.id] = EventForm(
+            instance=item,
+            current_user=request.user
+        )
+
     if request.method == "POST":
         if 'save' in request.POST:
             pk = request.POST.get("save")
@@ -157,6 +176,8 @@ def events(request):
                     current_user=context['current_user']
                     )
                 return redirect('home:events')
+            else:
+                error = "Форма заполнена неверно!"
         elif 'select' in request.POST:
             pk = request.POST.get("select")
             select_item = context['model'].get(id=pk)
@@ -166,17 +187,11 @@ def events(request):
         elif 'info' in request.POST:
             pk = request.POST.get("info")
             return redirect('home:view_event', pk)
-        elif 'edit' in request.POST:
-            pk = request.POST.get("edit")
-            edit_item = context['model'].get(id=pk)
-            context['id'] = pk
-            form = context['ClassForm'](
-                current_user=context['current_user'],
-                instance=edit_item)
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)
             delete_item.delete()
+            return redirect('home:events')
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
@@ -189,6 +204,7 @@ def events(request):
                 context['sort'])
         else:
             pass
+
     context['error'] = error
     context['form'] = form
     return render(request, "home/events.html", context)
@@ -287,7 +303,6 @@ def categories(request):
         count=Count('participants')
         )
     context['ClassForm'] = CategoryForm
-
     context['form'] = context['ClassForm'](
         current_user=context['current_user'])
     form = context['form']

@@ -62,8 +62,20 @@
                                 Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }}. </br>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger" formnovalidate name="delete" value="{{ item.id }}">Удалить</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                <button 
+                                    type="submit"
+                                    class="btn btn-danger"
+                                    formnovalidate
+                                    name="delete"
+                                    value="{{ item.id }}">
+                                    Удалить
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                    Отмена
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -81,7 +93,17 @@
                     <td>{{item.count}}</td>
                     <td> 
                         <button  class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" ><i class='fa fa-pencil'></i></button>
-                        <button  type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            name="del"
+                            value="{{ item.id }}"
+                            formnovalidate
+                            title="Удалить текущую строку."
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal{{ item.id }}">
+                            Del
+                        </button>
                     </td> 
                 </tr>
                 {% empty %}    
