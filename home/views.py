@@ -30,6 +30,16 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 
+def sort_button_pressed(sort_str):
+    if sort_str[0] == '-':
+        sort_button = 'fa fa-sort-desc'
+        sort_text = sort_str[1:]
+    else:
+        sort_button = 'fa fa-sort-asc'
+        sort_text = sort_str
+    return sort_button, sort_text
+
+
 # ----------------------------------------------------------------------------
 def sort_reverse(sort_str):
     """
@@ -144,9 +154,9 @@ def events(request):
 
     # Генерация форм для каждого объекта
     for item in context['model']:
-        context['edit_forms'][item.id] = EventForm(
+        context['edit_forms'][item.id] = context['ClassForm'](
             instance=item,
-            current_user=request.user
+            current_user=context['current_user']
         )
 
     if request.method == "POST":
@@ -223,73 +233,13 @@ def view_event(request, event_id):
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
-def add_event(request):
-    """ Add new event. """
-    context = {}
-    error = ""
-    context['current_event'] = request.user.profile.current_event
-    context['current_user'] = request.user
-    form = EventForm(
-        request.POST,
-        request.FILES,
-        current_user=context['current_user'])
-    if request.method == "POST":
-        if form.is_valid():
-            usr = form.save(commit=False)
-            usr.created_by = context['current_user']
-            form.save()
-            return redirect('home:events')
-        else:
-            error = form.errors
-
-    context['form'] = form
-    context['error'] = error
-
-    return render(request, "home/event/add_event.html", context)
-
-
-# ----------------------------------------------------------------------------
-@login_required(login_url="login")
-def edit_event(request, event_id):
-    """ Edit event. """
-    errors = "no error "
-    context = {}
-    context['current_event'] = request.user.profile.current_event
-    context['current_user'] = request.user
-    edit_item = Event.objects.get(id=event_id)
-    form = EventForm(
-        instance=edit_item,
-        current_user=context['current_user'])
-    if request.method == "POST":
-        form = EventForm(
-            request.POST,
-            request.FILES,
-            instance=edit_item,
-            current_user=context['current_user'])
-        if form.is_valid():
-            usr = form.save(commit=False)
-            usr.updated_by = request.user
-            form.save()
-            errors = errors + " save"
-            return redirect('home:events')
-        else:
-            errors = errors + "Error"
-
-    context['form'] = form
-    context['errors'] = errors
-    context['item'] = edit_item
-
-    return render(request, "home/event/edit_event.html", context)
-
-
-# ----------------------------------------------------------------------------
-@login_required(login_url="login")
 def categories(request):
     """ View, add, edit and delete categories in table.
         Filter for current user and selected event.
     """
     error = ""
     context = {}
+    context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Категории'
     context['current_event'] = request.user.profile.current_event
@@ -306,52 +256,58 @@ def categories(request):
     context['form'] = context['ClassForm'](
         current_user=context['current_user'])
     form = context['form']
-    if 'save' in request.POST:
-        pk = request.POST.get('save')
-        if not pk:
-            form = context['ClassForm'](
-                request.POST,
-                current_user=context['current_user'])
-            new_item = form.save(commit=False)
-            new_item.created_by = context['current_user']
-            new_item.event_related = context['current_event']
+    # Генерация форм для каждого объекта
+    for item in context['model']:
+        context['edit_forms'][item.id] = context['ClassForm'](
+            instance=item,
+            current_user=request.user
+        )
+    if request.method == "POST":
+        if 'save' in request.POST:
+            pk = request.POST.get('save')
+            if not pk:
+                form = context['ClassForm'](
+                    request.POST,
+                    current_user=context['current_user'])
+                new_item = form.save(commit=False)
+                new_item.created_by = context['current_user']
+                new_item.event_related = context['current_event']
+            else:
+                save_item = context['model'].get(id=pk)
+                save_item.updated_by = context['current_user']
+                form = context['ClassForm'](
+                    request.POST,
+                    instance=save_item,
+                    current_user=context['current_user'])
+            if form.is_valid():
+                form.save()
+                form = context['ClassForm'](
+                    current_user=context['current_user']
+                    )
+                return redirect('home:categories')
+            else:
+                error = "Форма заполнена неверно!"
+        elif 'delete' in request.POST:
+            pk = request.POST.get('delete')
+            delete_item = context['model'].get(id=pk)
+            delete_item.delete()
+            return redirect('home:categories')
+        elif 'sort' in request.POST:
+            sort_str = request.POST.get('sort')
+            if is_sort_exist(sort_str, context['sort']):
+                context['sort'] = sort_reverse(context['sort'])
+            else:
+                context['sort'] = sort_str
+            request.user.profile.sort_category = context['sort']
+            request.user.save()
+            context['model'] = context['model'].order_by(
+                context['sort'])
         else:
-            save_item = context['model'].get(id=pk)
-            save_item.updated_by = context['current_user']
-            form = context['ClassForm'](
-                request.POST,
-                instance=save_item,
-                current_user=context['current_user'])
-        form.save()
-        form = context['ClassForm'](
-            current_user=context['current_user'])
-    elif 'delete' in request.POST:
-        pk = request.POST.get('delete')
-        delete_item = context['model'].get(id=pk)
-        delete_item.delete()
-    elif 'edit' in request.POST:
-        pk = request.POST.get('edit')
-        edit_item = context['model'].get(id=pk)
-        context['id'] = pk
-        form = context['ClassForm'](
-            instance=edit_item,
-            current_user=context['current_user'])
-    elif 'sort' in request.POST:
-        sort_str = request.POST.get('sort')
-        if is_sort_exist(sort_str, context['sort']):
-            context['sort'] = sort_reverse(context['sort'])
-        else:
-            context['sort'] = sort_str
-        request.user.profile.sort_category = context['sort']
-        request.user.save()
-        context['model'] = context['model'].order_by(
-            context['sort'])
-    else:
-        pass
-
+            pass
     context['form'] = form
     context['error'] = error
-
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
     return render(request, "home/categories.html", context)
 
 

@@ -3,114 +3,254 @@
 {% block body %}
     <h4>Категории участников мероприятия: {{ current_event }}</h4>
 
-    <table class = "table table-hover table-bordered table-light">
-        <form method="POST" action="{% url 'home:categories' %}">
-            {% csrf_token %} 
-           
+    <!-- Кнопка добавления новой категории -->
+    <button class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+        <i class="fa fa-plus"></i> Добавить
+    </button>
+        
+    <form method="POST" action="{% url 'home:categories' %}">
+        {% csrf_token %} 
+        <table class = "table table-hover table-bordered table-light">
             <thead>   
                 <tr>
                     <th>№</th>
                     <th>
                         Наименование
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
-                    </th>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="title">
+                            {% if sort_text == 'title' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
+                   </th>
                     <th> Наименование для печати </th>
                     <th>
                         Бэдж
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="badge"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="badge">
+                            {% if sort_text == 'badge' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Сертификат
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="certificate"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="certificate">
+                            {% if sort_text == 'certificate' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Дата созд.
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="created_date">
+                            {% if sort_text == 'created_date' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Дата измен.
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                        Дата изм.
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="updated_date">
+                            {% if sort_text == 'updated_date' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Создал
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="created_by">
+                            {% if sort_text == 'created_by' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Изменил
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="updated_by">
+                            {% if sort_text == 'updated_by' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>Уч.
                         <i class="fa fa-info-circle"  aria-hidden="false" title="Количество участников по каждой категории" style="color: blue"></i>
                     </th>
                     <th>Примечания</th>
                 </tr>
-                <tr>
-                    {% include 'home/category.html' %}
-                </tr>
             </thead>
             <tbody class="table-group-divider">
-            {% for item in model %}
-                <!-- Modal -->
-                <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }}. </br>
-                            </div>
-                            <div class="modal-footer">
-                                <button 
-                                    type="submit"
-                                    class="btn btn-danger"
-                                    formnovalidate
-                                    name="delete"
-                                    value="{{ item.id }}">
-                                    Удалить
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    data-bs-dismiss="modal">
-                                    Отмена
-                                </button>
+                {% for item in model %}
+                    <!-- Modal delete-->
+                    <div class="modal fade" id="deleteModal{{ item.id }}" 
+                        tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }}. </br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button 
+                                        type="submit"
+                                        class="btn btn-danger"
+                                        formnovalidate
+                                        name="delete"
+                                        value="{{ item.id }}">
+                                        Удалить
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal">
+                                        Отмена
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>   
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{item.title}}</td>
-                    <td>{{item.print_title|linebreaks}}</td>
-                    <td>{{item.badge}}</td>
-                    <td>{{item.certificate}}</td>
-                    <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                    <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                    <td>{{item.created_by}}</td>
-                    <td>{{item.updated_by}}</td>
-                    <td>{{item.count}}</td>
-                    <td> 
-                        <button  class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" ><i class='fa fa-pencil'></i></button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-danger btn-sm"
-                            name="del"
-                            value="{{ item.id }}"
-                            formnovalidate
-                            title="Удалить текущую строку."
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteModal{{ item.id }}">
-                            Del
-                        </button>
-                    </td> 
-                </tr>
-                {% empty %}    
-                    Нет категорий
-            {% endfor %}
-        </form>
-        <tbody> 
-    </table>
-
+                    </div>  
+                    <!-- Модальное окно редактирования -->
+                    <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Редактировать: Item_id- {{ item_id }} Item.id- {{ item.id }} {{ item.title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="POST" action="{% url 'home:categories' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <div class="modal-body">
+                                        {{ edit_forms|get_item:item.id }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            name="save"  
+                                            value="{{ item.id }}">
+                                            Сохранить
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                            Отмена
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div> 
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.print_title|linebreaks}}</td>
+                        <td>{{item.badge}}</td>
+                        <td>{{item.certificate}}</td>
+                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.created_by}}</td>
+                        <td>{{item.updated_by}}</td>
+                        <td>{{item.count}}</td>
+                        <td> 
+                            <button  
+                                type="button"
+                                class="btn btn-outline-success btn-sm"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editModal{{ item.id }}"
+                                formnovalidate
+                                title="Редактировать текущую строку" >
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-outline-danger btn-sm"
+                                value="{{ item.id }}"
+                                formnovalidate
+                                title="Удалить текущую строку."
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal{{ item.id }}">
+                                Del
+                            </button>
+                        </td> 
+                    </tr>
+                {% endfor %}
+            <tbody> 
+        </table>
+    </form>    
+  <!-- Модальное окно добавления -->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить категорию участника</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'home:categories' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button 
+                        type="submit"
+                        class="btn btn-primary"
+                        name="save">
+                        Создать
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Отмена
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

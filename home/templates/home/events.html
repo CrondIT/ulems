@@ -54,7 +54,6 @@
                     </thead>
                     <tbody class="table-group-divider"> 
                         {% for item in model %}
-                          
                             <!-- Modal  delete event -->
                             <div class="modal fade" id="deleteModal{{ item.id }}" 
                                 tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
@@ -88,7 +87,6 @@
                                     </div>
                                 </div>
                             </div> 
-                            
                             <!-- Модальное окно редактирования -->
                             <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -97,6 +95,8 @@
                                             <h5 class="modal-title">Редактировать: {{ item.title }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
+                                        <form method="POST" action="{% url 'home:events' %}">
+                                            {% csrf_token %}
                                             <input type="hidden" name="item_id" value="{{ item.id }}">
                                             <div class="modal-body">
                                                 {{ edit_forms|get_item:item.id }}
@@ -115,6 +115,7 @@
                                                     Отмена
                                                 </button>
                                             </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +131,8 @@
                                 <td>{{item.count}}</td>
                                 <td> 
                                     <p>
-                                        <button type="button" 
+                                        <button 
+                                            type="button" 
                                             class="btn btn-outline-success btn-sm" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#editModal{{ item.id }}"
@@ -146,13 +148,15 @@
                                             title="Подробнее">
                                             <i class='fa fa-info'></i>
                                         </button>
-                                        <button class="btn btn-outline-success btn-sm"
+                                        <button 
+                                            class="btn btn-outline-success btn-sm"
                                             name="select" value="{{ item.id }}"
                                             formnovalidate
                                             title="Выбрать это мероприятие">
                                             <i class='fa fa-check'></i>
                                         </button>
-                                        <button type="button"
+                                        <button 
+                                            type="button"
                                             class="btn btn-outline-danger btn-sm"
                                             name="del"
                                             value="{{ item.id }}"
