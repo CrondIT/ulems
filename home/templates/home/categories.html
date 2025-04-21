@@ -4,7 +4,7 @@
     <h4>Категории участников мероприятия: {{ current_event }}</h4>
 
     <!-- Кнопка добавления новой категории -->
-    <button class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
         <i class="fa fa-plus"></i> Добавить
     </button>
         
@@ -228,7 +228,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Добавить категорию участника</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button
+                    type="button" 
+                    class="btn-close" 
+                    data-bs-dismiss="modal" 
+                    aria-label="Close">
+                </button>
             </div>
             <form method="POST" action="{% url 'home:categories' %}">
                 {% csrf_token %}

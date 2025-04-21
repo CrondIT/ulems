@@ -30,12 +30,17 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 
+# ----------------------------------------------------------------------------
 def sort_button_pressed(sort_str):
+    """
+        Choose rigth font awesome icon
+        for ascent or descent sorting button
+    """
     if sort_str[0] == '-':
-        sort_button = 'fa fa-sort-desc'
+        sort_button = 'fa fa-sort-amount-desc'
         sort_text = sort_str[1:]
     else:
-        sort_button = 'fa fa-sort-asc'
+        sort_button = 'fa fa-sort-amount-asc'
         sort_text = sort_str
     return sort_button, sort_text
 
@@ -217,6 +222,8 @@ def events(request):
 
     context['error'] = error
     context['form'] = form
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
     return render(request, "home/events.html", context)
 
 
