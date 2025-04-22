@@ -3,9 +3,14 @@
 {% block body %}
     <h4>Награды (дипломы) компетенций: {{ current_event}}</h4>
 
-    <table class = "table table-hover table-bordered table-light">
-        <form method="POST" action="{% url 'home:awards' %}">
-            {% csrf_token %} 
+    <!-- Кнопка добавления новой категории -->
+    <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+        <i class="fa fa-plus"></i> Добавить
+    </button>
+  
+    <form method="POST" action="{% url 'home:awards' %}">
+        {% csrf_token %} 
+        <table class = "table table-hover table-bordered table-light">
             <thead>   
                 <tr>
                     <th>№</th>
@@ -83,8 +88,44 @@
                         <button type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
                     </td> 
                 </tr>
-            {% endfor %}
-        </form>
-        <tbody> 
-    </table>
+                {% endfor %}
+            <tbody> 
+        </table>
+    </form>
+<!-- Модальное окно добавления -->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить награду</h5>
+                <button
+                    type="button" 
+                    class="btn-close" 
+                    data-bs-dismiss="modal" 
+                    aria-label="Close">
+                </button>
+            </div>
+            <form method="POST" action="{% url 'home:awards' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button 
+                        type="submit"
+                        class="btn btn-primary"
+                        name="save">
+                        Создать
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Отмена
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

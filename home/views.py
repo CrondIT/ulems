@@ -275,7 +275,8 @@ def categories(request):
             if not pk:
                 form = context['ClassForm'](
                     request.POST,
-                    current_user=context['current_user'])
+                    current_user=context['current_user']
+                    )
                 new_item = form.save(commit=False)
                 new_item.created_by = context['current_user']
                 new_item.event_related = context['current_event']
@@ -285,7 +286,8 @@ def categories(request):
                 form = context['ClassForm'](
                     request.POST,
                     instance=save_item,
-                    current_user=context['current_user'])
+                    current_user=context['current_user']
+                    )
             if form.is_valid():
                 form.save()
                 form = context['ClassForm'](
@@ -308,7 +310,8 @@ def categories(request):
             request.user.profile.sort_category = context['sort']
             request.user.save()
             context['model'] = context['model'].order_by(
-                context['sort'])
+                context['sort']
+                )
         else:
             pass
     context['form'] = form
@@ -316,15 +319,6 @@ def categories(request):
     context['sort_button_pressed'], context['sort_text'] = \
         sort_button_pressed(context['sort'])
     return render(request, "home/categories.html", context)
-
-
-# -------------------------------------------------------------------------------
-@login_required(login_url="login")
-def category(request, category_id):
-    category = Category.objects.get(pk=category_id)
-    return render(request, "home/category/category.html", {
-        "category": category
-    })
 
 
 # -------------------------------------------------------------------------------
@@ -610,6 +604,7 @@ def competencies(request):
     """
     error = ""
     context = {}
+    context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Компетенции'
     context['current_event'] = request.user.profile.current_event
@@ -623,33 +618,41 @@ def competencies(request):
         count=Count('participants')
         )
     context['ClassForm'] = CompetencyForm
-    form = CompetencyForm()
+    context['form'] = context['ClassForm']()
+    form = context['form']
+    # Генерация форм для каждого объекта
+    for item in context['model']:
+        context['edit_forms'][item.id] = context['ClassForm'](
+            instance=item
+            )
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
             if not pk:
-                form = context['ClassForm'](request.POST)
-                usr = form.save(commit=False)
-                usr.created_by = context['current_user']
-                usr.event_related = context['current_event']
+                form = context['ClassForm'](
+                    request.POST
+                    )
+                new_item = form.save(commit=False)
+                new_item.created_by = context['current_user']
+                new_item.event_related = context['current_event']
             else:
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
-                form = context['ClassForm'](request.POST, instance=save_item)
+                form = context['ClassForm'](
+                    request.POST,
+                    instance=save_item
+                    )
             if form.is_valid():
                 form.save()
                 form = context['ClassForm']()
+                return redirect('home:competencies')
             else:
                 error = "Форма заполнена неверно!"
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)
             delete_item.delete()
-        elif 'edit' in request.POST:
-            pk = request.POST.get('edit')
-            edit_item = context['model'].get(id=pk)
-            context['id'] = pk
-            form = context['ClassForm'](instance=edit_item)
+            return redirect('home:competencies')
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
@@ -659,7 +662,8 @@ def competencies(request):
             request.user.profile.sort_competency = context['sort']
             request.user.save()
             context['model'] = context['model'].order_by(
-                context['sort'])
+                context['sort']
+                )
         elif 'import' in request.POST:
             import_competencies = []
             if 'file' in request.FILES:
@@ -687,13 +691,13 @@ def competencies(request):
                         created_by=context['current_user'],
                         event_related=context['current_event']
                         )
-
         else:
             pass
 
     context['form'] = form
     context['error'] = error
-
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
     return render(request, "home/competencies.html", context)
 
 

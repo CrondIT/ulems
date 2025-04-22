@@ -1,12 +1,13 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h4>Категории участников мероприятия: {{ current_event }}</h4>
+<h4>Категории участников мероприятия: {{ current_event }}</h4>
 
     <!-- Кнопка добавления новой категории -->
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+    <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
         <i class="fa fa-plus"></i> Добавить
     </button>
+
         
     <form method="POST" action="{% url 'home:categories' %}">
         {% csrf_token %} 
@@ -128,7 +129,12 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">Удаление "{{ item.title }}"</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                    </button>
                                 </div>
                                 <div class="modal-body">
                                     Внимание! Будут удалены связанные записи из таблицы "Участники" в количестве {{ item.count }}. </br>
