@@ -267,7 +267,7 @@ def categories(request):
     for item in context['model']:
         context['edit_forms'][item.id] = context['ClassForm'](
             instance=item,
-            current_user=request.user
+            current_user=context['current_user']
         )
     if request.method == "POST":
         if 'save' in request.POST:
@@ -328,13 +328,14 @@ def participants(request):
         Filter for current user and selected event.
     """
     context = {}
+    context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Участники'
     context['all_selected'] = False
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_participant
-    context['current_competency'] = None
+    context['current_category'] = None
     context['database'] = Participant
     context['model'] = context['database'].objects.filter(
         created_by=context['current_user'],
@@ -343,10 +344,24 @@ def participants(request):
     context['model'] = context['model'].order_by(
         context['sort'])
     context['ClassForm'] = ParticipantForm
-    form = context['ClassForm'](
+    context['form'] = context['ClassForm'](
         current_user=context['current_user'],
         current_event=context['current_event'],
-        current_competency=context['current_competency'])
+        current_category=context['current_category']
+        )
+    form = context['form']
+    # Генерация форм для каждого объекта
+    for item in context['model']:
+        context['current_category'] = \
+            Category.objects.get(id=item.category.id)
+
+        context['edit_forms'][item.id] = context['ClassForm'](
+            instance=item,
+            current_user=context['current_user'],
+            current_event=context['current_event'],
+            current_category=context['current_category']
+            )
+
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -355,7 +370,7 @@ def participants(request):
                     request.POST,
                     current_user=context['current_user'],
                     current_event=context['current_event'],
-                    current_competency=context['current_competency'])
+                    current_category=context['current_category'])
                 new_item = form.save(commit=False)
                 new_item.created_by = context['current_user']
                 new_item.event_related = context['current_event']
@@ -368,29 +383,22 @@ def participants(request):
                     instance=save_item,
                     current_user=context['current_user'],
                     current_event=context['current_event'],
-                    current_competency=context['current_competency'])
-            form.save()
-            form = context['ClassForm'](
-                current_user=context['current_user'],
-                current_event=context['current_event'],
-                current_competency=context['current_competency'])
+                    current_category=save_item.category)
+            if form.is_valid():
+                form.save()
+                form = context['ClassForm'](
+                    current_user=context['current_user'],
+                    current_event=context['current_event'],
+                    current_category=context['current_category']
+                    )
+                return redirect('home:participants')
+            else:
+                error = "Форма заполнена неверно!"
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)
             delete_item.delete()
-        elif 'edit' in request.POST:
-            pk = request.POST.get('edit')
-            edit_item = context['model'].get(id=pk)
-            context['id'] = pk
-            if context['current_competency'] is not None:
-                context['current_competency'] = Competency.objects.get(
-                    id=edit_item.competency.id)
-            form = context['ClassForm'](
-                instance=edit_item,
-                current_user=context['current_user'],
-                current_event=context['current_event'],
-                current_competency=context['current_competency'])
-            context['anchor'] = 'row_' + pk
+            return redirect('home:participants')
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
@@ -583,6 +591,8 @@ def participants(request):
 
     context['form'] = form
     context['error'] = error
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
 
     return render(request, "home/participants.html", context)
 
@@ -989,6 +999,7 @@ def awards(request):
     """
     error = ""
     context = {}
+    context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Награды (дипломы)'
     context['current_event'] = request.user.profile.current_event
@@ -1000,9 +1011,17 @@ def awards(request):
     context['model'] = context['model'].order_by(
         context['sort'])
     context['ClassForm'] = AwardForm
-    form = context['ClassForm'](
+    context['form'] = context['ClassForm'](
         current_user=context['current_user'],
         current_event=context['current_event'])
+    form = context['form']
+    # Генерация форм для каждого объекта
+    for item in context['model']:
+        context['edit_forms'][item.id] = context['ClassForm'](
+            instance=item,
+            current_user=context['current_user'],
+            current_event=context['current_event']
+        )
     if request.method == 'POST':
         if 'save' in request.POST:
             pk = request.POST.get('save')
@@ -1022,22 +1041,20 @@ def awards(request):
                     instance=save_item,
                     current_event=context['current_event'],
                     current_user=context['current_user'])
-            form.save()
-            form = context['ClassForm'](
-                current_event=context['current_event'],
-                current_user=context['current_user'])
+            if form.is_valid():
+                form.save()
+                form = context['ClassForm'](
+                    current_event=context['current_event'],
+                    current_user=context['current_user'
+                                         ])
+                return redirect('home:awards')
+            else:
+                error = "Форма заполнена неверно!"
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
             delete_item = context['model'].get(id=pk)
             delete_item.delete()
-        elif 'edit' in request.POST:
-            pk = request.POST.get('edit')
-            edit_item = context['model'].get(id=pk)
-            context['id'] = pk
-            form = context['ClassForm'](
-                instance=edit_item,
-                current_event=context['current_event'],
-                current_user=context['current_user'])
+            return redirect('home:awards')
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
@@ -1047,11 +1064,14 @@ def awards(request):
             request.user.profile.sort_award = context['sort']
             request.user.save()
             context['model'] = context['model'].order_by(
-                context['sort'])
+                context['sort']
+                )
         else:
             pass
 
     context['form'] = form
     context['error'] = error
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
 
     return render(request, "home/awards.html", context)

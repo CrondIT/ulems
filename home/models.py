@@ -146,8 +146,8 @@ class Competency(TimeStamp, EventRelated):
 # -----------------------------------------------------------------------------------
 class Award(TimeStamp, EventRelated):
     title = models.CharField("Награда", max_length=100)
-    competency = models.ForeignKey(
-        Competency,
+    category = models.ForeignKey(
+        Category,
         on_delete=models.SET_NULL,
         related_name="award_competency",
         null=True,
@@ -163,7 +163,7 @@ class Award(TimeStamp, EventRelated):
 
     def __str__(self):
         return f"{self.title} в {
-                self.competency}"
+                self.category}"
 
     class Meta:
         verbose_name = 'Награда'
@@ -174,8 +174,7 @@ class Award(TimeStamp, EventRelated):
 class Participant(TimeStamp, EventRelated):
     first_name = models.CharField(
         "Фамилия",
-        max_length=100,
-        help_text="До 100 символов",
+        max_length=100
         )
     middle_name = models.CharField("Имя", max_length=100)
     last_name = models.CharField(

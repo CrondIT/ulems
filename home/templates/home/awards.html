@@ -33,13 +33,13 @@
                         </button>
                     </th>
                     <th>
-                        Компетенция
+                        Категория
                         <button 
                             class="btn btn-outline-success btn-sm" 
                             name="sort" 
                             formnovalidate
-                            value="competency">
-                            {% if sort_text == 'competency' %}
+                            value="category">
+                            {% if sort_text == 'category' %}
                                 <i class='{{ sort_button_pressed }}'></i>
                             {% else %}
                                 <i class='{{ sort_button }}'></i>
@@ -122,14 +122,11 @@
                     </th>
                     <th>Примечания</th>
                 </tr>
-                <tr>
-                    {% include 'home/award.html' %}
-                </tr>
             </thead>
 
             <tbody class="table-group-divider">
             {% for item in model %}
-               <!-- Modal -->
+               <!-- Modal delete -->
                 <div class="modal fade" id="deleteModal{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -147,10 +144,43 @@
                         </div>
                     </div>
                 </div>   
-                 <tr>
+                 <!-- Модальное окно редактирования -->  
+                 <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Редактировать: {{ item.id }} {{ item.title }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="POST" action="{% url 'home:awards' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <div class="modal-body">
+                                    {{ edit_forms|get_item:item.id }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                        name="save"  
+                                        value="{{ item.id }}">
+                                        Сохранить
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal">
+                                        Отмена
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+                <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{item.title}}</td>
-                    <td>{{item.competency}}</td>
+                    <td>{{item.category}}</td>
                     <td>{{item.award}}</td>
                     <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                     <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
@@ -158,8 +188,25 @@
                     <td>{{item.updated_by}}</td>
                     <td>{{item.event_related}}</td>
                     <td> 
-                        <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" name="del" value="{{ item.id }}" formnovalidate title="Удалить текущую строку." data-bs-toggle="modal" data-bs-target="#deleteModal{{ item.id }}">Del</button>
+                        <button  
+                            type="button"
+                            class="btn btn-outline-success btn-sm"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editModal{{ item.id }}"
+                            formnovalidate
+                            title="Редактировать текущую строку" >
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            value="{{ item.id }}"
+                            formnovalidate
+                            title="Удалить текущую строку."
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal{{ item.id }}">
+                            Del
+                        </button>
                     </td> 
                 </tr>
                 {% endfor %}
@@ -167,7 +214,7 @@
         </table>
     </form>
 <!-- Модальное окно добавления -->
-  <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

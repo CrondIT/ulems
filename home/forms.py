@@ -202,9 +202,9 @@ class ParticipantForm(ModelForm):
         # Extract the user from the view
         user = kwargs.pop('current_user')
         event = kwargs.pop('current_event')
-        award_competency = kwargs.pop('current_competency')
+        award_category = kwargs.pop('current_category')
         flag = False
-        if award_competency is not None:
+        if award_category is not None:
             flag = True
 
         super(ParticipantForm, self).__init__(*args, **kwargs)
@@ -221,7 +221,7 @@ class ParticipantForm(ModelForm):
             self.fields['award'].queryset = Award.objects.filter(
                 event_related=event,
                 created_by=user,
-                competency=award_competency
+                category=award_category
             )
         else:
             self.fields['award'].queryset = Award.objects.filter(
@@ -328,15 +328,15 @@ class PrintTemplateForm(ModelForm):
 class AwardForm(ModelForm):
     class Meta:
         model = Award
-        fields = ['title', 'competency', 'award']
+        fields = ['title', 'category', 'award']
         widgets = {
                 "title": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Наименование'
                 }),
-                "competency": Select(attrs={
+                "category": Select(attrs={
                     'class': 'form-control',
-                    'placeholder': 'Компетенция'
+                    'placeholder': 'Категория'
                 }),
                 "award": Select(attrs={
                     'class': 'form-control',
@@ -353,7 +353,7 @@ class AwardForm(ModelForm):
         self.fields['award'].queryset = UserImage.objects.filter(
             created_by=user
         )
-        self.fields['competency'].queryset = Competency.objects.filter(
+        self.fields['category'].queryset = Category.objects.filter(
             event_related=event,
             created_by=user
         )

@@ -1,129 +1,413 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
+<h4>Участники мероприятия: {{ current_event }} Пользователь: {{current_user}} {{ anchor }}</h4>
+
+<div class="row g-3 align-items-center pb-3">
+    <div class="col-auto">
+        <!-- Кнопка добавления -->
+        <button class="btn  btn-outline-success btn-sm"\
+            data-bs-toggle="modal"
+            data-bs-target="#addModal"
+            title="Добавить новую компетенцию/номинацию">
+            <i class="fa fa-plus"></i> Добавить
+        </button>
+    </div>
+    <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data" class="col-auto">
+        {% csrf_token %} 
+        Импорт из csv файла: 
+        <input type="file" name="file" class="btn btn-outline-success btn-sm">
+        <button class="btn btn-outline-success btn-sm"
+            type='submit'
+            name="import"
+            formnovalidate>
+            Импорт
+        </button> 
+        <button class="btn btn-outline-success btn-sm"
+            name="export"
+            formnovalidate>
+            Экспорт в csv
+        </button> 
+        <button class="btn btn-outline-success btn-sm" 
+            name="print_certificate" 
+            formnovalidate>
+            Печать сертификат
+        </button> 
+    </form>
+</div>
+<form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
+    {% csrf_token %}
    
-    <h4>Участники мероприятия: {{ current_event }} Пользователь: {{current_user}} {{ anchor }}</h4>
-   
-    <div>
     <table class = "table table-hover table-bordered table-light table-sm align-bottom">
-        
-        <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-                Импорт из csv файла: 
-                <input type="file" name="file" class="btn btn-outline-success btn-sm">
-                <button class="btn btn-outline-success btn-sm" type='submit' name="import" formnovalidate style="margin:7px">Импорт</button> 
-                <button class="btn btn-outline-success btn-sm" name="export" formnovalidate style="margin:7px">Экспорт в csv</button> 
-                <button class="btn btn-outline-success btn-sm" name="print_certificate" formnovalidate style="margin:7px">Печать сертификат</button> 
-            <thead>       
-                <tr>
-                    <th>№</th>
-                    <th> Фамилия
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="first_name" ><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
-                        Имя
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="middle_name"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
-                        Отчество
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="last_name"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
-                        Организация
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="organization"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
-                        Должность
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="job_title"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
-                        Доклад
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="text"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
-                        Категория
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="category"><i class='{{ sort_button }}'></i></button>
-                    </th>
-                    <th>
+        <thead>       
+            <tr>
+                <th>№</th>
+                <th>Actions</th>
+                <th> Фамилия
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="first_name">
+                        {% if sort_text == 'first_name' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
+                    Имя
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="middle_name">
+                        {% if sort_text == 'middle_name' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
+                    Отчество
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="last_name">
+                        {% if sort_text == 'last_name' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
+                    Организация
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="organization">
+                        {% if sort_text == 'organization' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
+                    Должность
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="job_title">
+                        {% if sort_text == 'job_title' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
+                    Доклад
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="text">
+                        {% if sort_text == 'text' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
+                    Категория
+                    <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="category">
+                        {% if sort_text == 'category' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
+                </th>
+                <th>
                         Компетенция
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="competency"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="competency">
+                            {% if sort_text == 'competency' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Награда
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="award"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="award">
+                            {% if sort_text == 'award' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Дата созд. 
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="created_date">
+                            {% if sort_text == 'created_date' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Дата изм. 
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="updated_date">
+                            {% if sort_text == 'updated_date' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Создал 
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="created_by">
+                            {% if sort_text == 'created_by' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Изменил 
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="updated_by">
+                            {% if sort_text == 'updated_by' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
-                    <th>
-                        Примечания 
-                        <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
-                        <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="Отменить выделение"><i class='fa fa-square-o'></i></button>
-                      
-                    </th>
-                </tr>
-                <tr>
-                    {% include 'home/participant.html' %}    
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">  
-                {% for item in model %}
-                    <tr id="row_{{ item.id }}">
-
-                            <td>{{forloop.counter}}</td>
-                            <td>{{item.first_name}}</td>
-                            <td>{{item.middle_name}}</td>
-                            <td>{{item.last_name}}</td>
-                            <td>{{item.organization}}</td>
-                            <td>{{item.job_title}}</td>
-                            <td>{{item.text}}</td>
-                            <td>{{item.category}}</td>
-                            <td>{{item.competency}}</td>
-                            <td>
-                                <button name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку" class="btn btn-outline-success btn-sm">
-                                {{item.award}}
+                <th>
+                    Actions 
+                    <button class="btn btn-outline-success btn-sm" name="select_all" formnovalidate title="Выделить все"><i class='fa fa-check-square-o'></i></button>
+                    <button class="btn btn-outline-success btn-sm" name="deselect_all" formnovalidate title="Отменить выделение"><i class='fa fa-square-o'></i></button>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">  
+            {% for item in model %}
+             <!-- Modal delete-->
+            <div class="modal fade" id="deleteModal{{ item.id }}" 
+                tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel{{ item.id }}">
+                                Удаление участника:  "{{ item.first_name }} {{ item.middle_name }} {{ item.last_name }}"
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Внимание! Участник будет удален окончательно и бесповоротно! </br>
+                        </div>
+                        <div class="modal-footer">
+                            <button 
+                                type="submit"
+                                class="btn btn-danger"
+                                formnovalidate
+                                name="delete"
+                                value="{{ item.id }}">
+                                Удалить
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                                Отмена
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!-- Модальное окно редактирования -->  
+            <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                Редактировать: {{ item.id }} "{{ item.first_name }} {{ item.middle_name }} {{ item.last_name }}"
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="{% url 'home:participants' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <div class="modal-body">
+                                {{ edit_forms|get_item:item.id }}   
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    name="save"  
+                                    value="{{ item.id }}">
+                                    Сохранить
                                 </button>
-                            </td>
-                            <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
-                            <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
-                            <td>{{item.created_by}}</td>
-                            <td>{{item.updated_by}}</td>
-                            <td> 
-                                {% if all_selected %}
-                                    <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" checked>
-                                {% else %}    
-                                    <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" unchecked>
-                                {% endif %}    
-                                <button  class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                                <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                            </td> 
-                    </tr>
-                
-                    {% empty %}    
-                        Нет участников
-                {% endfor %}
+                                <button 
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                    Отмена
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> 
+                <tr id="row_{{ item.id }}">
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        <button  
+                            type="button"
+                            class="btn btn-outline-success btn-sm"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editModal{{ item.id }}"
+                            formnovalidate
+                            title="Редактировать текущую строку" >
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            value="{{ item.id }}"
+                            formnovalidate
+                            title="Удалить текущую строку."
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal{{ item.id }}">
+                            <i class="fa fa-minus-circle"></i>
+                        </button> 
+                    </td>
+                    <td>{{item.first_name}}</td>
+                    <td>{{item.middle_name}}</td>
+                    <td>{{item.last_name}}</td>
+                    <td>{{item.organization}}</td>
+                    <td>{{item.job_title}}</td>
+                    <td>{{item.text}}</td>
+                    <td>{{item.category}}</td>
+                    <td>{{item.competency}}</td>
+                    <td>{{item.award}}</td>
+                    <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                    <td>{{item.created_by}}</td>
+                    <td>{{item.updated_by}}</td>
+                    <td> 
+                        {% if all_selected %}
+                            <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" checked>
+                        {% else %}    
+                            <input class="form-check-input" type="checkbox" name="select" value="{{ item.id }}" unchecked>
+                        {% endif %}   
+                        <button  
+                            type="button"
+                            class="btn btn-outline-success btn-sm"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editModal{{ item.id }}"
+                            formnovalidate
+                            title="Редактировать текущую строку" >
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            value="{{ item.id }}"
+                            formnovalidate
+                            title="Удалить текущую строку."
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal{{ item.id }}">
+                            <i class="fa fa-minus-circle"></i>
+                        </button> 
+                    </td> 
+                </tr>
+            {% endfor %}
+        <tbody>   
+    </table>
+</form>
+<!-- Модальное окно добавления -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить участника</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <form method="POST" action="{% url 'home:participants' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ form }}
+                </div>
+                <div class="modal-footer">
+                    <button 
+                        type="submit"
+                        class="btn btn-primary"
+                        name="save">
+                        Создать
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Отмена
+                    </button>
+                </div>
             </form>
-            <tbody>   
-        </table>
-        {{ error }}
+        </div>
     </div>
-    {% if anchor %}
-        {{ anchor }}
-        <script type="text/javascript">
-         
-        </script>
-    {% endif %}
+</div>
+
 {% endblock %}
