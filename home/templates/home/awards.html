@@ -2,11 +2,12 @@
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
     <h4>Награды (дипломы) компетенций: {{ current_event}}</h4>
-
-    <!-- Кнопка добавления новой категории -->
-    <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
-        <i class="fa fa-plus"></i> Добавить
-    </button>
+    <div class="container-fluid pb-2">
+        <!-- Кнопка добавления новой категории -->
+        <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="fa fa-plus"></i> Добавить
+        </button>
+    </div>
   
     <form method="POST" action="{% url 'home:awards' %}">
         {% csrf_token %} 

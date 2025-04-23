@@ -10,11 +10,12 @@
     {% else %}
         <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
     {% endif %}
-    
-    <!-- Кнопка добавления нового мероприятия -->
-    <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
-        <i class="fa fa-plus"></i> Добавить
-    </button>
+    <div class="container-fluid pb-2">    
+        <!-- Кнопка добавления нового мероприятия -->
+        <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="fa fa-plus"></i> Добавить
+        </button>
+    </div>
 
     <form method="POST" action="{% url 'home:events' %}">
         {% csrf_token %} 
