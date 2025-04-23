@@ -4,7 +4,10 @@
     <h4>Награды (дипломы) компетенций: {{ current_event}}</h4>
     <div class="container-fluid pb-2">
         <!-- Кнопка добавления новой категории -->
-        <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+        <button class="btn  btn-outline-success btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#addModal"
+            title="Добавить новую награду">
             <i class="fa fa-plus"></i> Добавить
         </button>
     </div>
@@ -16,35 +19,105 @@
                 <tr>
                     <th>№</th>
                     <th>
-                        Наименование </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                        Наименование
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="title">
+                            {% if sort_text == 'title' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Компетенция </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="competency"><i class='{{ sort_button }}'></i></button>
+                        Компетенция
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="competency">
+                            {% if sort_text == 'competency' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Награда </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="award"><i class='{{ sort_button }}'></i></button>
+                        Награда
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="award">
+                            {% if sort_text == 'award' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Дата создания </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                        Дата создания
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="created_date">
+                            {% if sort_text == 'created_date' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Дата изменения </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                        Дата изменения
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="updated_date">
+                            {% if sort_text == 'updated_date' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Создатель </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                        Создатель
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="created_by">
+                            {% if sort_text == 'created_by' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Изменил </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                        Изменил
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="updated_by">
+                            {% if sort_text == 'updated_by' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
-                        Мероприятие </br>
+                        Мероприятие
                         <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="event_related"><i class='{{ sort_button }}'></i></button>
                     </th>
                     <th>Примечания</th>

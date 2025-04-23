@@ -7,10 +7,13 @@
 </div>
 {% endif%}
 <h4>Компетенции (номинации) мероприятия: {{ current_event}}</h4>
-<div class="row g-3 align-items-center">
+<div class="row g-3 align-items-center pb-3">
     <div class="col-auto">
         <!-- Кнопка добавления -->
-        <button class="btn  btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+        <button class="btn  btn-outline-success btn-sm"\
+            data-bs-toggle="modal"
+            data-bs-target="#addModal"
+            title="Добавить новую компетенцию/номинацию">
             <i class="fa fa-plus"></i> Добавить
         </button>
     </div>
@@ -21,8 +24,7 @@
             class="btn btn-outline-success btn-sm"
             type='submit'
             name="import"
-            formnovalidate 
-            style="margin:7px">
+            formnovalidate>
             Импорт
         </button>   
     </form>
