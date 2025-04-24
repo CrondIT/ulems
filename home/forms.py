@@ -159,6 +159,17 @@ class ParticipantForm(ModelForm):
         model = Participant
         fields = ['first_name', 'middle_name', 'last_name', 'organization',
                   'job_title', 'text', 'category', 'competency', 'award']
+        labels = {
+            "first_name": "Фамилия",
+            "middle_name": "Имя",
+            "last_name": "Отчество",
+            "organization": "Организация",
+            "job_title": "Должность",
+            "text": "Доклад",
+            "category": "Категория",
+            "competency": "Компетенция",
+            "award": "Награда"
+        }
         widgets = {
                 "first_name": TextInput(attrs={
                     'class': 'form-control',
@@ -172,16 +183,18 @@ class ParticipantForm(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Отчество'
                 }),
-                "organization": TextInput(attrs={
+                "organization": Textarea(attrs={
                     'class': 'form-control',
+                    'rows': 3,
                     'placeholder': 'Организация'
                 }),
                 "job_title": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Должность'
                 }),
-                "text": TextInput(attrs={
+                "text": Textarea(attrs={
                     'class': 'form-control',
+                    'rows': 3,
                     'placeholder': 'Доклад'
                 }),
                 "category": Select(attrs={

@@ -285,7 +285,11 @@
                             {% csrf_token %}
                             <input type="hidden" name="item_id" value="{{ item.id }}">
                             <div class="modal-body">
-                                {{ edit_forms|get_item:item.id }}   
+                                {% with form=edit_forms|get_item:item.id %}
+
+                                    {{ form }}
+                                
+                                {% endwith %}
                             </div>
                             <div class="modal-footer">
                                 <button
@@ -389,7 +393,7 @@
             <form method="POST" action="{% url 'home:participants' %}">
                 {% csrf_token %}
                 <div class="modal-body">
-                    {{ form }}
+                    {{ form.as_table }}
                 </div>
                 <div class="modal-footer">
                     <button 
