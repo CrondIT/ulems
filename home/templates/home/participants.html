@@ -287,7 +287,7 @@
                             <div class="modal-body">
                                 {% with form=edit_forms|get_item:item.id %}
 
-                                    {{ form }}
+                                    {% include 'home/participant.html' %}
                                 
                                 {% endwith %}
                             </div>
@@ -393,7 +393,7 @@
             <form method="POST" action="{% url 'home:participants' %}">
                 {% csrf_token %}
                 <div class="modal-body">
-                    {{ form.as_table }}
+                    {% include 'home/participant.html' %}
                 </div>
                 <div class="modal-footer">
                     <button 

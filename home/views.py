@@ -377,7 +377,6 @@ def participants(request):
             else:
                 save_item = context['model'].get(id=pk)
                 save_item.updated_by = context['current_user']
-                # context['current_competency'] = None
                 form = context['ClassForm'](
                     request.POST,
                     instance=save_item,
@@ -730,7 +729,7 @@ def user_images(request):
     context = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Изображения'
-    # context['current_event'] = request.user.profile.current_event
+    context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_image
     context['model'] = UserImage.objects.filter(
@@ -798,6 +797,7 @@ def user_fonts(request):
     context = {}
     context['sort_button'] = 'fa fa-sort'
     context['title'] = 'Шрифты'
+    context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_font
     context['model'] = UserFont.objects.filter(

@@ -84,6 +84,12 @@ class CategoryForm(ModelForm):
     class Meta:
         model = Category
         fields = ['title', 'print_title', 'badge', 'certificate']
+        labels = {
+            "title": "Наименование",
+            "print_title": "Наименование для печати",
+            "badge": "Бэдж",
+            "certificate": "Сертификат"
+        }
         widgets = {
                 "title": TextInput(attrs={
                     'class': 'form-control',
@@ -342,6 +348,11 @@ class AwardForm(ModelForm):
     class Meta:
         model = Award
         fields = ['title', 'category', 'award']
+        labels = {
+            "title": "Наименование",
+            "category": "Категория",
+            "award": "Награда"
+        }
         widgets = {
                 "title": TextInput(attrs={
                     'class': 'form-control',
