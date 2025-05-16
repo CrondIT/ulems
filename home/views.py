@@ -329,7 +329,14 @@ def participants(request):
     """ View, add, edit and delete participants in table.
         Filter for current user and selected event.
     """
-    lines_per_page = 25  # Количество записей на странице
+    # Получаем и валидируем параметр per_page
+    try:
+        lines_per_page = int(request.GET.get('per_page', request.session.get('per_page', 25)))
+        lines_per_page = max(1, min(lines_per_page, 1000))  # Ограничение от 1 до 1000
+    except (ValueError, TypeError):
+        lines_per_page = 25  # Значение по умолчанию при ошибке
+    request.session['per_page'] = lines_per_page
+    # lines_per_page = 25  # Количество записей на странице
     context = {}
     context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
@@ -359,8 +366,6 @@ def participants(request):
     if not page_number:
         page_number = return_page
     context['page_obj'] = paginator.get_page(page_number)
-    print("page_number: ", page_number, "return_page: ", return_page)
-    
     # Генерация форм для каждого объекта
     for item in context['page_obj']:
         context['current_category'] = \
