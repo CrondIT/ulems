@@ -23,6 +23,8 @@ from reportlab.lib.units import mm
 
 from django.template.defaulttags import register
 
+from django.core.paginator import Paginator
+
 
 # ----------------------------------------------------------------------------
 @register.filter
@@ -327,6 +329,7 @@ def participants(request):
     """ View, add, edit and delete participants in table.
         Filter for current user and selected event.
     """
+    lines_per_page = 25  # Количество записей на странице
     context = {}
     context['edit_forms'] = {}
     context['sort_button'] = 'fa fa-sort'
@@ -350,8 +353,16 @@ def participants(request):
         current_category=context['current_category']
         )
     form = context['form']
+    return_page = request.session.get('return_page', 1)
+    paginator = Paginator(context['model'], lines_per_page)
+    page_number = request.GET.get('page')
+    if not page_number:
+        page_number = return_page
+    context['page_obj'] = paginator.get_page(page_number)
+    print("page_number: ", page_number, "return_page: ", return_page)
+    
     # Генерация форм для каждого объекта
-    for item in context['model']:
+    for item in context['page_obj']:
         context['current_category'] = \
             Category.objects.get(id=item.category.id)
 
@@ -390,6 +401,7 @@ def participants(request):
                     current_event=context['current_event'],
                     current_category=context['current_category']
                     )
+                request.session['return_page'] = request.POST.get('page', 1)
                 return redirect('home:participants')
             else:
                 error = "Форма заполнена неверно!"

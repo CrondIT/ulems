@@ -37,7 +37,6 @@
 </div>
 <form method="POST" action="{% url 'home:participants' %}" enctype="multipart/form-data">
     {% csrf_token %}
-   
     <table class = "table table-hover table-bordered table-light table-sm align-bottom">
         <thead>       
             <tr>
@@ -232,7 +231,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">  
-            {% for item in model %}
+            {% for item in page_obj %}
              <!-- Modal delete-->
             <div class="modal fade" id="deleteModal{{ item.id }}" 
                 tabindex="-1" aria-labelledby="deleteModalLabel{{ item.id }}" aria-hidden="true">
@@ -284,6 +283,7 @@
                         <form method="POST" action="{% url 'home:participants' %}">
                             {% csrf_token %}
                             <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <input type="hidden" name="page" value="{{ page_obj.number }}">
                             <div class="modal-body">
                                 {% with form=edit_forms|get_item:item.id %}
 
@@ -376,6 +376,68 @@
             {% endfor %}
         <tbody>   
     </table>
+    <!-- Разбиение на страницы -->   
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center pagination-sm">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" 
+                    href="?page=1{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                    aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" 
+                    href="?page={{ page_obj.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                    aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;&laquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                    <a class="page-link" 
+                    href="?page={{ num }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" 
+                    href="?page={{ page_obj.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                    aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" 
+                    href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                    aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;&raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
 </form>
 <!-- Модальное окно добавления -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
