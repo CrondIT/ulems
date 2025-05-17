@@ -32,7 +32,20 @@ def user_directory_path(instance, filename):
 
 
 # -----------------------------------------------------------------------------------
-class UserImage(TimeStamp):
+class Image(TimeStamp):
+    title = models.CharField('Название', max_length=200)
+    image = models.ImageField(upload_to=user_directory_path, null=True)
+
+    def __str__(self):
+        return str(self.title)
+
+    class Meta:
+        verbose_name = 'Изображения'
+        verbose_name_plural = 'Изображения'
+
+
+# -----------------------------------------------------------------------------------
+class PrintImage(TimeStamp):
     title = models.CharField('Название', max_length=200)
     image = models.ImageField(upload_to=user_directory_path, null=True)
     width = models.PositiveSmallIntegerField('Ширина, мм', default=210)
@@ -42,8 +55,8 @@ class UserImage(TimeStamp):
         return str(self.title)
 
     class Meta:
-        verbose_name = 'Изображение'
-        verbose_name_plural = 'Изображения'
+        verbose_name = 'Изображение для печати'
+        verbose_name_plural = 'Изображения для печати'
 
 
 # -----------------------------------------------------------------------------------
@@ -78,7 +91,7 @@ class Event(TimeStamp):
         default=True
         )
     image = models.ForeignKey(
-        UserImage,
+        PrintImage,
         on_delete=models.CASCADE,
         related_name="event_cover",
         null=True,
@@ -109,13 +122,13 @@ class EventRelated(models.Model):
 class Category(TimeStamp, EventRelated):
     title = models.CharField("Категория участника", max_length=100)
     print_title = models.TextField('Название для печати')
-    badge = models.ForeignKey(UserImage,
+    badge = models.ForeignKey(PrintImage,
                               on_delete=models.SET_NULL,
                               related_name="category_badge",
                               null=True,
                               blank=True
                               )
-    certificate = models.ForeignKey(UserImage,
+    certificate = models.ForeignKey(PrintImage,
                                     on_delete=models.SET_NULL,
                                     related_name="category_certificate",
                                     null=True,
@@ -154,7 +167,7 @@ class Award(TimeStamp, EventRelated):
         blank=True
         )
     award = models.ForeignKey(
-        UserImage,
+        PrintImage,
         on_delete=models.SET_NULL,
         related_name="award_image",
         null=True,
@@ -240,7 +253,7 @@ class Profile(TimeStamp):
         null=True
         )
     current_image = models.ForeignKey(
-        UserImage,
+        PrintImage,
         on_delete=models.SET_NULL,
         null=True
         )
@@ -316,7 +329,7 @@ class PrintTemplate(TimeStamp):
         ])
     font_leading = models.PositiveSmallIntegerField(default=12)
     user_image_related = models.ForeignKey(
-        UserImage,
+        PrintImage,
         related_name='%(app_label)s_%(class)s_user_image_related',
         on_delete=models.SET_NULL,
         null=True,

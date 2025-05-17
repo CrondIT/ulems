@@ -1,5 +1,5 @@
 from .models import Event, Category, Participant, Competency
-from .models import Profile, UserImage, PrintTemplate, Award
+from .models import Profile, PrintImage, PrintTemplate, Award
 from .models import UserFont
 
 from django.forms import ModelForm, TextInput, DateInput
@@ -75,7 +75,7 @@ class EventForm(ModelForm):
         user = kwargs.pop('current_user')
         super(EventForm, self).__init__(*args, **kwargs)
         # Filter
-        self.fields['image'].queryset = UserImage.objects.filter(
+        self.fields['image'].queryset = PrintImage.objects.filter(
             created_by=user
         )
 
@@ -115,17 +115,17 @@ class CategoryForm(ModelForm):
         user = kwargs.pop('current_user')
         super(CategoryForm, self).__init__(*args, **kwargs)
         # Filter
-        self.fields['badge'].queryset = UserImage.objects.filter(
+        self.fields['badge'].queryset = PrintImage.objects.filter(
                                         created_by=user
                                         )
-        self.fields['certificate'].queryset = UserImage.objects.filter(
+        self.fields['certificate'].queryset = PrintImage.objects.filter(
                                         created_by=user
                                         )
 
 
-class UserImageForm(ModelForm):
+class PrintImageForm(ModelForm):
     class Meta:
-        model = UserImage
+        model = PrintImage
         fields = ['title', 'image', 'width', 'height']
         widgets = {
                 "title": TextInput(attrs={
@@ -374,7 +374,7 @@ class AwardForm(ModelForm):
         event = kwargs.pop('current_event')
         super(AwardForm, self).__init__(*args, **kwargs)
         # Filter
-        self.fields['award'].queryset = UserImage.objects.filter(
+        self.fields['award'].queryset = PrintImage.objects.filter(
             created_by=user
         )
         self.fields['category'].queryset = Category.objects.filter(

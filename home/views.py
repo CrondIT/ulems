@@ -3,11 +3,11 @@ from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
 
-from .models import Event, Category, Participant, Competency, UserImage
+from .models import Event, Category, Participant, Competency, PrintImage
 from .models import PrintTemplate, Award, UserFont
 
 from .forms import EventForm, CategoryForm, ParticipantForm, AwardForm
-from .forms import CompetencyForm, UserImageForm, PrintTemplateForm
+from .forms import CompetencyForm, PrintImageForm, PrintTemplateForm
 from .forms import UserFontForm
 
 from . import makepdf
@@ -738,7 +738,7 @@ def competency(request, competency_id):
 
 # ------------------------------------------------------------------------------
 @login_required(login_url="login")
-def user_images(request):
+def print_images(request):
     """ View, add, edit and delete user images in table.
         Filter for event and current user.
     """
@@ -749,9 +749,9 @@ def user_images(request):
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_image
-    context['model'] = UserImage.objects.filter(
+    context['model'] = PrintImage.objects.filter(
         created_by=context['current_user'])
-    context['ClassForm'] = UserImageForm
+    context['ClassForm'] = PrintImageForm
     form = context['ClassForm']()
     if request.method == 'POST':
         if 'save' in request.POST:
@@ -801,7 +801,7 @@ def user_images(request):
     context['form'] = form
     context['error'] = error
 
-    return render(request, "home/user_images.html", context)
+    return render(request, "home/print_images.html", context)
 
 
 # ------------------------------------------------------------------------------

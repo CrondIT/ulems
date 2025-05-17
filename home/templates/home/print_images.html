@@ -4,7 +4,7 @@
     <h4>Изображения пользователя: {{current_user}}</h4>
 
     <table class = "table table-bordered table-light">
-        <form method="post" enctype="multipart/form-data" action="{% url 'home:user_images' %}">
+        <form method="post" enctype="multipart/form-data" action="{% url 'home:print_images' %}">
             {% csrf_token %} 
                
             <tr>
@@ -42,7 +42,7 @@
 
             {% if not form.instance.id %}
                 <tr>
-                    {% include 'home/user_image.html' %}
+                    {% include 'home/print_image.html' %}
                 </tr>
             {% endif %}   
 
@@ -51,7 +51,7 @@
                 
                 <tr>
                     {% if form.instance.id == item.id %}
-                        {% include 'home/user_image.html' %}
+                        {% include 'home/print_image.html' %}
                     {% else %}    
                         <td>{{forloop.counter}}</td>
                         <td><a href="{{item.image.url}}"><img src="{{item.image.url}}" width="100pt"  alt="User Image"></a></td>

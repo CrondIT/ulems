@@ -20,7 +20,7 @@ urlpatterns = [
          views.competency,
          name="competency"
          ),
-    path("user_images", views.user_images, name="user_images"),
+    path("print_images", views.print_images, name="print_images"),
     path("user_fonts", views.user_fonts, name="user_fonts"),
     path("print_templates", views.print_templates,  name="print_templates"),
     path("awards", views.awards, name="awards"),
