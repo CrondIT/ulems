@@ -1,0 +1,68 @@
+{% extends "home/layout.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block body %}
+    <h4>Изображения пользователя: {{current_user}}</h4>
+
+    <table class = "table table-bordered table-light">
+        <form method="post" enctype="multipart/form-data" action="{% url 'home:all_events_images' %}">
+            {% csrf_token %} 
+               
+            <tr>
+                <th>№</th>
+                <th>Изображение</th>
+                <th>
+                    Наименование
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Имя файла
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="image"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Дата создания
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Дата изменения
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Создатель
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                <th>
+                    Изменил
+                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                </th>
+                <th>
+                    Примечания
+                </th>
+            </tr>
+
+            {% if not form.instance.id %}
+                <tr>
+                    {% include 'home/all_events_image.html' %}
+                </tr>
+            {% endif %}   
+
+          
+            {% for item in model %}
+                
+                <tr>
+                    {% if form.instance.id == item.id %}
+                        {% include 'home/all_events_image.html' %}
+                    {% else %}    
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{{item.image.url}}"><img src="{{item.image.url}}" width="100pt"  alt="User Image"></a></td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.image}}</td>
+                        <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
+                        <td>{{item.created_by}}</td>
+                        <td>{{item.updated_by}}</td>
+                        <td> 
+                            <button class="btn btn-outline-success btn-sm" name="edit" value="{{ item.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                            <button class="btn btn-outline-success btn-sm" name="edit_print_templates" value="{{ item.id }}" formnovalidate title="Редактировать печатную форму"><i class='fa fa-file-o'></i></button>
+                            <button class="btn btn-outline-danger btn-sm" name="delete" value="{{ item.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                        </td> 
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </form>
+    </table>
+{% endblock %}

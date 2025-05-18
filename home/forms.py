@@ -1,6 +1,6 @@
 from .models import Event, Category, Participant, Competency
 from .models import Profile, PrintImage, PrintTemplate, Award
-from .models import UserFont
+from .models import UserFont, AllEventsImage
 
 from django.forms import ModelForm, TextInput, DateInput
 from django.forms import Textarea, Select, NumberInput
@@ -75,7 +75,7 @@ class EventForm(ModelForm):
         user = kwargs.pop('current_user')
         super(EventForm, self).__init__(*args, **kwargs)
         # Filter
-        self.fields['image'].queryset = PrintImage.objects.filter(
+        self.fields['image'].queryset = AllEventsImage.objects.filter(
             created_by=user
         )
 
@@ -121,6 +121,18 @@ class CategoryForm(ModelForm):
         self.fields['certificate'].queryset = PrintImage.objects.filter(
                                         created_by=user
                                         )
+
+
+class ImageForm(ModelForm):
+    class Meta:
+        model = AllEventsImage
+        fields = ['title', 'image']
+        widgets = {
+                "title": TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Наименование'
+                })
+            }
 
 
 class PrintImageForm(ModelForm):

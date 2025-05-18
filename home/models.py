@@ -32,7 +32,7 @@ def user_directory_path(instance, filename):
 
 
 # -----------------------------------------------------------------------------------
-class Image(TimeStamp):
+class AllEventsImage(TimeStamp):
     title = models.CharField('Название', max_length=200)
     image = models.ImageField(upload_to=user_directory_path, null=True)
 
@@ -91,7 +91,7 @@ class Event(TimeStamp):
         default=True
         )
     image = models.ForeignKey(
-        PrintImage,
+        AllEventsImage,
         on_delete=models.CASCADE,
         related_name="event_cover",
         null=True,

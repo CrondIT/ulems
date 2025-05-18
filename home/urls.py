@@ -21,6 +21,10 @@ urlpatterns = [
          name="competency"
          ),
     path("print_images", views.print_images, name="print_images"),
+    path("all_events_images",
+         views.all_events_images,
+         name="all_events_images"
+         ),
     path("user_fonts", views.user_fonts, name="user_fonts"),
     path("print_templates", views.print_templates,  name="print_templates"),
     path("awards", views.awards, name="awards"),
