@@ -14,7 +14,7 @@
                     Наименование
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
                 <th>
-                    Имя файла
+                    Файл изображения
                     <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="image"><i class='{{ sort_button }}'></i></button>
                 <th>
                     Ширина
@@ -54,9 +54,9 @@
                         {% include 'home/print_image.html' %}
                     {% else %}    
                         <td>{{forloop.counter}}</td>
-                        <td><a href="{{item.image.url}}"><img src="{{item.image.url}}" width="100pt"  alt="User Image"></a></td>
+                        <td><a href="{{item.print_image.image.url}}"><img src="{{item.print_image.image.url}}" width="100pt"  alt="User Image"></a></td>
                         <td>{{item.title}}</td>
-                        <td>{{item.image}}</td>
+                        <td>{{item.print_image}}</td>
                         <td>{{item.width}}</td>
                         <td>{{item.height}}</td>
                         <td>{{item.created_date|date:'d.m.Y H:i'}}</td>

@@ -47,6 +47,13 @@ class AllEventsImage(TimeStamp):
 # -----------------------------------------------------------------------------------
 class PrintImage(TimeStamp):
     title = models.CharField('Название', max_length=200)
+    print_image = models.ForeignKey(
+        AllEventsImage,
+        on_delete=models.SET_NULL,
+        related_name="print_image",
+        null=True,
+        blank=True
+        )
     image = models.ImageField(upload_to=user_directory_path, null=True)
     width = models.PositiveSmallIntegerField('Ширина, мм', default=210)
     height = models.PositiveSmallIntegerField('Высота, мм', default=297)
@@ -262,6 +269,9 @@ class Profile(TimeStamp):
     sort_competency = models.CharField(max_length=25,  default="created_date")
     sort_award = models.CharField(max_length=25,  default="created_date")
     sort_participant = models.CharField(max_length=25,  default="created_date")
+    sort_all_events_image = models.CharField(max_length=25,
+                                             default="created_date"
+                                             )
     sort_image = models.CharField(max_length=25, default="created_date")
     sort_template = models.CharField(max_length=25, default="created_date")
     sort_font = models.CharField(max_length=25, default="created_date")

@@ -751,7 +751,7 @@ def all_events_images(request):
     context['title'] = 'Изображения'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
-    context['sort'] = request.user.profile.sort_image
+    context['sort'] = request.user.profile.sort_all_events_image
     context['model'] = AllEventsImage.objects.filter(
         created_by=context['current_user'])
     context['ClassForm'] = ImageForm
@@ -766,35 +766,29 @@ def all_events_images(request):
                 usr = form.save(commit=False)
                 usr.created_by = context['current_user']
             else:
-                user_image = context['model'].get(id=pk)
-                user_image.updated_by = context['current_user']
+                save_item = context['model'].get(id=pk)
+                save_item.updated_by = context['current_user']
                 form = context['ClassForm'](
                     request.POST,
                     request.FILES,
-                    instance=user_image)
+                    instance=save_item)
             form.save()
             form = context['ClassForm']()
         elif 'delete' in request.POST:
             pk = request.POST.get('delete')
-            user_image = context['model'].get(id=pk)
-            user_image.delete()
+            delete_item = context['model'].get(id=pk)
+            delete_item.delete()
         elif 'edit' in request.POST:
             pk = request.POST.get('edit')
-            user_image = context['model'].get(id=pk)
-            form = context['ClassForm'](instance=user_image)
-        elif 'edit_print_templates' in request.POST:
-            pk = request.POST.get('edit_print_templates')
-            user_image = context['model'].get(id=pk)
-            request.user.profile.current_image = user_image
-            request.user.save()
-            return redirect('home:print_templates')
+            edit_item = context['model'].get(id=pk)
+            form = context['ClassForm'](instance=edit_item)
         elif 'sort' in request.POST:
             sort_str = request.POST.get('sort')
             if is_sort_exist(sort_str, context['sort']):
                 context['sort'] = sort_reverse(context['sort'])
             else:
                 context['sort'] = sort_str
-            request.user.profile.sort_image = context['sort']
+            request.user.profile.sort_all_events_image = context['sort']
             request.user.save()
             context['model'] = context['model'].order_by(
                 context['sort'])
@@ -803,6 +797,8 @@ def all_events_images(request):
 
     context['form'] = form
     context['error'] = error
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
     return render(request, "home/all_events_images.html", context)
 
 
@@ -851,8 +847,8 @@ def print_images(request):
             form = context['ClassForm'](instance=user_image)
         elif 'edit_print_templates' in request.POST:
             pk = request.POST.get('edit_print_templates')
-            user_image = context['model'].get(id=pk)
-            request.user.profile.current_image = user_image
+            edit_item = context['model'].get(id=pk)
+            request.user.profile.current_image = edit_item
             request.user.save()
             return redirect('home:print_templates')
         elif 'sort' in request.POST:
@@ -956,8 +952,8 @@ def print_templates(request):
     context['title'] = 'Настройка печати'
     context['current_user'] = request.user
     context['user_image'] = request.user.profile.current_image
-    context['image_width'] = context['user_image'].image.width
-    context['image_height'] = context['user_image'].image.height
+    context['image_width'] = context['user_image'].print_image.image.width
+    context['image_height'] = context['user_image'].print_image.image.height
     context['current_event'] = request.user.profile.current_event
     context['user_image_id'] = context['user_image'].id
     context['sort'] = request.user.profile.sort_template
@@ -1016,7 +1012,7 @@ def print_templates(request):
             pk = request.POST.get('selected')
             participant = context['participants'].get(id=pk)
             for print_template in context['model']:
-                img = print_template.user_image_related.image
+                img = print_template.user_image_related.print_image.image
                 match print_template.print_item:
                     case "fio":
                         print_text = f" {participant.first_name}  {

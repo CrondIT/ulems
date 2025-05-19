@@ -138,7 +138,7 @@ class ImageForm(ModelForm):
 class PrintImageForm(ModelForm):
     class Meta:
         model = PrintImage
-        fields = ['title', 'image', 'width', 'height']
+        fields = ['title', 'print_image', 'width', 'height']
         widgets = {
                 "title": TextInput(attrs={
                     'class': 'form-control',
