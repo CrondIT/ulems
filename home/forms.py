@@ -4,7 +4,7 @@ from .models import UserFont, AllEventsImage
 
 from django.forms import ModelForm, TextInput, DateInput
 from django.forms import Textarea, Select, NumberInput
-from django.forms import CheckboxInput
+from django.forms import CheckboxInput, ClearableFileInput
 
 from django.core.exceptions import ValidationError
 
@@ -123,16 +123,24 @@ class CategoryForm(ModelForm):
                                         )
 
 
-class ImageForm(ModelForm):
+class AllEventsImageForm(ModelForm):
     class Meta:
         model = AllEventsImage
         fields = ['title', 'image']
+        labels = {
+            "title": "Наименование",
+            "image": "Изображение"
+        }
         widgets = {
-                "title": TextInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Наименование'
-                })
-            }
+            "title": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Наименование'
+            }),
+            "image": ClearableFileInput(attrs={
+                'class': 'form-control-file',
+                'accept': 'image/*'
+            })
+        }
 
 
 class PrintImageForm(ModelForm):
@@ -143,6 +151,10 @@ class PrintImageForm(ModelForm):
                 "title": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Наименование'
+                }),
+                "print_image": Select(attrs={
+                    'class': 'form-select',
+                    'placeholder': 'Изображение'
                 }),
                 "width": NumberInput(attrs={
                     'class': 'form-control',

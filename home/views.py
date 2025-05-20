@@ -1,4 +1,3 @@
-""" Import render and redirect. """
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
@@ -8,7 +7,7 @@ from .models import PrintTemplate, Award, UserFont, AllEventsImage
 
 from .forms import EventForm, CategoryForm, ParticipantForm, AwardForm
 from .forms import CompetencyForm, PrintImageForm, PrintTemplateForm
-from .forms import UserFontForm, ImageForm
+from .forms import UserFontForm, AllEventsImageForm
 
 from . import makepdf
 
@@ -33,9 +32,18 @@ def get_item(dictionary, key):
 
 
 # ----------------------------------------------------------------------------
+def sort_button():
+    """
+        Choose font awesome icon
+        for initial sort buttton
+    """
+    return 'fa fa-sort'
+
+
+# ----------------------------------------------------------------------------
 def sort_button_pressed(sort_str):
     """
-        Choose rigth font awesome icon
+        Choose font awesome icon
         for ascent or descent sorting button
     """
     if sort_str[0] == '-':
@@ -142,7 +150,7 @@ def events(request):
     error = ""
     context = {}
     context['edit_forms'] = {}
-    context['sort_button'] = 'fa fa-sort'
+    context['sort_button'] = sort_button()
     context['title'] = 'Мероприятия'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
@@ -249,7 +257,7 @@ def categories(request):
     error = ""
     context = {}
     context['edit_forms'] = {}
-    context['sort_button'] = 'fa fa-sort'
+    context['sort_button'] = sort_button()
     context['title'] = 'Категории'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
@@ -342,7 +350,7 @@ def participants(request):
     # lines_per_page = 25  # Количество записей на странице
     context = {}
     context['edit_forms'] = {}
-    context['sort_button'] = 'fa fa-sort'
+    context['sort_button'] = sort_button()
     context['title'] = 'Участники'
     context['all_selected'] = False
     context['current_event'] = request.user.profile.current_event
@@ -634,7 +642,7 @@ def competencies(request):
     error = ""
     context = {}
     context['edit_forms'] = {}
-    context['sort_button'] = 'fa fa-sort'
+    context['sort_button'] = sort_button()
     context['title'] = 'Компетенции'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
@@ -747,14 +755,16 @@ def all_events_images(request):
     """
     error = ""
     context = {}
-    context['sort_button'] = 'fa fa-sort'
+    context['sort_button'] = sort_button()
     context['title'] = 'Изображения'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_all_events_image
     context['model'] = AllEventsImage.objects.filter(
         created_by=context['current_user'])
-    context['ClassForm'] = ImageForm
+    context['model'] = context['model'].order_by(
+        context['sort'])
+    context['ClassForm'] = AllEventsImageForm
     form = context['ClassForm']()
     if request.method == 'POST':
         if 'save' in request.POST:
@@ -810,13 +820,15 @@ def print_images(request):
     """
     error = ""
     context = {}
-    context['sort_button'] = 'fa fa-sort'
+    context['sort_button'] = sort_button()
     context['title'] = 'Изображения для печати'
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
     context['sort'] = request.user.profile.sort_image
     context['model'] = PrintImage.objects.filter(
         created_by=context['current_user'])
+    context['model'] = context['model'].order_by(
+        context['sort'])
     context['ClassForm'] = PrintImageForm
     form = context['ClassForm']()
     if request.method == 'POST':
@@ -866,6 +878,8 @@ def print_images(request):
 
     context['form'] = form
     context['error'] = error
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
 
     return render(request, "home/print_images.html", context)
 
@@ -885,6 +899,8 @@ def user_fonts(request):
     context['sort'] = request.user.profile.sort_font
     context['model'] = UserFont.objects.filter(
         created_by=context['current_user'])
+    context['model'] = context['model'].order_by(
+        context['sort'])
     context['ClassForm'] = UserFontForm
     form = context['ClassForm']()
     if request.method == 'POST':
@@ -938,6 +954,8 @@ def user_fonts(request):
 
     context['form'] = form
     context['error'] = error
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
 
     return render(request, "home/user_fonts.html", context)
 
@@ -1002,7 +1020,7 @@ def print_templates(request):
                 context['sort'] = sort_reverse(context['sort'])
             else:
                 context['sort'] = sort_str
-            request.user.profile.sort_participant = context['sort']
+            request.user.profile.sort_template = context['sort']
             request.user.save()
             context['model'] = context['model'].order_by(
                 context['sort'])
@@ -1070,6 +1088,8 @@ def print_templates(request):
         else:
             pass
     context['form'] = form
+    context['sort_button_pressed'], context['sort_text'] = \
+        sort_button_pressed(context['sort'])
 
     return render(request, "home/print_templates.html", context)
 

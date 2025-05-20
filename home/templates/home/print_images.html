@@ -12,28 +12,108 @@
                 <th>Изображение</th>
                 <th>
                     Наименование
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="title"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="title">
+                        {% if sort_text == 'title' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Файл изображения
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="image"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="image">
+                        {% if sort_text == 'image' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Ширина
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="width"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="width">
+                        {% if sort_text == 'width' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Высота
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="height"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="height">
+                        {% if sort_text == 'height' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Дата создания
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_date"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="created_date">
+                        {% if sort_text == 'created_date' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Дата изменения
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_date"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="updated_date">
+                        {% if sort_text == 'updated_date' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Создатель
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="created_by"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="created_by">
+                        {% if sort_text == 'created_by' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 <th>
                     Изменил
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="updated_by"><i class='{{ sort_button }}'></i></button>
+                     <button 
+                        class="btn btn-outline-success btn-sm" 
+                        name="sort" 
+                        formnovalidate
+                        value="updated_by">
+                        {% if sort_text == 'updated_by' %}
+                            <i class='{{ sort_button_pressed }}'></i>
+                        {% else %}
+                            <i class='{{ sort_button }}'></i>
+                        {% endif %}
+                    </button>
                 </th>
                 <th>
                     Примечания

@@ -182,8 +182,7 @@ class Award(TimeStamp, EventRelated):
         )
 
     def __str__(self):
-        return f"{self.title} в {
-                self.category}"
+        return f"{self.title}"
 
     class Meta:
         verbose_name = 'Награда'
