@@ -5,38 +5,99 @@
    Редактировать блок
 {% endif %}
 </h4>
-<table class = "table table-bordered table-light">
-   <tr>
-      <td>Шаблон текста</td><td>{{ form.print_text }}</td>
-   </tr>
-   <tr>
-      <td>Х, мм </td><td>{{ form.start_x }}</td>
-   </tr>
-   <tr>
-      <td>Y, мм </td><td>{{ form.start_y }}</td>
-   </tr>
-   <tr>
-      <td>Ширина текстового блока, мм </td><td>{{ form.delta_x }}</td>
-   </tr>
-   <tr>
-      <td>Высота текстового блока, мм </td><td>{{ form.delta_y }}</td>
-   </tr>
-   <tr>
-      <td>Шрифт</td><td>{{ form.user_font }}</td>
-   </tr>
-   <tr>
-      <td>Цвет шрифта </td><td>{{ form.font_color }}</td>
-   </tr>
-   <tr>
-      <td>Размер шрифта </td><td>{{ form.font_size }}</td>
-   </tr>
-   <tr>
-      <td>Межстрочный интервал </td><td>{{ form.font_leading }}</td>
-   </tr>
-   <tr>
-      <td>Выравнивание текстового блока </td><td>{{ form.font_alignment }}</td>
-   </tr>
+<table class="table table-bordered table-light table-sm mb-0">
+    <tr>
+        <td>Х, мм</td><td>{{ form.start_x }}</td>
+        <td>Y, мм</td><td>{{ form.start_y }}</td>
+        <td>Ширина текстового блока, мм</td><td>{{ form.delta_x }}</td>
+        <td>Высота текстового блока, мм</td><td>{{ form.delta_y }}</td>
+    </tr>
+    <tr>
+        <td>Шрифт</td><td>{{ form.user_font }}</td>
+        <td>Цвет шрифта</td><td>{{ form.font_color }}</td>
+        <td>Размер шрифта</td><td>{{ form.font_size }}</td>
+        <td>Межстрочный интервал</td><td>{{ form.font_leading }}</td>
+        <td>Выравнивание текстового блока</td><td>{{ form.font_alignment }}</td>
+    </tr>
 </table>
+<div class="mt-3">
+  <table class="table table-bordered table-light table-sm mb-0">
+    <tr>
+      <td>Шаблон текста</td>
+      <td>
+        {{ form.print_text }}
+         <select class="form-control mt-2 template-selector">
+          <option value="">Выберите шаблон...</option>
+          <option value="[фамилия]">Фамилия</option>
+          <option value="[имя]">Имя</option>
+          <option value="[отчество]">Отчество</option>
+          <option value="[компетенция]">Компетенция</option>
+          <option value="[категория]">Категория</option>
+          <option value="[организация]">Организация</option>
+          <option value="[должность]">Должность</option>
+          <option value="[доклад]">Тема доклада</option>
+          <option value="[награда]">Награда</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  // Функция для вставки текста в позицию курсора
+  function insertAtCursor(input, value) {
+    // Проверка поддержки стандартного API
+    if (input.setSelectionRange) {
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      
+      // Вставка текста в текущую позицию
+      input.value = input.value.substring(0, start) 
+                  + value 
+                  + input.value.substring(end);
+      
+      // Перемещение курсора после вставленного текста
+      input.selectionStart = input.selectionEnd = start + value.length;
+    } 
+    // Поддержка для старых версий Internet Explorer
+    else if (document.selection && document.selection.createRange) {
+      input.focus();
+      const range = document.selection.createRange();
+      range.text = value;
+      range.collapse(false);
+      range.select();
+    }
+    // Резервный вариант для нестандартных браузеров
+    else {
+      input.value += value;
+    }
+    
+    // Активация события input для обновления
+    const event = new Event('input', { bubbles: true });
+    input.dispatchEvent(event);
+  }
+
+  document.querySelectorAll('.template-selector').forEach(select => {
+    select.addEventListener('change', function() {
+      if (this.value) {
+        const textField = this.closest('td').querySelector('textarea, input');
+        if (textField) {
+          // Установка фокуса на поле, если его нет
+          if (textField !== document.activeElement) {
+            textField.focus();
+          }
+          
+          // Вставка значения в позицию курсора
+          insertAtCursor(textField, this.value);
+          
+          // Сброс выбора в списке
+          this.value = '';
+          textField.focus();
+        }
+      }
+    });
+  });
+</script>
 <br>
 {% if not form.instance.id %}
    <button class="btn btn-outline-success" name="save" value="{{ id }}" title="Сохранить"><i class='fa fa-save'></i>  Сохранить</button>

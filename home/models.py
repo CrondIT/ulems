@@ -272,6 +272,10 @@ class Profile(TimeStamp):
                                              )
     sort_image = models.CharField(max_length=25, default="created_date")
     sort_template = models.CharField(max_length=25, default="created_date")
+    sort_print_template = models.CharField(
+        max_length=25,
+        default="created_date"
+    )
     sort_font = models.CharField(max_length=25, default="created_date")
 
     @receiver(post_save, sender=User)

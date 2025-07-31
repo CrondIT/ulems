@@ -19,40 +19,100 @@
             <button class="btn btn-outline-success" name="preview_all" value="val" formnovalidate title="Предварительный просмотр"><i class='fa fa-file-pdf-o'></i></button>
         </div>   
         
-        <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+        <div class="col-md-6 ml-auto"  style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
             <h4> Текстовые блоки </h4>
             <table class = "table table-bordered table-light">
                 <tr>
                     <th>№</th>
                     <th>
                         Поле печати </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item" title="Сортировать по текущемк полю. Повторное нажатие сортирует в обратном порядке."><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="print_text">
+                            {% if sort_text == 'print_text' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Х<sub>0</sub> 
                         <i class="fa fa-info-circle"  aria-hidden="false" title="Расстояние слева от края документа до начала текста, в миллиметрах (координата Х)" style="color: blue"></i>
                         </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_x"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="start_x">
+                            {% if sort_text == 'start_x' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Y<sub>0</sub> 
                         <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние снизу от края документа до верхней части текста, в миллиметрах (координата Y)" style="color: blue"></i>
                         </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_y"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="start_y">
+                            {% if sort_text == 'start_y' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Цвет</br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="delta_y"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="font_color">
+                            {% if sort_text == 'font_color' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Размер</br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_size"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="font_size">
+                            {% if sort_text == 'font_size' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>
                         Инт.
                         <i class="fa fa-info-circle" aria-hidden="false" title="Межстрочный интервал" style="color: blue"></i>
                         </br>
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_leading"><i class='{{ sort_button }}'></i></button>
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="font_leading">
+                            {% if sort_text == 'font_leading' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
                     </th>
                     <th>Примечания</th>
                 </tr>
@@ -76,13 +136,12 @@
             </table>
         </div>
     </div>
-            <div class="col-md-9 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            {% if not form.instance.id %}
-                 {% include 'home/print_template.html' %}
-            {% elif form.instance.id %}
-                {% include 'home/print_template.html' %}
-            {% endif %}   
-        
-        </div>
+    <div class="col-md-8 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+        {% if not form.instance.id %}
+            {% include 'home/print_template.html' %}
+        {% elif form.instance.id %}
+            {% include 'home/print_template.html' %}
+        {% endif %}   
+    </div>
 </form>
 {% endblock %}
