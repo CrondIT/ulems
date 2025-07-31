@@ -54,7 +54,6 @@ class PrintImage(TimeStamp):
         null=True,
         blank=True
         )
-    image = models.ImageField(upload_to=user_directory_path, null=True)
     width = models.PositiveSmallIntegerField('Ширина, мм', default=210)
     height = models.PositiveSmallIntegerField('Высота, мм', default=297)
 

@@ -14,6 +14,7 @@ from . import makepdf
 from django.core.files.storage import FileSystemStorage
 
 import csv
+import re
 
 from django.db.models import Count
 
@@ -23,6 +24,59 @@ from reportlab.lib.units import mm
 from django.template.defaulttags import register
 
 from django.core.paginator import Paginator
+
+
+# Определение правил замены (аналог case)
+REPLACEMENT_MAP = {
+    'фамилия': 'first_name',
+    'имя': 'middle_name',
+    'name': 'middle_name',
+    'отчество': 'last_name',
+    'организация': 'organization',
+    'должность': 'job_title',
+    'доклад': 'text',
+    'категория': 'category.print_title',
+    'компетенция': 'competency.print_title',
+    'награда': 'award.title',
+    # Добавьте другие правила по аналогии
+}
+
+
+# ----------------------------------------------------------------------------
+def replace_placeholders(text, participant):
+    """
+    Заменяет выражения вида [ключ] на значения из объекта participant,
+    используя логику, аналогичную оператору `case`.
+
+    Args:
+        text (str): Исходный текст с плейсхолдерами.
+        participant: Объект, содержащий атрибуты и связанные модели.
+
+    Returns:
+        str: Текст с заменёнными плейсхолдерами.
+    """
+
+    def replace_match(match):
+        key = match.group(1).lower()  # Извлекаем ключ из квадратных скобок
+        path = REPLACEMENT_MAP.get(key)
+
+        if not path:
+            return f"[{key}]"  # Если ключ не найден, оставляем как есть
+
+        # Разделяем путь на части
+        # (например, "category.print_title" → ["category", "print_title"])
+        parts = path.split('.')
+        current = participant
+
+        try:
+            for part in parts:
+                # Получаем значение по цепочке
+                current = getattr(current, part)
+            return str(current) if current is not None else ''
+        except (AttributeError, ValueError):
+            return ''  # Если путь недоступен, возвращаем пустую строку
+
+    return re.sub(r'$$(?:[а-яА-ЯёЁ\w]+)$$', replace_match, text)
 
 
 # ----------------------------------------------------------------------------
@@ -612,6 +666,7 @@ def participants(request):
                             created_by=context['current_user'],
                             event_related=context['current_event'])
                     )
+            return redirect('home:participants')
 
         else:
             pass
@@ -1055,7 +1110,8 @@ def print_templates(request):
                 if print_template.before_print_text is not None:
                     text = print_template.before_print_text + text
                 if print_template.after_print_text is not None:
-                    text = text + " " + print_template.after_print_text
+                    after_text = replace_placeholders(print_template.after_print_text, participant)
+                    text = text + " " + after_text
                 if print_template.user_font is not None:
                     user_font_file_path = print_template.user_font.font
                 else:
