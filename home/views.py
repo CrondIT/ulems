@@ -76,7 +76,7 @@ def replace_placeholders(text, participant):
         except (AttributeError, ValueError):
             return ''  # Если путь недоступен, возвращаем пустую строку
 
-    return re.sub(r'$$(?:[а-яА-ЯёЁ\w]+)$$', replace_match, text)
+    return re.sub(r'\[([а-яА-ЯёЁ\w]+)\]', replace_match, text)
 
 
 # ----------------------------------------------------------------------------
