@@ -20,67 +20,63 @@
         </div>   
         
         <div style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-           <h4> Текстовые блоки </h4>
-        <table class = "table table-bordered table-light">
-            <tr>
-                <th>№</th>
-                <th>
-                    Поле печати </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item" title="Сортировать по текущемк полю. Повторное нажатие сортирует в обратном порядке."><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Х<sub>0</sub> 
-                    <i class="fa fa-info-circle"  aria-hidden="false" title="Расстояние слева от края документа до начала текста, в миллиметрах (координата Х)" style="color: blue"></i>
-                    </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_x"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Y<sub>0</sub> 
-                    <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние снизу от края документа до верхней части текста, в миллиметрах (координата Y)" style="color: blue"></i>
-                    </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_y"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Цвет</br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="delta_y"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Размер</br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_size"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>
-                    Инт.
-                    <i class="fa fa-info-circle" aria-hidden="false" title="Межстрочный интервал" style="color: blue"></i>
-                    </br>
-                    <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_leading"><i class='{{ sort_button }}'></i></button>
-                </th>
-                <th>Примечания</th>
-            </tr>
-        
+            <h4> Текстовые блоки </h4>
+            <table class = "table table-bordered table-light">
+                <tr>
+                    <th>№</th>
+                    <th>
+                        Поле печати </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="print_item" title="Сортировать по текущемк полю. Повторное нажатие сортирует в обратном порядке."><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Х<sub>0</sub> 
+                        <i class="fa fa-info-circle"  aria-hidden="false" title="Расстояние слева от края документа до начала текста, в миллиметрах (координата Х)" style="color: blue"></i>
+                        </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_x"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Y<sub>0</sub> 
+                        <i class="fa fa-info-circle" aria-hidden="false" title="Расстояние снизу от края документа до верхней части текста, в миллиметрах (координата Y)" style="color: blue"></i>
+                        </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="start_y"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Цвет</br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="delta_y"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Размер</br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_size"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>
+                        Инт.
+                        <i class="fa fa-info-circle" aria-hidden="false" title="Межстрочный интервал" style="color: blue"></i>
+                        </br>
+                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="font_leading"><i class='{{ sort_button }}'></i></button>
+                    </th>
+                    <th>Примечания</th>
+                </tr>
                     {% for pt in model %}
                         <tr>
-                           
-                                <td>{{forloop.counter}}</td>
-                                <td>{{pt.get_print_item_display}}</td>
-                                <td>{{pt.start_x}}</td>
-                                <td>{{pt.start_y}}</td>
-                                <td <span style="background-color: {{pt.font_color}}" >{{pt.font_color}} </span></td>
-                                <td>{{pt.font_size}}</td>
-                                <td>{{pt.font_leading}}</td>
-                                <td> 
-                                    <button class="btn btn-outline-success" name="edit" value="{{ pt.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
-                                    <button class="btn btn-outline-danger" name="delete" value="{{ pt.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
-                                </td> 
-                           
+                            <td>{{forloop.counter}}</td>
+                            <td>{{pt.print_text}}</td>
+                            <td>{{pt.start_x}}</td>
+                            <td>{{pt.start_y}}</td>
+                            <td <span style="background-color: {{pt.font_color}}" >{{pt.font_color}} </span></td>
+                            <td>{{pt.font_size}}</td>
+                            <td>{{pt.font_leading}}</td>
+                            <td> 
+                                <button class="btn btn-outline-success" name="edit" value="{{ pt.id }}" formnovalidate title="Редактировать текущую строку"><i class='fa fa-pencil'></i></button>
+                                <button class="btn btn-outline-danger" name="delete" value="{{ pt.id }}" formnovalidate title="Удалить текущую строку. Внимание! Удаляется сразу, без запроса подтверждения!">Del</button>
+                            </td> 
                         </tr>
-                    
-                        {% empty %}    
-                            Нет настроек
+                    {% empty %}    
+                        Нет настроек
                     {% endfor %}
-               
-        </table>
+            </table>
         </div>
-        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+    </div>
+            <div class="col-md-9 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
             {% if not form.instance.id %}
                  {% include 'home/print_template.html' %}
             {% elif form.instance.id %}
@@ -88,6 +84,5 @@
             {% endif %}   
         
         </div>
-    </div>
 </form>
 {% endblock %}

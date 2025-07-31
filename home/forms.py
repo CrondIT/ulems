@@ -300,9 +300,7 @@ class PrintTemplateForm(ModelForm):
     class Meta:
         model = PrintTemplate
         fields = [
-            'before_print_text',
-            'print_item',
-            'after_print_text',
+            'print_text',
             'start_x',
             'start_y',
             'delta_x',
@@ -314,19 +312,10 @@ class PrintTemplateForm(ModelForm):
             'font_leading'
             ]
         widgets = {
-            "before_print_text": Textarea(attrs={
+            "print_text": Textarea(attrs={
                 'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'Фиксированный текст до поля печати'
-            }),
-            "print_item": Select(attrs={
-                'class': 'form-control',
-                'placeholder': 'Поле печати'
-            }),
-            "after_print_text": Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'Фиксированный текс после поля печати'
+                'rows': 5,
+                'placeholder': 'Шаблон текста'
             }),
             "start_x": NumberInput(attrs={
                 'class': 'form-control',

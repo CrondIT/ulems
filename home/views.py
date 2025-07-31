@@ -1086,39 +1086,17 @@ def print_templates(request):
             participant = context['participants'].get(id=pk)
             for print_template in context['model']:
                 img = print_template.user_image_related.print_image.image
-                match print_template.print_item:
-                    case "fio":
-                        print_text = f" {participant.first_name}  {
-                                            participant.middle_name} {
-                                            participant.last_name}"
-                    case "category":
-                        print_text = participant.category.print_title
-                    case "competency":
-                        print_text = participant.competency.print_title
-                    case "event":
-                        print_text = participant.event_related.print_title
-                    case "organization":
-                        print_text = participant.organization
-                    case "job_title":
-                        print_text = participant.job_title
-                    case "text":
-                        print_text = participant.text
-                    case _:
-                        print_text = "произвольный текст," \
-                                        "я еще ничего не придумал"
-                text = print_text
-                if print_template.before_print_text is not None:
-                    text = print_template.before_print_text + text
-                if print_template.after_print_text is not None:
-                    after_text = replace_placeholders(print_template.after_print_text, participant)
-                    text = text + " " + after_text
+                if print_template.print_text is not None:
+                    print_text = replace_placeholders(
+                        print_template.print_text,
+                        participant
+                    )
                 if print_template.user_font is not None:
                     user_font_file_path = print_template.user_font.font
                 else:
                     user_font_file_path = "ARIAL.TTF"
 
                 text_data.append({
-                    "print_item": print_template.print_item,
                     "start_x": print_template.start_x,
                     "start_y": print_template.start_y,
                     "delta_x": print_template.delta_x,
@@ -1127,7 +1105,7 @@ def print_templates(request):
                     "font_size": print_template.font_size,
                     "font_leading": print_template.font_leading,
                     "font_alignment": print_template.font_alignment,
-                    "text": text,
+                    "text": print_text,
                     "user_font_file_path": user_font_file_path
                     })
 

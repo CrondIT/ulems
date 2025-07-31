@@ -293,25 +293,8 @@ class Profile(TimeStamp):
 
 # -----------------------------------------------------------------------------------
 class PrintTemplate(TimeStamp):
-    before_print_text = models.TextField(
-        'Текст до',
-        null=True,
-        blank=True
-        )
-    print_item = models.CharField(
-        max_length=25,
-        choices=[
-            ('event', 'Мероприятие'),
-            ('category', 'Категория'),
-            ('competency', 'Компетенция (номинация)'),
-            ('fio', 'Фамилия Имя Отчество'),
-            ('organization', 'Организация'),
-            ('job_title', 'Должность'),
-            ('text', 'Текст участника'),
-            ('custom_text', 'Произвольный техт')
-        ])
-    after_print_text = models.TextField(
-        'Текст после',
+    print_text = models.TextField(
+        'Шаблон печати',
         null=True,
         blank=True
         )
@@ -346,7 +329,7 @@ class PrintTemplate(TimeStamp):
 
     def __str__(self):
         return f"Шаблон печати: {self.user_image_related} для {
-                self.print_item}"
+                self.print_text}"
 
     class Meta:
         verbose_name = 'Шаблон печати'
