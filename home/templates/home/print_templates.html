@@ -135,13 +135,14 @@
                     {% endfor %}
             </table>
         </div>
-    </div>
-    <div class="col-md-8 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
+        <div class="col-md-4 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
         {% if not form.instance.id %}
             {% include 'home/print_template.html' %}
         {% elif form.instance.id %}
             {% include 'home/print_template.html' %}
         {% endif %}   
+        </div>
     </div>
+    
 </form>
 {% endblock %}
