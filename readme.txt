@@ -23,3 +23,8 @@ FullyQualifiedErrorId : UnauthorizedAccess
 - Открываем терминал PowerShell от админа.
 - Вставляем и запускаем - Set-ExecutionPolicy RemoteSigned
 - На вопрос отвечаем - A
+
+
+https://www.youtube.com/watch?v=fTiXuCEeLpo
+
+https://www.youtube.com/watch?v=ke0f3bKl03w встроенная аутентификация

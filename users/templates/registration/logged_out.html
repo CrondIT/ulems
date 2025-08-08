@@ -1,9 +1,13 @@
 {% extends "users/layout.html" %}
 {% block title %}Logged out{% endblock %}
 {% block body %}
+<div class="container-fluid col-sm-3 border border-3 position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center align-items-center text-center" 
+    style="height: 200px; padding: 10px;">
     <h1>Вы вышли из системы</h1>
     <p>
-    Вы успешно вышли из системы.
-    Вы можете <a href="{% url "login" %}">войти заново.</a>.
+        Вы успешно вышли из системы.<br>
+        Вы можете <a href="{% url 'login' %}" class="text-decoration-none">войти заново.</a>
     </p>
+</div>
+
 {% endblock %}

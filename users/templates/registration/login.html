@@ -1,21 +1,26 @@
 {% extends "users/layout.html" %}
 {% block title %}Log-in{% endblock %}
 {% block body %}
-    <div class="container-fluid col-sm-3 border border-3, position-absolute top-50 start-50 translate-middle" style="padding:10px">
+    <div class="container-fluid col-sm-2 border border-2 position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center align-items-center text-center" 
+        style="padding:10px">
         <h1>Вход в систему</h1>
         {% if form.errors %}
-            <p>
-        Неверные логин или пароль.
-            </p>
+            <p>Неверные логин или пароль.</p>
         {% else %}
             <p>Введите логин и пароль для входа:</p>
         {% endif %}
         <div class="login-form">
             <form action="{% url 'login' %}" method="post">
-                {{ form.as_p }}
+                {{ form.username.label}}: </br>
+                {{ form.username}} </br>
+                {{ form.password.label}}: </br>
+                {{ form.password}} </br>
+
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}" />
-                <p><input type="submit" value="Войти"></p>
+                <div class="d-grid" style="padding:10px">
+                    <p><input type="submit" class="btn btn-primary" value="  Войти  "></p>
+                </div>
             </form>
         </div>
     </div>
