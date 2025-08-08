@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = "home"
@@ -28,5 +28,6 @@ urlpatterns = [
     path("user_fonts", views.user_fonts, name="user_fonts"),
     path("print_templates", views.print_templates,  name="print_templates"),
     path("awards", views.awards, name="awards"),
+    path("users/", include('users.urls')),
 
 ]

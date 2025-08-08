@@ -1,0 +1,9 @@
+{% extends "users/layout.html" %}
+{% block title %}Logged out{% endblock %}
+{% block body %}
+    <h1>Вы вышли из системы</h1>
+    <p>
+    Вы успешно вышли из системы.
+    Вы можете <a href="{% url "login" %}">войти заново.</a>.
+    </p>
+{% endblock %}

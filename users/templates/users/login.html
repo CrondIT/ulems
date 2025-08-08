@@ -7,7 +7,7 @@
             {{ message }}
         </div>
     {% endif %}
-    <div class="container-fluid col-sm-3 border border-3, position-absolute top-50 start-50 translate-middle" style="padding:10px">
+    <div class="container-fluid col-sm-3 border border-3, position-absolute top-50 start-30 " style="padding:10px">
         <form action="{% url 'login' %}" method="post" class="text-center">
             {% csrf_token %}
             Имя пользователя: </br>
@@ -17,6 +17,14 @@
             <input type="submit" value="Войти" class="col-sm-6">
         </form>
     </div>
-  </main>
+    <div class="container-fluid col-sm-3 border border-3, position-absolute top-50 start-50 translate-middle" style="padding:10px">
+        <h1>Вход в систему</h1>
+        <p>Введите имя пользователя и пароль:</p>
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Войти"></p>
+        </form>
+    </div>
 
 {% endblock %}
