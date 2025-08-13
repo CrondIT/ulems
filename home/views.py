@@ -165,6 +165,18 @@ def check_textblock_xy(
 
 # ----------------------------------------------------------------------------
 @login_required(login_url="login")
+def user_profile(request):
+    """ view user profile """
+    context = {}
+    context['current_event'] = request.user.profile.current_event
+    context['current_user'] = request.user
+    context['title'] = 'Профиль пользователя'
+
+    return render(request, "home/user_profile.html", context)
+
+
+# ----------------------------------------------------------------------------
+@login_required(login_url="login")
 def index(request):
     """ View main (starter) page """
     context = {}
