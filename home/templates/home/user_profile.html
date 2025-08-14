@@ -10,6 +10,7 @@
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-lg border-0">
                 <div class="card-header bg-primary text-white text-center py-4">
+                    <small class="text-muted">Имя пользователя</small></br>
                     <h1 class="card-title mb-0 display-4">
                         <i class="bi bi-person-circle me-2"></i>
                         {{ current_user.username }}
@@ -21,15 +22,15 @@
                         <li class="list-group-item d-flex align-items-center py-3">
                             <i class="bi bi-envelope-fill text-primary fs-4 me-3"></i>
                             <div>
-                                <h5 class="mb-1 text-secondary">Email</h5>
-                                <p class="mb-0 fs-5">{{ current_user.email }}</p>
+                                <h5 class="mb-0 text-secondary d-inline">Email</h5>
+                                <p class="mb-0 fs-5 d-inline ms-2">{{ current_user.email }}</p>
                             </div>
                         </li>
                         
                         <li class="list-group-item d-flex align-items-center py-3">
                             <i class="bi bi-person-badge-fill text-success fs-4 me-3"></i>
                             <div>
-                                <h5 class="mb-1 text-secondary">First Name</h5>
+                                <h5 class="mb-1 text-secondary">Имя</h5>
                                 <p class="mb-0 fs-5">{{ current_user.first_name }}</p>
                             </div>
                         </li>
@@ -37,7 +38,7 @@
                         <li class="list-group-item d-flex align-items-center py-3">
                             <i class="bi bi-person-vcard-fill text-info fs-4 me-3"></i>
                             <div>
-                                <h5 class="mb-1 text-secondary">Last Name</h5>
+                                <h5 class="mb-1 text-secondary">Фамилия</h5>
                                 <p class="mb-0 fs-5">{{ current_user.last_name }}</p>
                             </div>
                         </li>
