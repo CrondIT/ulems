@@ -25,6 +25,8 @@ from django.template.defaulttags import register
 
 from django.core.paginator import Paginator
 
+from datetime import date, datetime
+
 
 # Определение правил замены (аналог case)
 REPLACEMENT_MAP = {
@@ -38,23 +40,41 @@ REPLACEMENT_MAP = {
     'категория': 'category.print_title',
     'компетенция': 'competency.print_title',
     'награда': 'award.title',
+    'мероприятие': 'event.print_title',
+    'дата_начала': 'event.from_date',
+    'дата_окончания': 'event.to_date',
     # Добавьте другие правила по аналогии
 }
 
 
 # ----------------------------------------------------------------------------
-def replace_placeholders(text, participant):
+def replace_placeholders(text, participant, request):
     """
-    Заменяет выражения вида [ключ] на значения из объекта participant,
+    Заменяет выражения вида [ключ] на значения из объекта participant или event,
     используя логику, аналогичную оператору `case`.
 
     Args:
         text (str): Исходный текст с плейсхолдерами.
         participant: Объект, содержащий атрибуты и связанные модели.
+        request: Объект запроса для доступа к текущему событию
 
     Returns:
         str: Текст с заменёнными плейсхолдерами.
     """
+
+    def format_date_if_needed(value):
+        """Форматирует дату в формате 'день месяц год', если значение — дата."""
+        if isinstance(value, (date, datetime)):
+            # Используем русские названия месяцев
+            months = {
+                1: 'января', 2: 'февраля', 3: 'марта', 4: 'апреля', 5: 'мая', 6: 'июня',
+                7: 'июля', 8: 'августа', 9: 'сентября', 10: 'октября', 11: 'ноября', 12: 'декабря'
+            }
+            day = value.day
+            month = months[value.month]
+            year = value.year
+            return f"{day} {month} {year}"
+        return str(value) if value is not None else ''
 
     def replace_match(match):
         key = match.group(1).lower()  # Извлекаем ключ из квадратных скобок
@@ -64,15 +84,22 @@ def replace_placeholders(text, participant):
             return f"[{key}]"  # Если ключ не найден, оставляем как есть
 
         # Разделяем путь на части
-        # (например, "category.print_title" → ["category", "print_title"])
         parts = path.split('.')
-        current = participant
+        
+        # Определяем начальный объект для поиска значений
+        if path.startswith('event.'):
+            # Для event путей используем текущее событие из профиля пользователя
+            current = request.user.profile.current_event
+            parts = parts[1:]  # Убираем префикс 'event.'
+        else:
+            # Для остальных путей используем participant
+            current = participant
 
         try:
             for part in parts:
                 # Получаем значение по цепочке
                 current = getattr(current, part)
-            return str(current) if current is not None else ''
+            return format_date_if_needed(current)
         except (AttributeError, ValueError):
             return ''  # Если путь недоступен, возвращаем пустую строку
 
@@ -522,31 +549,12 @@ def participants(request):
                 page_data = {}
                 text_data = []
                 for print_template in print_templates:
-                    match print_template.print_item:
-                        case "fio":
-                            print_text = f" {participant.first_name}  {
-                                            participant.middle_name} {
-                                            participant.last_name}"
-                        case "category":
-                            print_text = participant.category.print_title
-                        case "competency":
-                            print_text = participant.competency.print_title
-                        case "event":
-                            print_text = participant.event_related.print_title
-                        case "organization":
-                            print_text = participant.organization
-                        case "job_title":
-                            print_text = participant.job_title
-                        case "text":
-                            print_text = participant.text
-                        case _:
-                            print_text = "произвольный текст," \
-                                        "я еще ничего не придумал"
-                    text = print_text
-                    if print_template.before_print_text is not None:
-                        text = print_template.before_print_text + text
-                    if print_template.after_print_text is not None:
-                        text = text + " " + print_template.after_print_text
+                    if print_template.print_text is not None:
+                        print_text = replace_placeholders(
+                            print_template.print_text,
+                            participant,
+                            request
+                            )
                     if print_template.user_font is not None:
                         user_font_file_path = print_template.user_font.font
                     else:
@@ -561,14 +569,13 @@ def participants(request):
                         "font_size": print_template.font_size,
                         "font_leading": print_template.font_leading,
                         "font_alignment": print_template.font_alignment,
-                        "text": text,
+                        "text": print_text,
                         "user_font_file_path": user_font_file_path
                         })
 
                 page_data['page_width'] = user_image.width
                 page_data['page_height'] = user_image.height
-                page_data['image'] = user_image.image
-                context['error'] = page_data
+                page_data['image'] = print_template.user_image_related.print_image.image
                 canva = makepdf.make_pdf2(page_data, text_data, canva)
             canva.save()
         elif 'export' in request.POST:
@@ -576,6 +583,7 @@ def participants(request):
             with open("participants.csv", 'w', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(
                     csvfile,
+                    delimiter=';',
                     fieldnames=[
                         'first_name',
                         'middle_name',
@@ -622,7 +630,7 @@ def participants(request):
                     file
                                     )
                 with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
-                    reader = csv.DictReader(csvfile)
+                    reader = csv.DictReader(csvfile, delimiter=';')
                     # upload data to import_participants
                     for row in reader:
                         import_participants.append({
@@ -1101,7 +1109,8 @@ def print_templates(request):
                 if print_template.print_text is not None:
                     print_text = replace_placeholders(
                         print_template.print_text,
-                        participant
+                        participant,
+                        request
                     )
                 if print_template.user_font is not None:
                     user_font_file_path = print_template.user_font.font
