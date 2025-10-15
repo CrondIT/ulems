@@ -787,7 +787,7 @@ def competencies(request):
                     file
                                     )
                 with open(fs.path(filename), 'r', encoding='utf-8') as csvfile:
-                    reader = csv.DictReader(csvfile)
+                    reader = csv.DictReader(csvfile, delimiter=';')
                     # upload data to import_participants
                     for row in reader:
                         import_competencies.append({
