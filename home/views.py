@@ -41,8 +41,8 @@ REPLACEMENT_MAP = {
     'компетенция': 'competency.print_title',
     'награда': 'award.title',
     'мероприятие': 'event.print_title',
-    'дата_начала': 'event.from_date',
-    'дата_окончания': 'event.to_date',
+    'дата начала': 'event.from_date',
+    'дата окончания': 'event.to_date',
     # Добавьте другие правила по аналогии
 }
 
@@ -50,25 +50,29 @@ REPLACEMENT_MAP = {
 # ----------------------------------------------------------------------------
 def replace_placeholders(text, participant, request):
     """
-    Заменяет выражения вида [ключ] на значения из объекта participant или event,
-    используя логику, аналогичную оператору `case`.
+    Заменяет выражения вида [ключ] на значения из объекта participant
+    или event, используя логику, аналогичную оператору `case`.
 
     Args:
-        text (str): Исходный текст с плейсхолдерами.
+        text (str): Исходный текст c плейсхолдерами.
         participant: Объект, содержащий атрибуты и связанные модели.
         request: Объект запроса для доступа к текущему событию
 
     Returns:
-        str: Текст с заменёнными плейсхолдерами.
+        str: Текст c заменёнными плейсхолдерами.
     """
 
     def format_date_if_needed(value):
-        """Форматирует дату в формате 'день месяц год', если значение — дата."""
+        """
+        Форматирует дату в формате 'день месяц год', если значение — дата.
+        """
         if isinstance(value, (date, datetime)):
             # Используем русские названия месяцев
             months = {
-                1: 'января', 2: 'февраля', 3: 'марта', 4: 'апреля', 5: 'мая', 6: 'июня',
-                7: 'июля', 8: 'августа', 9: 'сентября', 10: 'октября', 11: 'ноября', 12: 'декабря'
+                1: 'января', 2: 'февраля', 3: 'марта',
+                4: 'апреля', 5: 'мая', 6: 'июня',
+                7: 'июля', 8: 'августа', 9: 'сентября',
+                10: 'октября', 11: 'ноября', 12: 'декабря'
             }
             day = value.day
             month = months[value.month]
@@ -88,7 +92,7 @@ def replace_placeholders(text, participant, request):
         
         # Определяем начальный объект для поиска значений
         if path.startswith('event.'):
-            # Для event путей используем текущее событие из профиля пользователя
+            # Для event путей используем текущее событие из профиля польз.
             current = request.user.profile.current_event
             parts = parts[1:]  # Убираем префикс 'event.'
         else:
@@ -575,7 +579,9 @@ def participants(request):
 
                 page_data['page_width'] = user_image.width
                 page_data['page_height'] = user_image.height
-                page_data['image'] = print_template.user_image_related.print_image.image
+                page_data['image'] = (
+                    print_template.user_image_related.print_image.image
+                    )
                 canva = makepdf.make_pdf2(page_data, text_data, canva)
             canva.save()
         elif 'export' in request.POST:

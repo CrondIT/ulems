@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 app_name = "home"
@@ -29,6 +29,6 @@ urlpatterns = [
     path("print_templates", views.print_templates,  name="print_templates"),
     path("awards", views.awards, name="awards"),
     path("user_profile", views.user_profile, name="user_profile"),
-    path("users/", include('users.urls')),
+    # path("users/", include('users.urls')),
 
 ]
