@@ -1,6 +1,6 @@
 {% extends "home/layout.html" %}
 {% block body %}
-    <h1>Редактировать печатную форму "{{user_image.title}}"</h1>
+    <h5>Редактировать печатную форму "{{user_image.title}}"</h5>
    {{ error }}
 
 <form method="POST"  action="{% url 'home:print_templates' %}">

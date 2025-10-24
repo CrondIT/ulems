@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-  
+  <h6>  </h6>
     <!-- Карточки  -->
     <div class="row mb-6" style="padding:5px; margin-left:5px;">
         <!-- Карточки с мероприятием -->    
@@ -19,16 +19,7 @@
                 </div>
             </div>
         </div>
-        <!-- Карточка с участниками -->
-        <div class="col-md-2">
-            <div class="card text-black  mb-3 text-center" style="max-width: 12rem;">
-                <div class="card-header">Участники</div>
-                <div class="card-body">
-                    <h4 class="card-title">{{ participants_count }}</h4>
-                </div>
-            </div>
-        </div>
-
+       
         <!-- Карточка с категориями -->
         <div class="col-md-2">
             <div class="card text-blac mb-3 text-center" style="max-width: 12rem;">
@@ -45,6 +36,16 @@
                 <div class="card-header">Компетенции</div>
                 <div class="card-body">
                     <h4 class="card-title">{{ competencies_count }}</h4>
+                </div>
+            </div>
+        </div>
+
+         <!-- Карточка с участниками -->
+        <div class="col-md-2">
+            <div class="card text-black  mb-3 text-center" style="max-width: 12rem;">
+                <div class="card-header">Участники</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ participants_count }}</h4>
                 </div>
             </div>
         </div>

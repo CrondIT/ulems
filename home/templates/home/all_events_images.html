@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h4>Изображения пользователя: {{current_user}}</h4>
+    <h5>Изображения пользователя</h5>
 
     <table class = "table table-bordered table-light">
         <form method="post" enctype="multipart/form-data" action="{% url 'home:all_events_images' %}">

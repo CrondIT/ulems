@@ -2,13 +2,13 @@
 {% block title %}Мероприятия{% endblock %}
 {% block body %}
     {% if current_event is NONE%}
-        <h4>Выберите мероприятие,
+        <h5>Выберите мероприятие,
             для этого нажмите на кнопку 
             <button class="btn btn-outline-success btn-sm"><i class='fa fa-check'></i></button>
             у нужного мероприятия
-        </h4>
+        </h5>
     {% else %}
-        <h4>Мероприятия. Выбрано: {{ current_event }}</h4>
+        <h5>Мероприятия. Выбрано: <i>{{ current_event }}</i></h5>
     {% endif %}
     <div class="container-fluid pb-2">    
         <!-- Кнопка добавления нового мероприятия -->

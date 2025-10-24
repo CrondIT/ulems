@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block body %}
-    <h4>Шрифты пользователя: {{current_user}}</h4>
+    <h5>Шрифты пользователя</h5>
     {% if error %}
         <div class="alert alert-danger" role="alert">
             {{ error }}
