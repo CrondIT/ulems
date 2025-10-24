@@ -3,19 +3,61 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-    <h1>Главная страница</h1>
-    {{ current_event }} c {{ current_event.from_date }} по  {{ current_event.to_date }} </br>
-    <div style="display: flex;">
-        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            <h4> Сводная информация</h4>
-            Категорий {{ categories_count }}</br>
-            Компетенций {{ competencies_count }}</br>
-            Участников {{ participants_count }}</br>
+  
+    <!-- Карточки  -->
+    <div class="row mb-6" style="padding:5px; margin-left:5px;">
+        <!-- Карточки с мероприятием -->    
+        <div class="col-md-6">
+            <div class="card text-black bg-light mb-3" >
+                <div class="card-header">Мероприятие</div>
+                <div class="card-body">
+                    <div class="card-title">
+                        Наименование: <i>{{ current_event }}</i></br>
+                        Наименование для печати: <i>{{ current_event.print_title }}</i> </br> 
+                        c {{ current_event.from_date }} по  {{ current_event.to_date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Карточка с участниками -->
+        <div class="col-md-2">
+            <div class="card text-black  mb-3 text-center" style="max-width: 12rem;">
+                <div class="card-header">Участники</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ participants_count }}</h4>
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            <h4>Категории по количеству участников</h4>
-            <table class = "table table-striped table-bordered table-light">
+        <!-- Карточка с категориями -->
+        <div class="col-md-2">
+            <div class="card text-blac mb-3 text-center" style="max-width: 12rem;">
+                <div class="card-header">Категории</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ categories_count }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка с компетенциями -->
+        <div class="col-md-2">
+            <div class="card text-blac mb-3 text-center" style="max-width: 12rem;">
+                <div class="card-header">Компетенции</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ competencies_count }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <!-- Количество участников по категориям и компетенциям -->
+    <div class="row mb-6" style="padding:5px; margin-left:5px;">
+        <!-- Карточка с количеством участников по категориям -->
+        <div class="col-md-6">
+            <div class="card text-black  mb-5" >
+                <div class="card-header">Участники по категориям</div>
+                <div class="card-body">
+                    <table class = "table table-striped table-bordered table-light">
                 <thead>
                     <tr>
                         <th>№</th>
@@ -33,30 +75,37 @@
                     {% endfor %}
                 </tbody>
             </table>
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-3 ml-auto" style="border:1px solid #a5a5a5; padding:5px; margin-left:5px;">
-            <h4>Компетенции по количеству участников</h4>
-            <table class = "table table-striped table-bordered table-light">
-                <thead>
-                    <tr>
-                        <th>№</th>
-                        <th> Наименование</th>
-                        <th> Кол-во</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">  
-                    {% for cbp in competencies_by_participants %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td>{{ cbp }} </td>
-                        <td>{{ cbp.count }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <!-- Карточка с количеством участников по компетенциям -->
+        <div class="col-md-6">
+            <div class="card text-black mb-5">
+                <div class="card-header">Участики по компетенциям </div>
+                <div class="card-body">
+                <table class = "table table-striped table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th> Наименование</th>
+                            <th> Кол-во</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">  
+                        {% for cbp in competencies_by_participants %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ cbp }} </td>
+                            <td>{{ cbp.count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>   
+                </div>
+            </div>
         </div>
+    
     </div>
-
 
 {% endblock %}
