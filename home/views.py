@@ -89,7 +89,7 @@ def replace_placeholders(text, participant, request):
 
         # Разделяем путь на части
         parts = path.split('.')
-        
+
         # Определяем начальный объект для поиска значений
         if path.startswith('event.'):
             # Для event путей используем текущее событие из профиля польз.
