@@ -419,6 +419,58 @@ def categories(request):
             context['model'] = context['model'].order_by(
                 context['sort']
                 )
+        elif 'print_certificate' in request.POST:
+            pk = request.POST.get('print_certificate')
+            item = context['model'].get(id=pk)
+            participants = Participant.objects.filter(
+                created_by=context['current_user'],
+                event_related=context['current_event'],
+                categories=item)
+            
+            page_width = 210 * mm
+            page_height = 297 * mm
+            page_size = (page_width, page_height)
+            canva = canvas.Canvas("helloworld.pdf", page_size)
+            
+            for participant in participants:
+                user_image = participant.category.certificate
+                print_templates = PrintTemplate.objects.filter(
+                    user_image_related=user_image
+                    )
+                page_data = {}
+                text_data = []
+                for print_template in print_templates:
+                    if print_template.print_text is not None:
+                        print_text = replace_placeholders(
+                            print_template.print_text,
+                            participant,
+                            request
+                            )
+                    if print_template.user_font is not None:
+                        user_font_file_path = print_template.user_font.font
+                    else:
+                        user_font_file_path = "ARIAL.TTF"
+
+                    text_data.append({
+                        "start_x": print_template.start_x,
+                        "start_y": print_template.start_y,
+                        "delta_x": print_template.delta_x,
+                        "delta_y": print_template.delta_y,
+                        "font_color": print_template.font_color,
+                        "font_size": print_template.font_size,
+                        "font_leading": print_template.font_leading,
+                        "font_alignment": print_template.font_alignment,
+                        "text": print_text,
+                        "user_font_file_path": user_font_file_path
+                        })
+
+                page_data['page_width'] = user_image.width
+                page_data['page_height'] = user_image.height
+                page_data['image'] = (
+                    print_template.user_image_related.print_image.image
+                    )
+                canva = makepdf.make_pdf2(page_data, text_data, canva)
+            canva.save()    
         else:
             pass
     context['form'] = form
