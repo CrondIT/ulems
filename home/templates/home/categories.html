@@ -200,8 +200,34 @@
                         <td>{{forloop.counter}}</td>
                         <td>{{item.title}}</td>
                         <td>{{item.print_title|linebreaks}}</td>
-                        <td>{{item.badge}}</td>
-                        <td>{{item.certificate}}</td>
+                        <td>
+                            {% if item.badge %}
+                                <button  
+                                    type="button"
+                                    class="btn btn-outline-success btn-sm"  
+                                    name="print_badge" 
+                                    value="{{ item.id }}"
+                                    formnovalidate
+                                    title="Печать бэджей участников по данной категории" >
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                </button>
+                            {% endif %}
+                            {{item.badge}}
+                        </td>
+                        <td>
+                            {% if item.certificate %}
+                                <button  
+                                    type="button"
+                                    class="btn btn-outline-success btn-sm"
+                                    name="print_certificate" 
+                                    value="{{ item.id }}"
+                                    formnovalidate
+                                    title="Печать сертификатов участников по данной категории" >
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                </button>
+                            {% endif %}
+                            {{item.certificate}}
+                        </td>
                         <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
                         <td>{{item.created_by}}</td>
@@ -225,7 +251,7 @@
                                 title="Удалить текущую строку."
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteModal{{ item.id }}">
-                                Del
+                                X
                             </button>
                         </td> 
                     </tr>
