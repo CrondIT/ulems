@@ -420,24 +420,32 @@ def categories(request):
                 context['sort']
                 )
         elif 'print_certificate' in request.POST:
+            page_data = {}
             pk = request.POST.get('print_certificate')
             item = context['model'].get(id=pk)
             participants = Participant.objects.filter(
                 created_by=context['current_user'],
                 event_related=context['current_event'],
-                categories=item)
-            
-            page_width = 210 * mm
-            page_height = 297 * mm
+                category=item)
+            user_image = item.certificate
+            print_templates = PrintTemplate.objects.filter(
+                    user_image_related=user_image
+                    )
+
+            page_data['page_width'] = user_image.width
+            page_data['page_height'] = user_image.height
+#            page_data['image'] = user_image.print_image.image
+
+            page_width = page_data['page_width'] * mm
+            page_height = page_data['page_height'] * mm
             page_size = (page_width, page_height)
             canva = canvas.Canvas("helloworld.pdf", page_size)
-            
+
             for participant in participants:
                 user_image = participant.category.certificate
                 print_templates = PrintTemplate.objects.filter(
                     user_image_related=user_image
                     )
-                page_data = {}
                 text_data = []
                 for print_template in print_templates:
                     if print_template.print_text is not None:
@@ -463,14 +471,9 @@ def categories(request):
                         "text": print_text,
                         "user_font_file_path": user_font_file_path
                         })
-
-                page_data['page_width'] = user_image.width
-                page_data['page_height'] = user_image.height
-                page_data['image'] = (
-                    print_template.user_image_related.print_image.image
-                    )
+                page_data['image'] = user_image.print_image.image    
                 canva = makepdf.make_pdf2(page_data, text_data, canva)
-            canva.save()    
+            canva.save()
         else:
             pass
     context['form'] = form
