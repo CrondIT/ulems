@@ -202,30 +202,47 @@
                         <td>{{item.print_title|linebreaks}}</td>
                         <td>
                             {% if item.badge %}
-                                <button  
-                                    class="btn btn-outline-success btn-sm"  
-                                    name="print_badge" 
-                                    value="{{ item.id }}"
-                                    formnovalidate
-                                    title="Печать бэджей участников по данной категории" >
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                </button>
+                                <div style="overflow: hidden;">
+                                    <a href="{{ item.badge.print_image.image.url }}" 
+                                       style="float: left; margin: 5px 5px 5px 5px;">
+                                       <img src="{{ item.badge.print_image.image.url }}"
+                                        width="100pt" alt="User Image">
+                                    </a>
+                                    {{item.badge}}
+                                </div>
+                                <div style="text-align: center; width: 100%;">
+                                    <button  
+                                        class="btn btn-outline-success btn-sm"  
+                                        name="print_badge" 
+                                        value="{{ item.id }}"
+                                        formnovalidate
+                                        title="Печать бэджей участников по данной категории" >
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                             {% endif %}
-                            {{item.badge}}
                         </td>
                         <td>
                             {% if item.certificate %}
-                                <button  
-                                    
-                                    class="btn btn-outline-success btn-sm"
-                                    name="print_certificate" 
-                                    value="{{ item.id }}"
-                                    formnovalidate
-                                    title="Печать сертификатов участников по данной категории" >
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                </button>
+                                <div style="overflow: hidden;">
+                                    <a href="{{ item.certificate.print_image.image.url }}" 
+                                       style="float: left; margin: 5px 5px 5px 5px;">
+                                       <img src="{{ item.certificate.print_image.image.url }}"
+                                        width="100pt" alt="User Image">
+                                    </a>
+                                    {{item.certificate}}
+                                </div>
+                                <div style="text-align: center; width: 100%;">    
+                                    <button 
+                                        class="btn btn-outline-success btn-sm"
+                                        name="print_certificate" 
+                                        value="{{ item.id }}"
+                                        formnovalidate
+                                        title="Печать сертификатов участников по данной категории">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </button>
+                                </div>
                             {% endif %}
-                            {{item.certificate}}
                         </td>
                         <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                         <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
@@ -250,7 +267,7 @@
                                 title="Удалить текущую строку."
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteModal{{ item.id }}">
-                                X
+                                <i class="fa fa-trash"></i>
                             </button>
                         </td> 
                     </tr>
