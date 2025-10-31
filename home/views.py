@@ -424,24 +424,25 @@ def categories(request):
 
             if 'print_badge' in request.POST:
                 pk = request.POST.get('print_badge')
-                user_image = item.badge
-                outputfilename = item.badge.title+".pdf"
+                item = context['model'].get(id=pk)
+                item_image = item.badge
+                outputfilename = item.badge.title + ".pdf"
             else:
                 pk = request.POST.get('print_certificate')
-                user_image = item.certificate
-                outputfilename = item.certificate.title+".pdf"
+                item = context['model'].get(id=pk)
+                item_image = item.certificate
+                outputfilename = item.certificate.title + ".pdf"
 
-            item = context['model'].get(id=pk)
             participants = Participant.objects.filter(
                 created_by=context['current_user'],
                 event_related=context['current_event'],
                 category=item)
             print_templates = PrintTemplate.objects.filter(
-                    user_image_related=user_image
+                    user_image_related=item_image
                     )
 
-            page_data['page_width'] = user_image.width
-            page_data['page_height'] = user_image.height
+            page_data['page_width'] = item_image.width
+            page_data['page_height'] = item_image.height
 #            page_data['image'] = user_image.print_image.image
 
             page_width = page_data['page_width'] * mm
@@ -450,7 +451,11 @@ def categories(request):
             canva = canvas.Canvas(outputfilename, page_size)
 
             for participant in participants:
-#               user_image = participant.category.certificate
+                if 'print_badge' in request.POST:
+                    user_image = participant.category.badge
+                else:
+                    user_image = participant.category.certificate
+
                 print_templates = PrintTemplate.objects.filter(
                     user_image_related=user_image
                     )

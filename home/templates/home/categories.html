@@ -202,15 +202,7 @@
                         <td>{{item.print_title|linebreaks}}</td>
                         <td>
                             {% if item.badge %}
-                                <div style="overflow: hidden;">
-                                    <a href="{{ item.badge.print_image.image.url }}" 
-                                       style="float: left; margin: 5px 5px 5px 5px;">
-                                       <img src="{{ item.badge.print_image.image.url }}"
-                                        width="100pt" alt="User Image">
-                                    </a>
-                                    {{item.badge}}
-                                </div>
-                                <div style="text-align: center; width: 100%;">
+                                <div style="text-align: right; width: 100%;">
                                     <button  
                                         class="btn btn-outline-success btn-sm"  
                                         name="print_badge" 
@@ -220,19 +212,19 @@
                                         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                     </button>
                                 </div>
+                                <div style="overflow: hidden;">
+                                    <a href="{{ item.badge.print_image.image.url }}" 
+                                       style="float: left; margin: 5px 5px 5px 5px;">
+                                       <img src="{{ item.badge.print_image.image.url }}"
+                                        width="100pt" alt="User Image">
+                                    </a>
+                                    {{item.badge}}
+                                </div>
                             {% endif %}
                         </td>
                         <td>
                             {% if item.certificate %}
-                                <div style="overflow: hidden;">
-                                    <a href="{{ item.certificate.print_image.image.url }}" 
-                                       style="float: left; margin: 5px 5px 5px 5px;">
-                                       <img src="{{ item.certificate.print_image.image.url }}"
-                                        width="100pt" alt="User Image">
-                                    </a>
-                                    {{item.certificate}}
-                                </div>
-                                <div style="text-align: center; width: 100%;">    
+                                <div style="text-align: right; width: 100%;">    
                                     <button 
                                         class="btn btn-outline-success btn-sm"
                                         name="print_certificate" 
@@ -241,6 +233,14 @@
                                         title="Печать сертификатов участников по данной категории">
                                         <i class="fa fa-file-pdf-o"></i>
                                     </button>
+                                </div>
+                                <div style="overflow: hidden;">
+                                    <a href="{{ item.certificate.print_image.image.url }}" 
+                                       style="float: left; margin: 5px 5px 5px 5px;">
+                                       <img src="{{ item.certificate.print_image.image.url }}"
+                                        width="100pt" alt="User Image">
+                                    </a>
+                                    {{item.certificate}}
                                 </div>
                             {% endif %}
                         </td>
