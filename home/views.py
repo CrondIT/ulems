@@ -419,15 +419,23 @@ def categories(request):
             context['model'] = context['model'].order_by(
                 context['sort']
                 )
-        elif 'print_certificate' in request.POST:
+        elif 'print_certificate' or 'print_badge' in request.POST:
             page_data = {}
-            pk = request.POST.get('print_certificate')
+
+            if 'print_badge' in request.POST:
+                pk = request.POST.get('print_badge')
+                user_image = item.badge
+                outputfilename = item.badge.title+".pdf"
+            else:
+                pk = request.POST.get('print_certificate')
+                user_image = item.certificate
+                outputfilename = item.certificate.title+".pdf"
+
             item = context['model'].get(id=pk)
             participants = Participant.objects.filter(
                 created_by=context['current_user'],
                 event_related=context['current_event'],
                 category=item)
-            user_image = item.certificate
             print_templates = PrintTemplate.objects.filter(
                     user_image_related=user_image
                     )
@@ -439,10 +447,10 @@ def categories(request):
             page_width = page_data['page_width'] * mm
             page_height = page_data['page_height'] * mm
             page_size = (page_width, page_height)
-            canva = canvas.Canvas("helloworld.pdf", page_size)
+            canva = canvas.Canvas(outputfilename, page_size)
 
             for participant in participants:
-                user_image = participant.category.certificate
+#               user_image = participant.category.certificate
                 print_templates = PrintTemplate.objects.filter(
                     user_image_related=user_image
                     )
@@ -471,7 +479,7 @@ def categories(request):
                         "text": print_text,
                         "user_font_file_path": user_font_file_path
                         })
-                page_data['image'] = user_image.print_image.image    
+                page_data['image'] = user_image.print_image.image
                 canva = makepdf.make_pdf2(page_data, text_data, canva)
             canva.save()
         else:
