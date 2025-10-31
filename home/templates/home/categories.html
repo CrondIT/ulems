@@ -203,13 +203,12 @@
                         <td>
                             {% if item.badge %}
                                 <button  
-                                    type="button"
                                     class="btn btn-outline-success btn-sm"  
                                     name="print_badge" 
                                     value="{{ item.id }}"
                                     formnovalidate
                                     title="Печать бэджей участников по данной категории" >
-                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                 </button>
                             {% endif %}
                             {{item.badge}}
@@ -223,7 +222,7 @@
                                     value="{{ item.id }}"
                                     formnovalidate
                                     title="Печать сертификатов участников по данной категории" >
-                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                 </button>
                             {% endif %}
                             {{item.certificate}}
