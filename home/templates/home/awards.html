@@ -33,6 +33,20 @@
                         </button>
                     </th>
                     <th>
+                        Наименование для печати
+                        <button 
+                            class="btn btn-outline-success btn-sm" 
+                            name="sort" 
+                            formnovalidate
+                            value="print_title">
+                            {% if sort_text == 'print_title' %}
+                                <i class='{{ sort_button_pressed }}'></i>
+                            {% else %}
+                                <i class='{{ sort_button }}'></i>
+                            {% endif %}
+                        </button>
+                    </th>
+                    <th>
                         Категория
                         <button 
                             class="btn btn-outline-success btn-sm" 
@@ -89,7 +103,7 @@
                         </button>
                     </th>
                     <th>
-                        Создатель
+                        Создал
                         <button 
                             class="btn btn-outline-success btn-sm" 
                             name="sort" 
@@ -117,10 +131,14 @@
                         </button>
                     </th>
                     <th>
-                        Мероприятие
-                        <button class="btn btn-outline-success btn-sm" name="sort" formnovalidate value="event_related"><i class='{{ sort_button }}'></i></button>
+                        Уч.
+                        <i class="fa fa-info-circle"  
+                            aria-hidden="false" 
+                            title="Количество награжденных участников" 
+                            style="color: blue">
+                        </i>
                     </th>
-                    <th>Примечания</th>
+                    <th>Примеч.</th>
                 </tr>
             </thead>
 
@@ -180,13 +198,35 @@
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{item.title}}</td>
+                    <td>{{item.print_title}}</td>
                     <td>{{item.category}}</td>
-                    <td>{{item.award}}</td>
+                    <td>
+                        {% if item.award %}
+                            <div style="text-align: right; width: 100%;">
+                                <button  
+                                    class="btn btn-outline-success btn-sm"  
+                                    name="print_award" 
+                                    value="{{ item.id }}"
+                                    formnovalidate
+                                    title="Печать участников по данной категории и награде" >
+                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div style="overflow: hidden;">
+                                <a href="{{ item.award.print_image.image.url }}" 
+                                    style="float: left; margin: 5px 5px 5px 5px;">
+                                    <img src="{{ item.award.print_image.image.url }}"
+                                    width="100pt" alt="User Image">
+                                </a>
+                                {{item.award}}
+                            </div>
+                        {% endif %}
+                    </td>
                     <td>{{item.created_date|date:'d.m.Y H:i'}}</td>
                     <td>{{item.updated_date|date:'d.m.Y H:i'}}</td>
                     <td>{{item.created_by}}</td>
                     <td>{{item.updated_by}}</td>
-                    <td>{{item.event_related}}</td>
+                    <td>{{item.count}}</td>
                     <td> 
                         <button  
                             type="button"
@@ -205,7 +245,7 @@
                             title="Удалить текущую строку."
                             data-bs-toggle="modal"
                             data-bs-target="#deleteModal{{ item.id }}">
-                            Del
+                            <i class="fa fa-times"></i>
                         </button>
                     </td> 
                 </tr>

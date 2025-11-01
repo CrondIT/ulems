@@ -165,6 +165,7 @@ class Competency(TimeStamp, EventRelated):
 # -----------------------------------------------------------------------------------
 class Award(TimeStamp, EventRelated):
     title = models.CharField("Награда", max_length=100)
+    print_title = models.TextField('Название для печати')
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -231,7 +232,7 @@ class Participant(TimeStamp, EventRelated):
         )
     award = models.ForeignKey(
         Award, on_delete=models.SET_NULL,
-        related_name="participant_award",
+        related_name="participants",
         null=True,
         blank=True
         )

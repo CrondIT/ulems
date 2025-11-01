@@ -39,7 +39,7 @@ REPLACEMENT_MAP = {
     'доклад': 'text',
     'категория': 'category.print_title',
     'компетенция': 'competency.print_title',
-    'награда': 'award.title',
+    'награда': 'award.print_title',
     'мероприятие': 'event.print_title',
     'дата начала': 'event.from_date',
     'дата окончания': 'event.to_date',
@@ -1241,7 +1241,9 @@ def awards(request):
         created_by=context['current_user'],
         event_related=context['current_event'])
     context['model'] = context['model'].order_by(
-        context['sort'])
+        context['sort']).annotate(
+        count=Count('participants')
+        )
     context['ClassForm'] = AwardForm
     context['form'] = context['ClassForm'](
         current_user=context['current_user'],

@@ -360,7 +360,7 @@ class PrintTemplateForm(ModelForm):
 class AwardForm(ModelForm):
     class Meta:
         model = Award
-        fields = ['title', 'category', 'award']
+        fields = ['title', 'print_title','category', 'award']
         labels = {
             "title": "Наименование",
             "category": "Категория",
@@ -370,6 +370,11 @@ class AwardForm(ModelForm):
                 "title": TextInput(attrs={
                     'class': 'form-control',
                     'placeholder': 'Наименование'
+                }),
+                "print_title": Textarea(attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                    'placeholder': 'Наименование для печати'
                 }),
                 "category": Select(attrs={
                     'class': 'form-control',
