@@ -5,9 +5,9 @@
 {% block body %}
   <h6>  </h6>
     <!-- Карточки  -->
-    <div class="row mb-6" style="padding:5px; margin-left:5px;">
+    <div class="row mb-3" style="padding:5px; margin-left:5px;">
         <!-- Карточки с мероприятием -->    
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card text-black bg-light mb-3" >
                 <div class="card-header">Мероприятие</div>
                 <div class="card-body">
@@ -40,6 +40,16 @@
             </div>
         </div>
 
+         <!-- Карточка с наградми -->
+        <div class="col-md-2">
+            <div class="card text-blac mb-3 text-center" style="max-width: 12rem;">
+                <div class="card-header">Награды</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ awards_count }}</h4>
+                </div>
+            </div>
+        </div>
+
          <!-- Карточка с участниками -->
         <div class="col-md-2">
             <div class="card text-black  mb-3 text-center" style="max-width: 12rem;">
@@ -63,15 +73,63 @@
                     <tr>
                         <th>№</th>
                         <th> Наименование</th>
-                        <th> Кол-во</th>
+                        <th> Бэдж</th>
+                        <th> Серт.</th>
+                        <th> 
+                            Уч.
+                             <i class="fa fa-info-circle"  
+                            aria-hidden="false" 
+                            title="Количество участников по каждой категории" 
+                            style="color: blue"></i>
+                        </th>
+                        <th>
+                            Награжд.
+                            <i class="fa fa-info-circle"  
+                            aria-hidden="false" 
+                            title="Количество награжденных участников по каждой категории" 
+                            style="color: blue"></i>
+                        </th>
+                        <th>
+                            Награды
+                            <i class="fa fa-info-circle"  
+                            aria-hidden="false" 
+                            title="Запланированные награды по каждой категории" 
+                            style="color: blue"></i>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">  
                     {% for catbp in categories_by_participants %}
                     <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td>{{ catbp }} </td>
-                        <td>{{ catbp.count }}</td>
+                        <td class="text-center align-middle">{{forloop.counter}}</td>
+                        <td>{{ catbp }}</td>
+                        <td class="text-center align-middle">
+                            {% if catbp.badge %}
+                               <i class="fa fa-check text-success" aria-hidden="true"></i>
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle">
+                            {% if catbp.certificate %}
+                                <i class="fa fa-check text-success" aria-hidden="true"></i>
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle"> 
+                            {% if catbp.count > 0 %}
+                                {{ catbp.count }}
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle"> 
+                            {% if catbp.count_award > 0 %}
+                                {{ catbp.count_award }}
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle"> 
+                            {% for awrd in awards_all %}
+                                {% if awrd.category == catbp %}
+                                    {{ awrd }}.
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

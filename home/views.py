@@ -16,7 +16,7 @@ from django.core.files.storage import FileSystemStorage
 import csv
 import re
 
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
@@ -221,6 +221,16 @@ def index(request):
         created_by=context['current_user'],
         event_related=context['current_event']
         ).count()
+    context['awards_all'] = Award.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).annotate(
+            cat_count=Count('category')
+        )
+    context['awards_count'] = Award.objects.filter(
+        created_by=context['current_user'],
+        event_related=context['current_event']
+        ).count()
     context['participants_count'] = Participant.objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event']
@@ -230,9 +240,16 @@ def index(request):
         event_related=context['current_event']
         ).annotate(count=Count('participants'))
     context['categories_by_participants'] = Category.objects.filter(
-        created_by=context['current_user'],
-        event_related=context['current_event']
-        ).annotate(count=Count('participants'))
+            created_by=context['current_user'],
+            event_related=context['current_event']
+        ).annotate(
+            count_award=Count('participants__award',
+                              filter=Q(participants__award__isnull=False),
+                              distinct=True  # Каждая награда считается 1 раз
+                              ),
+            count_awarded=Count('participants',
+                                filter=Q(participants__award__isnull=False)),
+            count=Count('participants'))
     return render(request, "home/index.html", context)
 
 
@@ -1132,6 +1149,7 @@ def print_templates(request):
     context['participants'] = Participant.objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event'])
+
     if request.method == "POST":
         if 'save' in request.POST:
             pk = request.POST.get('save')
