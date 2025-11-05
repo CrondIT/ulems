@@ -210,6 +210,8 @@ def user_profile(request):
 @login_required(login_url="login")
 def index(request):
     """ View main (starter) page """
+    sort_category = request.user.profile.sort_category
+    sort_competency = request.user.profile.sort_competency
     context = {}
     context['current_event'] = request.user.profile.current_event
     context['current_user'] = request.user
@@ -236,11 +238,11 @@ def index(request):
     context['competencies_by_participants'] = Competency.objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event']
-        ).annotate(count=Count('participants'))
+        ).order_by(sort_competency).annotate(count=Count('participants'))
     context['categories_by_participants'] = Category.objects.filter(
             created_by=context['current_user'],
             event_related=context['current_event']
-        ).annotate(
+        ).order_by(sort_category).annotate(
             count_award=Count('participants__award',
                               filter=Q(participants__award__isnull=False),
                               distinct=True  # Каждая награда считается 1 раз
