@@ -224,8 +224,6 @@ def index(request):
     context['awards_all'] = Award.objects.filter(
         created_by=context['current_user'],
         event_related=context['current_event']
-        ).annotate(
-            cat_count=Count('category')
         )
     context['awards_count'] = Award.objects.filter(
         created_by=context['current_user'],
